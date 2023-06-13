@@ -1,8 +1,10 @@
-package br.com.pradofigu.maestro
+package br.com.pradofigu.maestro.main
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.ComponentScan
 
+@ComponentScan(basePackages = ["br.com.pradofigu.maestro"])
 @SpringBootApplication
 class MaestroApplication
 
