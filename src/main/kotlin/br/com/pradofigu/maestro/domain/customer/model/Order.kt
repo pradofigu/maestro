@@ -6,7 +6,8 @@ import java.util.*
 
 data class Order(
         val id: UUID,
-        val orderNumber: Number,
+        val orderNumber: Long,
+        val customer: Customer,
         val products: List<Product>,
         val totalPrice: BigDecimal,
         val statusOrder: String,

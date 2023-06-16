@@ -8,5 +8,5 @@ interface OrderDataAccessPort {
     suspend fun findById(id: UUID): Order?
     suspend fun findByOrderNumber(orderNumber: Number): Order?
     suspend fun create(order: Order): Order?
-    suspend fun updateStatus(order: Order): Order?
+    suspend fun updateStatus(order: Order)
 }
