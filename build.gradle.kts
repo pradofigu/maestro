@@ -1,12 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jooq.meta.jaxb.ForcedType
 import org.jooq.meta.jaxb.Logging
 import org.jooq.meta.jaxb.Property
 
 plugins {
     id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.1.0"
-    id("org.flywaydb.flyway") version "9.8.1"
+    id("org.flywaydb.flyway") version "9.19.4"
     id("nu.studer.jooq") version "8.2"
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
@@ -70,20 +69,43 @@ sourceSets {
     }
 }
 
-flyway {
-    driver=System.getenv("datasource.driver")
-    url = System.getenv("datasource.jdbc-url")
-    user = System.getenv("datasource.username")
-    password = System.getenv("datasource.password")
+//flyway {
+//    driver=System.getenv("datasource.driver")
+//    url = System.getenv("datasource.jdbc-url")
+//    user = System.getenv("datasource.username")
+//    password = System.getenv("datasource.password")
+//    baselineOnMigrate = true
+//    createSchemas = true
+//    defaultSchema = "flyway"
+//    schemas=arrayOf("flyway")
+//    table="schema_version"
+//    locations = arrayOf("filesystem:src/main/resources/db/migration","classpath:db/migration")
+//}
+
+val DB_DRIVER = System.getenv("datasource.driver")
+val DB_URL = System.getenv("datasource.jdbc-url")
+val DB_USER = System.getenv("datasource.username")
+val DB_PASSWORD = System.getenv("datasource.password")
+
+tasks.named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
+//    driver = DB_DRIVER
+//    url = DB_URL
+//    user = DB_USER
+//    password = DB_PASSWORD
+    driver = "org.postgresql.Driver"
+    url = "jdbc:postgresql://localhost:5432/maestro"
+    user = "admin"
+    password = "admin"
     baselineOnMigrate = true
     createSchemas = true
     defaultSchema = "flyway"
     schemas=arrayOf("flyway")
-    locations = arrayOf("filesystem:src/main/resources/db/migration","classpath:db/migration")
+    table="schema_version"
+    locations = arrayOf("filesystem:src/main/resources/db/migration")
 }
 
 jooq {
-//    version.set(dependencyManagement.importedProperties['jooq.version'])  // default (can be omitted)
+    version.set(dependencyManagement.importedProperties["jooq.version"])  // default (can be omitted)
     edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)  // default (can be omitted)
 
     configurations {
@@ -106,24 +128,13 @@ jooq {
                     name = "org.jooq.codegen.DefaultGenerator"
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
-                        inputSchema = "public"
-                        forcedTypes.addAll(listOf(
-                            ForcedType().apply {
-                                name = "varchar"
-                                includeExpression = ".*"
-                                includeTypes = "JSONB?"
-                            },
-                            ForcedType().apply {
-                                name = "varchar"
-                                includeExpression = ".*"
-                                includeTypes = "INET"
-                            }
-                        ))
+                        includes = ".*"
+                        excludes = "(?i:information_schema\\..*) | (?i:pg_catalog\\..*)"
                     }
                     generate.apply {
                         isDeprecated = false
                         isRecords = true
-                        isImmutablePojos = true
+                        isPojos = false
                         isFluentSetters = true
                     }
                     target.apply {
