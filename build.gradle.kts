@@ -95,7 +95,7 @@ jooq {
                     database.apply {
                         name = "org.jooq.meta.postgres.PostgresDatabase"
                         includes = ".*"
-                        excludes = "(?i:information_schema\\..*) | (?i:pg_catalog\\..*)"
+                        excludes = "(?i:information_schema\\..*) | (?i:pg_catalog\\..*) | (?i:public\\..*)"
                     }
                     generate.apply {
                         isDeprecated = false
