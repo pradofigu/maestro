@@ -1,9 +1,8 @@
-package br.com.pradofigu.maestro.resources
+package br.com.pradofigu.maestro.resources.customers
 
-import br.com.pradofigu.maestro.domain.customer.Customer
+import br.com.pradofigu.maestro.domain.customers.Customer
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 
 data class CustomerResponse(
     val id: String,
