@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.customer.model
+package br.com.pradofigu.maestro.domain.customer
 
 import java.time.LocalDate
 import java.time.LocalDateTime
