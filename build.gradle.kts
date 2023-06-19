@@ -5,7 +5,7 @@ import org.jooq.meta.jaxb.Property
 plugins {
     id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.1.0"
-    id("org.flywaydb.flyway") version "9.19.4"
+    id("org.flywaydb.flyway") version "9.8.1"
     id("nu.studer.jooq") version "8.2"
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
@@ -57,41 +57,7 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-sourceSets {
-    //add a flyway sourceSet
-    val flyway by creating {
-        compileClasspath += sourceSets.main.get().compileClasspath
-        runtimeClasspath += sourceSets.main.get().runtimeClasspath
-    }
-    //main sourceSet depends on the output of flyway sourceSet
-    main {
-        output.dir(flyway.output)
-    }
-}
-
-//flyway {
-//    driver=System.getenv("datasource.driver")
-//    url = System.getenv("datasource.jdbc-url")
-//    user = System.getenv("datasource.username")
-//    password = System.getenv("datasource.password")
-//    baselineOnMigrate = true
-//    createSchemas = true
-//    defaultSchema = "flyway"
-//    schemas=arrayOf("flyway")
-//    table="schema_version"
-//    locations = arrayOf("filesystem:src/main/resources/db/migration","classpath:db/migration")
-//}
-
-val DB_DRIVER = System.getenv("datasource.driver")
-val DB_URL = System.getenv("datasource.jdbc-url")
-val DB_USER = System.getenv("datasource.username")
-val DB_PASSWORD = System.getenv("datasource.password")
-
 tasks.named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
-//    driver = DB_DRIVER
-//    url = DB_URL
-//    user = DB_USER
-//    password = DB_PASSWORD
     driver = "org.postgresql.Driver"
     url = "jdbc:postgresql://localhost:5432/maestro"
     user = "admin"
@@ -146,10 +112,4 @@ jooq {
             }
         }
     }
-}
-
-tasks.named<nu.studer.gradle.jooq.JooqGenerate>("generateJooq") {
-    (launcher::set)(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    })
 }
