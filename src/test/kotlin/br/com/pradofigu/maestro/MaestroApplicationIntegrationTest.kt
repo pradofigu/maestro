@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext
 class MaestroApplicationIntegrationTest(@Autowired val applicationContext: ApplicationContext) {
 
     @Test
-    fun contextLoads() {
+    fun `When load application should load contexts`() {
         assertThat(applicationContext).isNotNull();
     }
 
