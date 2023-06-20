@@ -26,7 +26,7 @@ class CustomerResourceIntegrationTest(
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
-    inner class HappyPath {
+    inner class HappyPathIntegrationTest {
 
         private val CPF = CPFValidator().generateRandomValid()
         private var customerId: String? = null
@@ -34,7 +34,7 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(1)
         @Throws(Exception::class)
-        fun save_whenCreateCustomer_returns201() {
+        fun `When create a customers should returns 201`() {
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
                     "John Smith",
@@ -71,7 +71,7 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(2)
         @Throws(java.lang.Exception::class)
-        fun get_whenGetCustomer_returns200() {
+        fun `When get a customer by id should returns 200`() {
             val mvcResult = mvc.perform(get("/customers/$customerId")
                     .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -91,7 +91,7 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(3)
         @Throws(java.lang.Exception::class)
-        fun get_whenGetCustomerByCPF_returns200() {
+        fun `When get a customer by cpf should returns 200`() {
             val mvcResult = mvc.perform(get("/customers/cpf/${CPF}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(4)
         @Throws(java.lang.Exception::class)
-        fun update_whenUpdateCustomer_returns200() {
+        fun `When update a customer should returns 200`() {
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
                     "John Smith",
@@ -143,7 +143,7 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(5)
         @Throws(java.lang.Exception::class)
-        fun delete_whenDeleteCustomer_returns204() {
+        fun `When delete a customer should returns 204`() {
             val mvcResult = mvc.perform(delete("/customers/${customerId}"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
