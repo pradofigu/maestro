@@ -76,7 +76,7 @@ class CustomerResourceIntegrationTest(
                 .andExpect(request().asyncStarted())
                 .andReturn()
 
-            val response = mvc.perform(asyncDispatch(mvcResult))
+            mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
