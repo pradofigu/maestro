@@ -1,0 +1,40 @@
+services:
+
+  database:
+    image: 'postgres:15.3'
+    container_name: maestro-postgres
+    environment:
+        POSTGRES_DB: maestro
+        POSTGRES_USER: admin
+        POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - maestro-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: "exit 0"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: maestro-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - maestro-pgadmin4-data:/var/lib/pgadmin
+      - ./scripts/pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  maestro-postgres-data:
+  maestro-pgadmin4-data:
+
+networks:
+  default:
+    external: false
+    name: development
