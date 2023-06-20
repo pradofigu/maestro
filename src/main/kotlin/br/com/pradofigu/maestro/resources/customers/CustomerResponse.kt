@@ -10,9 +10,7 @@ data class CustomerResponse(
     val cpf: String,
     val email: String,
     val phone: String,
-    val birthDate: LocalDate,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val birthDate: LocalDate
 ) {
     companion object {
         fun from(customer: Customer) : CustomerResponse {
@@ -22,9 +20,7 @@ data class CustomerResponse(
                 cpf = customer.cpf,
                 email = customer.email,
                 phone = customer.phone,
-                birthDate = customer.birthDate,
-                createdAt = customer.createdAt,
-                updatedAt = customer.updatedAt
+                birthDate = customer.birthDate
             )
         }
     }

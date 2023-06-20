@@ -1,13 +1,16 @@
 package br.com.pradofigu.maestro.domain.customers
 
+import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
 import java.util.*
 
 interface Customers {
 
-    fun findAll(): List<Customer>
+    fun save(customer: CreateCustomer): Customer?
 
-    fun findById(customerId: UUID): Customer
+    fun findBy(id: UUID): Customer?
 
-    fun findByCpf(cpf: String): Customer
+    fun update(id: UUID, customer: Customer.UpdateCustomer): Customer?
+
+    fun delete(id: UUID): Boolean
 
 }
