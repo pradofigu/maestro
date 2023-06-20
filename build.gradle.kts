@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jooq.meta.jaxb.Logging
 import org.jooq.meta.jaxb.Property
+import java.util.*
 
 plugins {
     id("org.springframework.boot") version "3.1.0"
@@ -38,12 +39,17 @@ dependencies {
 //    implementation("org.springframework:spring-jdbc")
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 //    runtimeOnly("org.postgresql:r2dbc-postgresql")
     jooqGenerator("org.postgresql:postgresql:42.5.1")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
 //    testImplementation("org.springframework.security:spring-security-test")
+}
+
+val props = Properties().apply {
+    load(rootProject.file("src/main/resources/application.properties").reader())
 }
 
 tasks.withType<KotlinCompile> {
@@ -58,10 +64,10 @@ tasks.withType<Test> {
 }
 
 tasks.named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
-    driver = "org.postgresql.Driver"
-    url = "jdbc:postgresql://localhost:5432/maestro"
-    user = "admin"
-    password = "admin"
+    driver = props.getProperty("datasource.driver")
+    url = props.getProperty("datasource.jdbc-url")
+    user = props.getProperty("datasource.username")
+    password = props.getProperty("datasource.password")
     baselineOnMigrate = true
     createSchemas = true
     defaultSchema = "flyway"
@@ -81,10 +87,10 @@ jooq {
             jooqConfiguration.apply {
                 logging = Logging.WARN
                 jdbc.apply {
-                    driver = "org.postgresql.Driver"
-                    url = "jdbc:postgresql://localhost:5432/maestro"
-                    user = "admin"
-                    password = "admin"
+                    driver = props.getProperty("datasource.driver")
+                    url = props.getProperty("datasource.jdbc-url")
+                    user = props.getProperty("datasource.username")
+                    password = props.getProperty("datasource.password")
                     properties.add(Property().apply {
                         key = "ssl"
                         value = "false"
