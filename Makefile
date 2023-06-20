@@ -3,15 +3,29 @@ DOCKER_COMPOSE_FILE_PATH?="docker/docker-compose.yaml"
 run:
 	@./gradlew bootRun
 
+# COMPILING
+
 compile:
 	@echo "Compiling project and Generating database entity classes with JOOQ"
 	@./gradlew build -x test
 
-build: migrate compile
-
 migrate:
 	@echo "Starting migration"
 	@./gradlew flywayMigrate
+
+build: migrate compile
+
+# TESTING
+
+test:
+	@echo "Starting UNIT tests"
+	-@./gradlew test
+
+integration-test:
+	@echo "Starting INTEGRATION tests"
+	-@./gradlew integrationTest
+
+all-tests: test integration-test
 
 # INFRASTRUCTURE
 start:

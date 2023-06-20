@@ -8,6 +8,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.0"
     id("org.flywaydb.flyway") version "9.8.1"
     id("nu.studer.jooq") version "8.2"
+//    id("org.unbroken-dome.test-sets") version "2.1.1"
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
 }
@@ -61,8 +62,20 @@ tasks.withType<KotlinCompile> {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+tasks.named<Test>("test") {
+    useJUnitPlatform() {
+        filter {
+            setExcludePatterns("*IntegrationTest")
+        }
+    }
+}
+
+tasks.create("integrationTest", Test::class) {
+    useJUnitPlatform() {
+        filter {
+            setIncludePatterns("*IntegrationTest")
+        }
+    }
 }
 
 tasks.named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {

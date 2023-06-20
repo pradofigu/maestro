@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext
 
 
 @SpringBootTest
-class MaestroApplicationTests(@Autowired val applicationContext: ApplicationContext) {
+class MaestroApplicationIntegrationTest(@Autowired val applicationContext: ApplicationContext) {
 
     @Test
     fun contextLoads() {
