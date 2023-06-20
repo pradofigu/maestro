@@ -12,5 +12,6 @@ interface Customers {
     fun update(id: UUID, customer: Customer.UpdateCustomer): Customer?
 
     fun delete(id: UUID): Boolean
+    fun findBy(id: CPF): Customer?
 
 }

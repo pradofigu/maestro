@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.resources.customers
 
+import br.com.caelum.stella.validation.CPFValidator
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -27,6 +28,7 @@ class CustomerResourceIntegrationTest(
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
     inner class HappyPath {
 
+        private val CPF = CPFValidator().generateRandomValid()
         private var customerId: String? = null
 
         @Test
@@ -36,7 +38,7 @@ class CustomerResourceIntegrationTest(
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
                     "John Smith",
-                    "321.456.789-10",
+                    CPF,
                     "john.smith@example.com.br",
                     "(11)98555-4321",
                     LocalDate.of(1980, Month.SEPTEMBER, 3)
@@ -55,7 +57,7 @@ class CustomerResourceIntegrationTest(
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value("321.456.789-10"))
+                .andExpect(jsonPath("cpf").value(CPF))
                 .andExpect(jsonPath("email").value("john.smith@example.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -80,7 +82,7 @@ class CustomerResourceIntegrationTest(
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value("321.456.789-10"))
+                .andExpect(jsonPath("cpf").value(CPF))
                 .andExpect(jsonPath("email").value("john.smith@example.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -89,11 +91,31 @@ class CustomerResourceIntegrationTest(
         @Test
         @Order(3)
         @Throws(java.lang.Exception::class)
+        fun get_whenGetCustomerByCPF_returns200() {
+            val mvcResult = mvc.perform(get("/customers/cpf/${CPF}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(request().asyncStarted())
+                .andReturn()
+
+            mvc.perform(asyncDispatch(mvcResult))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(customerId))
+                .andExpect(jsonPath("name").value("John Smith"))
+                .andExpect(jsonPath("cpf").value(CPF))
+                .andExpect(jsonPath("email").value("john.smith@example.com.br"))
+                .andExpect(jsonPath("phone").value("(11)98555-4321"))
+                .andExpect(jsonPath("birthDate").value("1980-09-03"))
+        }
+
+        @Test
+        @Order(4)
+        @Throws(java.lang.Exception::class)
         fun update_whenUpdateCustomer_returns200() {
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
                     "John Smith",
-                    "321.456.789-10",
+                    CPF,
                     "john.smith@example-altera-email.com.br",
                     "(11)98555-4321",
                     LocalDate.of(1980, Month.SEPTEMBER, 3)
@@ -111,7 +133,7 @@ class CustomerResourceIntegrationTest(
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value("321.456.789-10"))
+                .andExpect(jsonPath("cpf").value(CPF))
                 .andExpect(jsonPath("email").value("john.smith@example-altera-email.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -119,7 +141,7 @@ class CustomerResourceIntegrationTest(
         }
 
         @Test
-        @Order(4)
+        @Order(5)
         @Throws(java.lang.Exception::class)
         fun delete_whenDeleteCustomer_returns204() {
             val mvcResult = mvc.perform(delete("/customers/${customerId}"))

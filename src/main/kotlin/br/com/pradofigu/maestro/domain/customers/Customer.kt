@@ -8,14 +8,14 @@ data class Customer(
     val name: String,
     val email: String,
     val phone: String,
-    val cpf: String,
+    val cpf: CPF,
     val birthDate: LocalDate) {
 
     class CreateCustomer(
         val name: String,
         val email: String,
         val phone: String,
-        val cpf: String,
+        val cpf: CPF,
         val birthDate: LocalDate,
     )
 
@@ -23,7 +23,7 @@ data class Customer(
         val name: String,
         val email: String,
         val phone: String,
-        val cpf: String,
+        val cpf: CPF,
         val birthDate: LocalDate,
     )
 }

@@ -36,6 +36,7 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("br.com.caelum.stella:caelum-stella-core:2.1.6")
 //    implementation("org.springframework:spring-jdbc")
     implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")

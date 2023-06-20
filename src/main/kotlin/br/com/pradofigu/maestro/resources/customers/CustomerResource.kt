@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.resources.customers
 
+import br.com.pradofigu.maestro.domain.customers.CPF
 import br.com.pradofigu.maestro.domain.customers.CustomerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -36,5 +37,11 @@ class CustomerResource(@Autowired private val service: CustomerService) {
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         service.delete(UUID.fromString(id))
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    suspend fun findByCPF(@PathVariable cpf: String): CustomerResponse? {
+        val maybeCustomer = service.findBy(CPF(cpf))
+        return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
     }
 }

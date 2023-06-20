@@ -17,7 +17,7 @@ data class CustomerResponse(
             return CustomerResponse(
                 id= customer.id.toString(),
                 name = customer.name,
-                cpf = customer.cpf,
+                cpf = customer.cpf.number,
                 email = customer.email,
                 phone = customer.phone,
                 birthDate = customer.birthDate

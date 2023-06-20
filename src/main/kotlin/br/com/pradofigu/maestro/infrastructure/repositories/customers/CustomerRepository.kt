@@ -2,6 +2,7 @@ package br.com.pradofigu.maestro.infrastructure.repositories.customers
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Customer.CUSTOMER
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CustomerRecord
+import br.com.pradofigu.maestro.domain.customers.CPF
 import br.com.pradofigu.maestro.domain.customers.Customer
 import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
 import br.com.pradofigu.maestro.domain.customers.Customers
@@ -20,7 +21,7 @@ class CustomerRepository(@Autowired private val context: DSLContext) : Customers
         val record = CustomerRecord()
             .setName(customer.name)
             .setEmail(customer.email)
-            .setCpf(customer.cpf)
+            .setCpf(customer.cpf.number)
             .setBirthDate(customer.birthDate)
             .setPhone(customer.phone)
 
@@ -34,21 +35,28 @@ class CustomerRepository(@Autowired private val context: DSLContext) : Customers
             .fetchOne(this::toCustomer)
     }
 
+    override fun findBy(cpf: CPF): Customer? {
+        return context.selectFrom(CUSTOMER).where(CUSTOMER.CPF.eq(cpf.number))
+            .fetchOne(this::toCustomer)
+    }
+
     @Transactional
     override fun update(id: UUID, customer: Customer.UpdateCustomer): Customer? {
-        val record = context.selectFrom(CUSTOMER).where(CUSTOMER.ID.eq(id)).fetchOne().let { r ->
-            r?.setName(customer.name)
-            ?.setEmail(customer.email)
-            ?.setCpf(customer.cpf)
-            ?.setBirthDate(customer.birthDate)
-            ?.setPhone(customer.phone)
-        } ?: throw IllegalArgumentException("Error to update. User id=$id not found")
+        return context.selectFrom(CUSTOMER).where(CUSTOMER.ID.eq(id)).fetchOne()
+            ?.let { record ->
 
-        return context.update(CUSTOMER)
-            .set(optimizeColumnsUpdateOf(record))
-            .where(CUSTOMER.ID.eq(id))
-            .returning()
-            .fetchOne(this::toCustomer)
+                record.setName(customer.name)
+                    .setEmail(customer.email)
+                    .setCpf(customer.cpf.number)
+                    .setBirthDate(customer.birthDate)
+                    .setPhone(customer.phone)
+            }
+            ?.let(this::optimizeColumnsUpdateOf)
+            ?.let { record ->
+                context.update(CUSTOMER).set(record).where(CUSTOMER.ID.eq(id))
+                    .returning()
+                    .fetchOne(this::toCustomer)
+            }
     }
 
     @Transactional
@@ -63,7 +71,7 @@ class CustomerRepository(@Autowired private val context: DSLContext) : Customers
             name = record.name,
             email = record.email,
             phone = record.phone,
-            cpf = record.cpf,
+            cpf = CPF(record.cpf),
             birthDate = record.birthDate
         )
     }

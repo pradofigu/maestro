@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.resources.customers
 
+import br.com.pradofigu.maestro.domain.customers.CPF
 import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
 import br.com.pradofigu.maestro.domain.customers.Customer.UpdateCustomer
 import java.time.LocalDate
@@ -14,7 +15,7 @@ data class CustomerRequest(
     fun toCreateCustomer() : CreateCustomer {
         return CreateCustomer(
             name = this.name,
-            cpf = this.cpf,
+            cpf = CPF(this.cpf),
             email = this.email,
             phone = this.phone,
             birthDate = this.birthDate
@@ -24,7 +25,7 @@ data class CustomerRequest(
     fun toUpdateCustomer() : UpdateCustomer {
         return UpdateCustomer(
             name = this.name,
-            cpf = this.cpf,
+            cpf = CPF(this.cpf),
             email = this.email,
             phone = this.phone,
             birthDate = this.birthDate

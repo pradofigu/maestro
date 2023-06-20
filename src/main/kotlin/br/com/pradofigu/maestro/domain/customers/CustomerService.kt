@@ -11,15 +11,21 @@ import java.util.*
 class CustomerService(@Autowired private val customers: Customers) {
 
     fun register(customer: CreateCustomer): Customer {
-        return customers.save(customer) ?: throw IllegalArgumentException("Error to save user")
+        return customers.save(customer) ?:
+         throw IllegalArgumentException("Error to save user")
     }
 
     fun findBy(id: UUID): Customer? {
         return customers.findBy(id)
     }
 
+    fun findBy(cpf: CPF): Customer? {
+        return customers.findBy(cpf)
+    }
+
     fun update(id: UUID, customer: UpdateCustomer): Customer {
-        return customers.update(id, customer) ?: throw IllegalArgumentException("Error to update user")
+        return customers.update(id, customer) ?:
+        throw IllegalArgumentException("Error to update user")
     }
 
     fun delete(id: UUID): Boolean {

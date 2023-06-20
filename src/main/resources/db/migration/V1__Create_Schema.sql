@@ -13,7 +13,7 @@ CREATE SCHEMA IF NOT EXISTS maestro;
 CREATE TABLE IF NOT EXISTS maestro.customer (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     name VARCHAR,
-    cpf VARCHAR,
+    cpf VARCHAR UNIQUE,
     email VARCHAR,
     phone VARCHAR,
     birth_date DATE,
@@ -21,4 +21,4 @@ CREATE TABLE IF NOT EXISTS maestro.customer (
     PRIMARY KEY (id)
 );
 
-INSERT INTO maestro.customer (id, name, cpf, email, phone, birth_date) VALUES ('574e7d5d-bf46-449d-9307-4f263362dec8','Priscila Carvalho','12345678910','pri.carvalho86@gmail.com','(11)99999-8765', '1986-09-12' );
+INSERT INTO maestro.customer (id, name, cpf, email, phone, birth_date) VALUES ('574e7d5d-bf46-449d-9307-4f263362dec8','Priscila Carvalho','74531863666','pri.carvalho86@gmail.com','(11)99999-8765', '1986-09-12' );
