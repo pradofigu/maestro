@@ -22,7 +22,7 @@ data class Order(
         )
 
         class UpdateStatus(
-                val orderNumber: Long,
+                val id: UUID,
                 val statusOrder: String,
         )
 }

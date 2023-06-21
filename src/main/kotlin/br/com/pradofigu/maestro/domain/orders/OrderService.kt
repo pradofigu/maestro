@@ -24,8 +24,8 @@ class OrderService(@Autowired private val orders: Orders) {
         return orders.findBy(orderNumber)
     }
 
-    fun updateStatus(order: UpdateStatus): Order? {
-        return orders.update(order) ?:
+    fun updateStatus(id: UUID, order: UpdateStatus): Order? {
+        return orders.update(id, order) ?:
         throw IllegalArgumentException("Error to update order status")
     }
 

@@ -8,7 +8,7 @@ import java.util.*
 interface Orders {
     fun save(order: CreateOrder): Order?
     fun findBy(id: UUID): Order?
-    fun update(order: UpdateStatus): Order?
+    fun update(id: UUID, order: UpdateStatus): Order?
     fun delete(id: UUID): Boolean
     fun findBy(orderNumber: Long): Order?
 }

@@ -7,6 +7,7 @@ import java.math.BigDecimal
 import java.util.*
 
 data class OrderRequest(
+        val id: UUID,
         val customerId: UUID,
         val orderNumber: Long,
         val customer: Customer,
@@ -24,7 +25,7 @@ data class OrderRequest(
 
     fun toUpdateStatus() : UpdateStatus {
         return UpdateStatus(
-                orderNumber = this.orderNumber,
+                id = this.id,
                 statusOrder = this.statusOrder,
         )
     }

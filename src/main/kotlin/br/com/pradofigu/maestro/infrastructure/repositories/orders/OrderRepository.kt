@@ -40,14 +40,14 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
 
     @Transactional
     override fun update(order: UpdateStatus): Order? {
-        return context.selectFrom(ORDER).where(ORDER.ORDER_NUMBER.eq(order.orderNumber)).fetchOne()
+        return context.selectFrom(ORDER).where(ORDER.ID.eq(order.id)).fetchOne()
                 ?.let { record ->
 
                     record.setName(order.statusOrder)
                 }
                 ?.let(this::optimizeColumnsUpdateOf)
                 ?.let { record ->
-                    context.update(ORDER).set(record).where(ORDER.ORDER_NUMBER.eq(order.orderNumber))
+                    context.update(ORDER).set(record).where(ORDER.ID.eq(order.id))
                             .returning()
                             .fetchOne(this::toOrder)
                 }
