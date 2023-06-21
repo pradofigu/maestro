@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.customers
+package br.com.pradofigu.maestro.domain.orders
 
 import br.com.pradofigu.maestro.domain.orders.Order
 import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
