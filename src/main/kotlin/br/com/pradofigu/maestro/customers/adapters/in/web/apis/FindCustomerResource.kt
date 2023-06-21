@@ -9,11 +9,11 @@ import java.util.*
 
 @RestController
 @RequestMapping(value = ["/customers"], produces = [APPLICATION_JSON_VALUE])
-class FindCustomerResource(@Autowired private val findCustomers: FindCustomerInPort) {
+class FindCustomerResource(@Autowired private val service: FindCustomerInPort) {
 
     @GetMapping("/cpf/{cpf}")
     suspend fun findById(@PathVariable cpf: String): CustomerResponse? {
-        val maybeCustomer = findCustomers.by(CPF(cpf))
+        val maybeCustomer = service.findBy(CPF(cpf))
         return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
     }
 

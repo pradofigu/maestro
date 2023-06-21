@@ -18,7 +18,6 @@ import java.time.Month
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("/customers")
 class FindCustomerResourceIntegrationTest(
     @Autowired val findCustomerResource: FindCustomerResource,
     @Autowired val mvc: MockMvc,
@@ -31,18 +30,16 @@ class FindCustomerResourceIntegrationTest(
     @Throws(java.lang.Exception::class)
     fun `When get a customer by cpf should returns 200`() {
 
-        val CPF = "91980968853"
-
         val record = CustomerRecord()
             .setName("John Smith")
             .setEmail("john.smith@example.com")
-            .setCpf(CPF)
+            .setCpf("91980968853")
             .setBirthDate(LocalDate.of(1980, Month.SEPTEMBER, 3))
             .setPhone("(11)9999-8888")
 
         context.insertInto(Customer.CUSTOMER).set(record).execute()
 
-        val mvcResult = mvc.perform(get("/customers/cpf/${CPF}")
+        val mvcResult = mvc.perform(get("/customers/cpf/${record.cpf}")
             .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())

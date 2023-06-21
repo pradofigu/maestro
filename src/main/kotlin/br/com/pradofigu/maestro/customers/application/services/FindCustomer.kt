@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class FindCustomer(@Autowired private val findCustomer: FindCustomerOutPort): FindCustomerInPort {
+class FindCustomer(@Autowired private val repository: FindCustomerOutPort): FindCustomerInPort {
 
-    override fun by(cpf: CPF): Customer? {
-        return findCustomer.findBy(cpf)
+    override fun findBy(cpf: CPF): Customer? {
+        return repository.findBy(cpf)
     }
 
 }

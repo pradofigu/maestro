@@ -16,8 +16,6 @@ import java.time.Month
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("/customers")
-
 class RegisterCustomerResourceIntegrationTest(
     @Autowired val registerCustomerResource: RegisterCustomerResource,
     @Autowired val mvc: MockMvc,

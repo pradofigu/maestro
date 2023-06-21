@@ -5,6 +5,6 @@ import br.com.pradofigu.maestro.customers.domain.Customer
 
 interface FindCustomerInPort {
 
-    fun by(id: CPF): Customer?
+    fun findBy(id: CPF): Customer?
 
 }
