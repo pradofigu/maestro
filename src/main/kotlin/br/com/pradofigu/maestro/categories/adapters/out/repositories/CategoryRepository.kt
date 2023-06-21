@@ -1,17 +1,20 @@
-package br.com.pradofigu.maestro.infrastructure.repositories.categories
+package br.com.pradofigu.maestro.categories.adapters.out.repositories
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Category.CATEGORY
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CategoryRecord
-import br.com.pradofigu.maestro.domain.categories.Category
+import br.com.pradofigu.maestro.categories.application.ports.out.CreateCategoryOutPort
+import br.com.pradofigu.maestro.categories.application.ports.out.DeleteCategoryOutPort
+import br.com.pradofigu.maestro.categories.application.ports.out.FindCategoryOutPort
+import br.com.pradofigu.maestro.categories.application.ports.out.UpdateCategoryOutPort
+import br.com.pradofigu.maestro.categories.domain.Category
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
-import br.com.pradofigu.maestro.resources.categories.Categories
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-class CategoryRepository(@Autowired private val context: DSLContext) : Categories, JooqRepository<CategoryRecord> {
+class CategoryRepository(@Autowired private val context: DSLContext) : CreateCategoryOutPort, DeleteCategoryOutPort,FindCategoryOutPort, UpdateCategoryOutPort, JooqRepository<CategoryRecord> {
 
     override fun save(category: Category.CreateCategory): Category? {
         return context.insertInto(CATEGORY)
@@ -36,7 +39,7 @@ class CategoryRepository(@Autowired private val context: DSLContext) : Categorie
             }
     }
 
-    override fun delete(id: UUID): Boolean {
+    override fun deleteBy(id: UUID): Boolean {
         val result = context.delete(CATEGORY).where(CATEGORY.ID.eq(id)).execute()
         return 1 == result;
     }

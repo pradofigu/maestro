@@ -1,7 +1,7 @@
-package br.com.pradofigu.maestro.resources.categories
+package br.com.pradofigu.maestro.categories.adapters.`in`.web.apis
 
-import br.com.pradofigu.maestro.domain.categories.Category.CreateCategory
-import br.com.pradofigu.maestro.domain.categories.Category.UpdateCategory
+import br.com.pradofigu.maestro.categories.domain.Category.CreateCategory
+import br.com.pradofigu.maestro.categories.domain.Category.UpdateCategory
 
 data class CategoryRequest(
     val name: String,

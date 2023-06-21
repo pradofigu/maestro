@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.resources.categories
+package br.com.pradofigu.maestro.categories.adapters.`in`.web.apis
 
-import br.com.pradofigu.maestro.domain.categories.Category
+import br.com.pradofigu.maestro.categories.domain.Category
 
 class CategoryResponse(
     val id: String,
