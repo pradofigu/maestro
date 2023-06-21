@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.main
+package br.com.pradofigu.maestro
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
