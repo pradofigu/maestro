@@ -1,8 +1,7 @@
-package br.com.pradofigu.maestro.resources.customers
+package br.com.pradofigu.maestro.customers.adapters.`in`.web.apis
 
-import br.com.pradofigu.maestro.domain.customers.CPF
-import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.customers.domain.CPF
+import br.com.pradofigu.maestro.customers.domain.Customer
 import java.time.LocalDate
 
 data class CustomerRequest(
@@ -12,8 +11,8 @@ data class CustomerRequest(
     val phone: String,
     val birthDate: LocalDate
 ) {
-    fun toCreateCustomer() : CreateCustomer {
-        return CreateCustomer(
+    fun toCreateCustomer() : Customer.CreateCustomer {
+        return Customer.CreateCustomer(
             name = this.name,
             cpf = CPF(this.cpf),
             email = this.email,
@@ -22,8 +21,8 @@ data class CustomerRequest(
         )
     }
 
-    fun toUpdateCustomer() : UpdateCustomer {
-        return UpdateCustomer(
+    fun toUpdateCustomer() : Customer.UpdateCustomer {
+        return Customer.UpdateCustomer(
             name = this.name,
             cpf = CPF(this.cpf),
             email = this.email,

@@ -1,8 +1,7 @@
-package br.com.pradofigu.maestro.resources.customers
+package br.com.pradofigu.maestro.customers.adapters.`in`.web.apis
 
-import br.com.pradofigu.maestro.domain.customers.Customer
+import br.com.pradofigu.maestro.customers.domain.Customer
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 data class CustomerResponse(
     val id: String,

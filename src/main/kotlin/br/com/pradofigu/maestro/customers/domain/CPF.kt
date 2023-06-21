@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.customers
+package br.com.pradofigu.maestro.customers.domain
 
 import br.com.caelum.stella.validation.CPFValidator
 
