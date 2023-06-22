@@ -6,6 +6,7 @@ import br.com.pradofigu.maestro.domain.orders.Order
 import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
 import br.com.pradofigu.maestro.domain.orders.OrderStatus
 import br.com.pradofigu.maestro.domain.orders.Orders
+import br.com.pradofigu.maestro.domain.orders.PaymentStatus
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,10 +45,10 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
     }
 
     @Transactional
-    override fun update(id: UUID, status: OrderStatus): Order? {
+    override fun update(id: UUID, paymentStatus: PaymentStatus): Order {
         return context.selectFrom(ORDER).where(ORDER.ID.eq(id)).fetchOne()
                 ?.let { record ->
-                    record.setStatus(status)
+                    record.setPaymentStatus(paymentStatus)
                 }
                 ?.let(this::optimizeColumnsUpdateOf)
                 ?.let { record ->
@@ -69,7 +70,6 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
                 number = record.number,
                 customer = record.customer,
                 products = record.products,
-                status = record.status,
                 paymentStatus = record.paymentStatus
         )
     }

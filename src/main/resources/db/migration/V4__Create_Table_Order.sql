@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS maestro.order (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     number SERIAL UNIQUE NOT NULL,
     customer_id uuid NOT NULL REFERENCES maestro.customer(id),
-    status VARCHAR NOT NULL,
     payment_status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     update_at TIMESTAMP DEFAULT NOW(),

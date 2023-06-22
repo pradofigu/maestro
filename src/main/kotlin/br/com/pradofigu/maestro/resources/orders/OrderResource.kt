@@ -32,7 +32,7 @@ class OrderResource(@Autowired private val service: OrderService) {
 
     @PutMapping("/{id}")
     suspend fun update(@PathVariable id: String, @RequestBody request: OrderRequest): OrderResponse {
-        val order = service.updateStatus(UUID.fromString(id), request.toUpdateOrder().status)
+        val order = service.updatePaymentStatus(UUID.fromString(id), request.toUpdatePaymentStatus().paymentStatus)
         return OrderResponse.from(order)
     }
 

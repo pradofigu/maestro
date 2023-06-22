@@ -11,19 +11,16 @@ data class Order(
         val number: Long,
         val customer: Customer,
         val products: List<Product>,
-        val status: OrderStatus,
         val paymentStatus: PaymentStatus
 ) {
         class CreateOrder(
                 val customerId: UUID,
                 val products: List<Product>,
-                val status: OrderStatus = OrderStatus.PENDING,
                 val paymentStatus: PaymentStatus = PaymentStatus.PENDING
         )
 
-        class UpdateOrder(
-                val status: OrderStatus
+        class UpdatePaymentStatus(
+                val paymentStatus: PaymentStatus
         )
 }
-enum class OrderStatus { PENDING, IN_PREPARATION, READY }
 enum class PaymentStatus { PENDING, PAID, REJECT }

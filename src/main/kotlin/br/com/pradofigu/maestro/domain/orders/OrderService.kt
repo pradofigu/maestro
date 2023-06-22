@@ -22,9 +22,9 @@ class OrderService(@Autowired private val orders: Orders) {
         return orders.findBy(id)
     }
 
-    fun updateStatus(id: UUID, status: OrderStatus): Order {
-        return orders.update(id, status) ?:
-        throw IllegalArgumentException("Error to update order status")
+    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus): Order {
+        return orders.update(id, paymentStatus) ?:
+        throw IllegalArgumentException("Error to update payment status")
     }
 
     fun delete(id: UUID): Boolean {
