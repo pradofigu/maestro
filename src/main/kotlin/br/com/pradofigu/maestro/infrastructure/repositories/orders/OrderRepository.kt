@@ -3,26 +3,22 @@ package br.com.pradofigu.maestro.infrastructure.repositories.orders
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Order.ORDER
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.OrderRecord
 import br.com.pradofigu.maestro.domain.orders.Order
-import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
-import br.com.pradofigu.maestro.domain.orders.OrderStatus
 import br.com.pradofigu.maestro.domain.orders.Orders
 import br.com.pradofigu.maestro.domain.orders.PaymentStatus
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
 import org.jooq.DSLContext
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-class OrderRepository(@Autowired private val context: DSLContext) : Orders, JooqRepository<OrderRecord> {
+class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<OrderRecord> {
 
     @Transactional
-    override fun save(order: CreateOrder): Order? {
+    override fun save(order: Order): Order {
         val record = OrderRecord()
-                .setCustomerId(order.customerId)
+                .setCustomerId(order.customer?.id)
                 .setProducts(order.products)
-                .setStatus(order.status)
                 .setPaymentStatus(order.paymentStatus)
 
         return context.insertInto(ORDER).set(record)
@@ -34,12 +30,12 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
         return context.selectFrom(ORDER).fetchOne(this::toOrder)
     }
 
-    override fun findBy(id: UUID): Order? {
+    override fun findBy(id: UUID): Order {
         return context.selectFrom(ORDER).where(ORDER.ID.eq(id))
                 .fetchOne(this::toOrder)
     }
 
-    override fun findBy(number: Long): Order? {
+    override fun findBy(number: Long): Order {
         return context.selectFrom(ORDER).where(ORDER.NUMBER.eq(number))
                 .fetchOne(this::toOrder)
     }

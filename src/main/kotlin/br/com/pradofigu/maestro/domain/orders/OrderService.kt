@@ -1,34 +1,19 @@
 package br.com.pradofigu.maestro.domain.orders
 
-import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 import java.util.*
 
 @Service
 class OrderService(private val orders: Orders) {
 
-    fun createOrder(order: CreateOrder): Order {
-        return orders.save(order) ?:
-        throw IllegalArgumentException("Error to create order")
-    }
+    fun createOrder(order: Order): Order = orders.save(order)
 
-    fun findAll(): List<Order> {
-        return orders.findAll();
-    }
+    fun findAll(): List<Order> = orders.findAll()
 
-    fun findBy(id: UUID): Order? {
-        return orders.findBy(id)
-    }
+    fun findBy(id: UUID): Order = orders.findBy(id)
 
-    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus): Order {
-        return orders.update(id, paymentStatus) ?:
-        throw IllegalArgumentException("Error to update payment status")
-    }
+    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus)
+        : Order = orders.update(id, paymentStatus)
 
-    fun delete(id: UUID): Boolean {
-        return orders.delete(id)
-    }
-
+    fun delete(id: UUID): Boolean = orders.delete(id)
 }
