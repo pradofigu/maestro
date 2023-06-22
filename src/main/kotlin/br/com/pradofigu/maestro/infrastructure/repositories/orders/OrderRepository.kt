@@ -4,7 +4,7 @@ import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Order.ORD
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.OrderRecord
 import br.com.pradofigu.maestro.domain.orders.Order
 import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
-import br.com.pradofigu.maestro.domain.orders.Order.UpdateStatus
+import br.com.pradofigu.maestro.domain.orders.OrderStatus
 import br.com.pradofigu.maestro.domain.orders.Orders
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
 import org.jooq.DSLContext
@@ -21,11 +21,16 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
         val record = OrderRecord()
                 .setCustomerId(order.customerId)
                 .setProducts(order.products)
-                .setTotalPrice(order.totalPrice)
+                .setStatus(order.status)
+                .setPaymentStatus(order.paymentStatus)
 
         return context.insertInto(ORDER).set(record)
                 .returning()
                 .fetchOne(this::toOrder)
+    }
+
+    override fun findAll(): List<Order> {
+        return context.selectFrom(ORDER).fetchOne(this::toOrder)
     }
 
     override fun findBy(id: UUID): Order? {
@@ -33,21 +38,20 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
                 .fetchOne(this::toOrder)
     }
 
-    override fun findBy(orderNumber: Long): Order? {
-        return context.selectFrom(ORDER).where(ORDER.ORDER_NUMBER.eq(orderNumber))
+    override fun findBy(number: Long): Order? {
+        return context.selectFrom(ORDER).where(ORDER.NUMBER.eq(number))
                 .fetchOne(this::toOrder)
     }
 
     @Transactional
-    override fun update(order: UpdateStatus): Order? {
-        return context.selectFrom(ORDER).where(ORDER.ID.eq(order.id)).fetchOne()
+    override fun update(id: UUID, status: OrderStatus): Order? {
+        return context.selectFrom(ORDER).where(ORDER.ID.eq(id)).fetchOne()
                 ?.let { record ->
-
-                    record.setName(order.statusOrder)
+                    record.setStatus(status)
                 }
                 ?.let(this::optimizeColumnsUpdateOf)
                 ?.let { record ->
-                    context.update(ORDER).set(record).where(ORDER.ID.eq(order.id))
+                    context.update(ORDER).set(record).where(ORDER.ID.eq(id))
                             .returning()
                             .fetchOne(this::toOrder)
                 }
@@ -62,13 +66,11 @@ class OrderRepository(@Autowired private val context: DSLContext) : Orders, Jooq
     private fun toOrder(record: OrderRecord): Order {
         return Order(
                 id = record.id,
-                orderNumber = record.orderNumber,
+                number = record.number,
                 customer = record.customer,
                 products = record.products,
-                totalPrice = record.totalPrice,
-                statusOrder = record.statusOrder,
-                createdAt = record.createAt,
-                updatedAt = record.updateAt
+                status = record.status,
+                paymentStatus = record.paymentStatus
         )
     }
 

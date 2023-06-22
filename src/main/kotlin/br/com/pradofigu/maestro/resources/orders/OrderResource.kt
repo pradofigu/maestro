@@ -18,6 +18,12 @@ class OrderResource(@Autowired private val service: OrderService) {
         return ResponseEntity(OrderResponse.from(order), CREATED)
     }
 
+    @GetMapping
+    suspend fun findAll(): List<OrderResponse> {
+        val orders = service.findAll()
+        return orders.map { order -> OrderResponse.from(order) }
+    }
+
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): OrderResponse? {
         val maybeOrder = service.findBy(UUID.fromString(id))
@@ -26,7 +32,7 @@ class OrderResource(@Autowired private val service: OrderService) {
 
     @PutMapping("/{id}")
     suspend fun update(@PathVariable id: String, @RequestBody request: OrderRequest): OrderResponse {
-        val order = service.updateStatus(UUID.fromString(id), request.toUpdateStatus())
+        val order = service.updateStatus(UUID.fromString(id), request.toUpdateOrder().status)
         return OrderResponse.from(order)
     }
 
@@ -36,9 +42,9 @@ class OrderResource(@Autowired private val service: OrderService) {
         return ResponseEntity.noContent().build()
     }
 
-    @GetMapping("/orderNumber/{orderNumber}")
-    suspend fun findByOrderNumber(@PathVariable orderNumber: Long): OrderResponse? {
-        val maybeOrder = service.findBy(orderNumber)
+    @GetMapping("/number/{number}")
+    suspend fun findByNumber(@PathVariable number: UUID): OrderResponse? {
+        val maybeOrder = service.findBy(number)
         return maybeOrder?.let { order -> OrderResponse.from(order) }
     }
 }

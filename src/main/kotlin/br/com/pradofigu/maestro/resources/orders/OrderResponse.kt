@@ -2,26 +2,29 @@ package br.com.pradofigu.maestro.resources.orders
 
 import br.com.pradofigu.maestro.domain.customers.Customer
 import br.com.pradofigu.maestro.domain.orders.Order
+import br.com.pradofigu.maestro.domain.orders.OrderStatus
+import br.com.pradofigu.maestro.domain.orders.PaymentStatus
+import br.com.pradofigu.maestro.domain.products.Product
 import java.math.BigDecimal
 import java.util.*
 
 data class OrderResponse(
         val id: String,
-        val orderNumber: Long,
+        val number: Long,
         val customer: Customer,
         val products: List<Product>,
-        val totalPrice: BigDecimal,
-        val statusOrder: String,
+        val status: OrderStatus,
+        val paymentStatus: PaymentStatus
 ) {
     companion object {
         fun from(order: Order) : OrderResponse {
             return OrderResponse(
                     id = order.id.toString(),
                     customer = order.customer,
-                    orderNumber = order.orderNumber,
+                    number = order.number,
                     products = order.products,
-                    totalPrice = order.totalPrice,
-                    statusOrder = order.statusOrder
+                    status = order.status,
+                    paymentStatus = order.paymentStatus
             )
         }
     }

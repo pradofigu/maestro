@@ -1,8 +1,6 @@
 package br.com.pradofigu.maestro.domain.orders
 
-import br.com.pradofigu.maestro.domain.orders.Order
 import br.com.pradofigu.maestro.domain.orders.Order.CreateOrder
-import br.com.pradofigu.maestro.domain.orders.Order.UpdateStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
@@ -16,16 +14,16 @@ class OrderService(@Autowired private val orders: Orders) {
         throw IllegalArgumentException("Error to create order")
     }
 
+    fun findAll(): List<Order> {
+        return orders.findAll();
+    }
+
     fun findBy(id: UUID): Order? {
         return orders.findBy(id)
     }
 
-    fun findBy(orderNumber: Long): Order? {
-        return orders.findBy(orderNumber)
-    }
-
-    fun updateStatus(id: UUID, order: UpdateStatus): Order? {
-        return orders.update(id, order) ?:
+    fun updateStatus(id: UUID, status: OrderStatus): Order {
+        return orders.update(id, status) ?:
         throw IllegalArgumentException("Error to update order status")
     }
 
