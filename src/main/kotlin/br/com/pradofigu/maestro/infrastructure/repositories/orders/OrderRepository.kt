@@ -27,36 +27,49 @@ class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<
     }
 
     override fun findAll(): List<Order> {
-        return context.selectFrom(ORDER).fetchOne(this::toOrder)
+        return context
+                .selectFrom(ORDER)
+                .fetchOne(this::toOrder)
     }
 
     override fun findBy(id: UUID): Order {
-        return context.selectFrom(ORDER).where(ORDER.ID.eq(id))
+        return context
+                .selectFrom(ORDER)
+                .where(ORDER.ID.eq(id))
                 .fetchOne(this::toOrder)
     }
 
     override fun findBy(number: Long): Order {
-        return context.selectFrom(ORDER).where(ORDER.NUMBER.eq(number))
+        return context
+                .selectFrom(ORDER)
+                .where(ORDER.NUMBER.eq(number))
                 .fetchOne(this::toOrder)
     }
 
     @Transactional
     override fun update(id: UUID, paymentStatus: PaymentStatus): Order {
-        return context.selectFrom(ORDER).where(ORDER.ID.eq(id)).fetchOne()
-                ?.let { record ->
-                    record.setPaymentStatus(paymentStatus)
-                }
-                ?.let(this::optimizeColumnsUpdateOf)
-                ?.let { record ->
-                    context.update(ORDER).set(record).where(ORDER.ID.eq(id))
-                            .returning()
-                            .fetchOne(this::toOrder)
-                }
+        return context
+                .selectFrom(ORDER)
+                .where(ORDER.ID.eq(id))
+                .fetchOne()?.
+        let { it.setPaymentStatus(paymentStatus) }?.
+        let(this::optimizeColumnsUpdateOf)?.
+        let {
+            context
+                    .update(ORDER)
+                    .set(it)
+                    .where(ORDER.ID.eq(id))
+                    .returning()
+                    .fetchOne(this::toOrder)
+        }
     }
 
     @Transactional
     override fun delete(id: UUID): Boolean {
-        val result = context.delete(ORDER).where(ORDER.ID.eq(id)).execute()
+        val result = context
+                .delete(ORDER)
+                .where(ORDER.ID.eq(id))
+                .execute()
         return 1 == result;
     }
 

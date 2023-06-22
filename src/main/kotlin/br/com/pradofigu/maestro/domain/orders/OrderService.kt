@@ -12,8 +12,7 @@ class OrderService(private val orders: Orders) {
 
     fun findBy(id: UUID): Order = orders.findBy(id)
 
-    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus)
-        : Order = orders.update(id, paymentStatus)
+    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus) : Order = orders.update(id, paymentStatus)
 
     fun delete(id: UUID): Boolean = orders.delete(id)
 }
