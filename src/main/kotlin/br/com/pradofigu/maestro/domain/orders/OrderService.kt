@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 import java.util.*
 
 @Service
-class OrderService(@Autowired private val orders: Orders) {
+class OrderService(private val orders: Orders) {
 
     fun createOrder(order: CreateOrder): Order {
         return orders.save(order) ?:
