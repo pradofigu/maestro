@@ -14,15 +14,13 @@ class OrderResource(@Autowired private val service: OrderService) {
 
     @PostMapping
     suspend fun createOrder(@RequestBody request: OrderRequest): ResponseEntity<OrderResponse> {
-        val order = service.createOrder(request.toCreateOrder())
-        return ResponseEntity(OrderResponse.from(order), CREATED)
+        return service.createOrder(request.toCreateOrder()).let {
+            ResponseEntity(OrderResponse.from(it), CREATED)
+        }
     }
 
     @GetMapping
-    suspend fun findAll(): List<OrderResponse> {
-        val orders = service.findAll()
-        return orders.map { order -> OrderResponse.from(order) }
-    }
+    suspend fun findAll(): List<OrderResponse> = service.findAll().map { OrderResponse.from(it) }
 
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): OrderResponse? {
@@ -32,8 +30,9 @@ class OrderResource(@Autowired private val service: OrderService) {
 
     @PutMapping("/{id}")
     suspend fun update(@PathVariable id: String, @RequestBody request: OrderRequest): OrderResponse {
-        val order = service.updatePaymentStatus(UUID.fromString(id), request.toUpdatePaymentStatus().paymentStatus)
-        return OrderResponse.from(order)
+        return service.updatePaymentStatus(UUID.fromString(id), request.toUpdatePaymentStatus().paymentStatus).let {
+            OrderResponse.from(it)
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -43,8 +42,7 @@ class OrderResource(@Autowired private val service: OrderService) {
     }
 
     @GetMapping("/number/{number}")
-    suspend fun findByNumber(@PathVariable number: UUID): OrderResponse? {
-        val maybeOrder = service.findBy(number)
-        return maybeOrder?.let { order -> OrderResponse.from(order) }
+    suspend fun findByNumber(@PathVariable number: UUID): OrderResponse? = service.findBy(number)?.let {
+        OrderResponse.from(it)
     }
 }
