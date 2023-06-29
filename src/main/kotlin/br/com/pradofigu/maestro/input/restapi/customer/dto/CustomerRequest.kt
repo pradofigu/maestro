@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.resources.customers
 
-import br.com.pradofigu.maestro.domain.customers.CPF
-import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.domain.customers.model.CPF
+import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customers.model.Customer.UpdateCustomer
 import java.time.LocalDate
 
 data class CustomerRequest(

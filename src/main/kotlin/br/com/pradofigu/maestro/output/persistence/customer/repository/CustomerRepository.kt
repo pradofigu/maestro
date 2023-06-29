@@ -2,10 +2,10 @@ package br.com.pradofigu.maestro.infrastructure.repositories.customers
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Customer.CUSTOMER
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CustomerRecord
-import br.com.pradofigu.maestro.domain.customers.CPF
-import br.com.pradofigu.maestro.domain.customers.Customer
-import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.Customers
+import br.com.pradofigu.maestro.domain.customers.model.CPF
+import br.com.pradofigu.maestro.domain.customers.model.Customer
+import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-class CustomerRepository(@Autowired private val context: DSLContext) : Customers, JooqRepository<CustomerRecord> {
+class CustomerRepository(@Autowired private val context: DSLContext) : CustomerDataAccessPort, JooqRepository<CustomerRecord> {
 
     @Transactional
     override fun save(customer: CreateCustomer): Customer? {

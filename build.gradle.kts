@@ -125,7 +125,7 @@ jooq {
                         isFluentSetters = true
                     }
                     target.apply {
-                        packageName = "br.com.pradofigo.maestro.infrastructure.entities"
+                        packageName = "br.com.pradofigu.maestro.infrastructure.entities"
                         directory = "build/generated-sources/jooq/main"  // default (can be omitted)
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"

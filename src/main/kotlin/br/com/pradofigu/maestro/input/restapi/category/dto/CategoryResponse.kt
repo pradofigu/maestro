@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.resources.categories
+package br.com.pradofigu.maestro.input.restapi.category.dto
 
-import br.com.pradofigu.maestro.domain.categories.Category
+import br.com.pradofigu.maestro.domain.category.model.Category
 
 class CategoryResponse(
     val id: String,

@@ -1,11 +1,9 @@
 package br.com.pradofigu.maestro.resources.customers
 
-import br.com.pradofigu.maestro.domain.customers.CPF
-import br.com.pradofigu.maestro.domain.customers.CustomerService
+import br.com.pradofigu.maestro.domain.customers.model.CPF
+import br.com.pradofigu.maestro.domain.customers.usecase.CustomerUseCase
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.CREATED
-import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -13,7 +11,7 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/customers"], produces = [APPLICATION_JSON_VALUE])
-class CustomerResource(@Autowired private val service: CustomerService) {
+class CustomerResource(@Autowired private val service: CustomerUseCase) {
 
     @PostMapping
     suspend fun register(@RequestBody request: CustomerRequest): ResponseEntity<CustomerResponse> {

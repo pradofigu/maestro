@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.categories
+package br.com.pradofigu.maestro.domain.category.model
 
 import java.util.UUID
 

@@ -1,6 +1,8 @@
 package br.com.pradofigu.maestro.resources.categories
 
-import br.com.pradofigu.maestro.domain.categories.CategoryService
+import br.com.pradofigu.maestro.domain.category.usecase.CategoryUseCase
+import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
+import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,14 +12,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/customers")
-class CategoryResourceIntegrationTest(
-    @Autowired val categoryService: CategoryService,
+class CategoryControllerIntegrationTest(
+    @Autowired val categoryUseCase: CategoryUseCase,
     @Autowired val mvc: MockMvc,
     @Autowired val objectMapper: ObjectMapper
 ) {
