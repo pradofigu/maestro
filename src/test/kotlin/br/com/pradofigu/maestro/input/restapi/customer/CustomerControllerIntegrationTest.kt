@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.resources.customers
+package br.com.pradofigu.maestro.input.restapi.customer
 
 import br.com.caelum.stella.validation.CPFValidator
 import br.com.pradofigu.maestro.input.restapi.customer.controller.CustomerController

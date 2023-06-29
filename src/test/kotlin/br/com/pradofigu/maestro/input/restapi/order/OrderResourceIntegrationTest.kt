@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.resources.orders
+package br.com.pradofigu.maestro.input.restapi.order
 
 import br.com.pradofigu.maestro.input.restapi.order.controller.OrderController
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest

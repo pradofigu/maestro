@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.resources.categories
+package br.com.pradofigu.maestro.input.restapi.category
 
 import br.com.pradofigu.maestro.domain.category.usecase.CategoryUseCase
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest

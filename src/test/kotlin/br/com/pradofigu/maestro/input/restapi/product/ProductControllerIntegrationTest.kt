@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.resources.products
+package br.com.pradofigu.maestro.input.restapi.product
 
 import br.com.pradofigu.maestro.input.restapi.product.controller.ProductController
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
