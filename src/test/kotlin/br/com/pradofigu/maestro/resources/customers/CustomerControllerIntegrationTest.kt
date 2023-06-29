@@ -1,6 +1,9 @@
 package br.com.pradofigu.maestro.resources.customers
 
 import br.com.caelum.stella.validation.CPFValidator
+import br.com.pradofigu.maestro.input.restapi.customer.controller.CustomerController
+import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
+import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -17,8 +20,8 @@ import java.time.Month
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/customers")
-class CustomerResourceIntegrationTest(
-    @Autowired val customerResource: CustomerResource,
+class CustomerControllerIntegrationTest(
+    @Autowired val customerController: CustomerController,
     @Autowired val mvc: MockMvc,
     @Autowired val objectMapper: ObjectMapper
 ) {

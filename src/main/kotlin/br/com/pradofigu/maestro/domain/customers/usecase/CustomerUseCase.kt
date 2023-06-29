@@ -1,35 +1,38 @@
-package br.com.pradofigu.maestro.domain.customers
+package br.com.pradofigu.maestro.domain.customers.usecase
 
-import br.com.pradofigu.maestro.domain.customers.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
+import br.com.pradofigu.maestro.domain.customers.model.CPF
+import br.com.pradofigu.maestro.domain.customers.model.Customer
+import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customers.model.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.domain.customers.ports.input.CustomerInputPort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
 import java.util.*
 
 @Service
-class CustomerService(@Autowired private val customers: Customers) {
+class CustomerUseCase(@Autowired private val customerDataAccessPort: CustomerDataAccessPort): CustomerInputPort {
 
-    fun register(customer: CreateCustomer): Customer {
-        return customers.save(customer) ?:
+    override fun register(customer: CreateCustomer): Customer {
+        return customerDataAccessPort.save(customer) ?:
          throw IllegalArgumentException("Error to save user")
     }
 
-    fun findBy(id: UUID): Customer? {
-        return customers.findBy(id)
+    override fun findBy(id: UUID): Customer? {
+        return customerDataAccessPort.findBy(id)
     }
 
-    fun findBy(cpf: CPF): Customer? {
-        return customers.findBy(cpf)
+    override fun findBy(cpf: CPF): Customer? {
+        return customerDataAccessPort.findBy(cpf)
     }
 
-    fun update(id: UUID, customer: UpdateCustomer): Customer {
-        return customers.update(id, customer) ?:
+    override fun update(id: UUID, customer: UpdateCustomer): Customer {
+        return customerDataAccessPort.update(id, customer) ?:
         throw IllegalArgumentException("Error to update user")
     }
 
-    fun delete(id: UUID): Boolean {
-        return customers.delete(id)
+    override fun delete(id: UUID): Boolean {
+        return customerDataAccessPort.delete(id)
     }
-
 }

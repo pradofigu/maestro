@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.infrastructure.repositories.customers
+package br.com.pradofigu.maestro.output.persistence.customer.repository
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Customer.CUSTOMER
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CustomerRecord

@@ -1,7 +1,9 @@
-package br.com.pradofigu.maestro.resources.customers
+package br.com.pradofigu.maestro.input.restapi.customer.controller
 
 import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.usecase.CustomerUseCase
+import br.com.pradofigu.maestro.domain.customers.ports.input.CustomerInputPort
+import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
+import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -11,35 +13,35 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/customers"], produces = [APPLICATION_JSON_VALUE])
-class CustomerResource(@Autowired private val service: CustomerUseCase) {
+class CustomerController(@Autowired private val customerInputPort: CustomerInputPort) {
 
     @PostMapping
     suspend fun register(@RequestBody request: CustomerRequest): ResponseEntity<CustomerResponse> {
-        val customer = service.register(request.toCreateCustomer())
+        val customer = customerInputPort.register(request.toCreateCustomer())
         return ResponseEntity(CustomerResponse.from(customer), CREATED)
     }
 
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): CustomerResponse? {
-        val maybeCustomer = service.findBy(UUID.fromString(id))
+        val maybeCustomer = customerInputPort.findBy(UUID.fromString(id))
         return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
     }
 
     @PutMapping("/{id}")
     suspend fun update(@PathVariable id: String, @RequestBody request: CustomerRequest): CustomerResponse {
-        val customer = service.update(UUID.fromString(id), request.toUpdateCustomer())
+        val customer = customerInputPort.update(UUID.fromString(id), request.toUpdateCustomer())
         return CustomerResponse.from(customer)
     }
 
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
-        service.delete(UUID.fromString(id))
+        customerInputPort.delete(UUID.fromString(id))
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/cpf/{cpf}")
     suspend fun findByCPF(@PathVariable cpf: String): CustomerResponse? {
-        val maybeCustomer = service.findBy(CPF(cpf))
+        val maybeCustomer = customerInputPort.findBy(CPF(cpf))
         return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
     }
 }

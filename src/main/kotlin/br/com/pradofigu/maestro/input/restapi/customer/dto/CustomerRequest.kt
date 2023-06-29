@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.resources.customers
+package br.com.pradofigu.maestro.input.restapi.customer.dto
 
 import br.com.pradofigu.maestro.domain.customers.model.CPF
 import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
