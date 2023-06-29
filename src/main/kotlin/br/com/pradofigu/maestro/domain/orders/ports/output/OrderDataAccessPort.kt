@@ -1,8 +1,10 @@
-package br.com.pradofigu.maestro.domain.orders
+package br.com.pradofigu.maestro.domain.orders.ports.output
 
+import br.com.pradofigu.maestro.domain.orders.model.Order
+import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
 import java.util.*
 
-interface Orders {
+interface OrderDataAccessPort {
     fun save(order: Order): Order
     fun findAll(): List<Order>
     fun findBy(id: UUID): Order

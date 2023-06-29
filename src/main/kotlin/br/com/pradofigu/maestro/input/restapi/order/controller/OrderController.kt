@@ -1,6 +1,8 @@
-package br.com.pradofigu.maestro.resources.orders
+package br.com.pradofigu.maestro.input.restapi.order.controller
 
-import br.com.pradofigu.maestro.domain.orders.OrderService
+import br.com.pradofigu.maestro.domain.orders.ports.input.OrderInputPort
+import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
+import br.com.pradofigu.maestro.input.restapi.order.dto.OrderResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -10,39 +12,39 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/orders"], produces = [APPLICATION_JSON_VALUE])
-class OrderResource(@Autowired private val service: OrderService) {
+class OrderController(@Autowired private val orderInputPort: OrderInputPort) {
 
     @PostMapping
     suspend fun createOrder(@RequestBody request: OrderRequest): ResponseEntity<OrderResponse> {
-        return service.createOrder(request.toCreateOrder()).let {
+        return orderInputPort.createOrder(request.toCreateOrder()).let {
             ResponseEntity(OrderResponse.from(it), CREATED)
         }
     }
 
     @GetMapping
-    suspend fun findAll(): List<OrderResponse> = service.findAll().map { OrderResponse.from(it) }
+    suspend fun findAll(): List<OrderResponse> = orderInputPort.findAll().map { OrderResponse.from(it) }
 
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): OrderResponse? {
-        val maybeOrder = service.findBy(UUID.fromString(id))
+        val maybeOrder = orderInputPort.findBy(UUID.fromString(id))
         return maybeOrder?.let { order -> OrderResponse.from(order) }
     }
 
     @PutMapping("/{id}")
     suspend fun update(@PathVariable id: String, @RequestBody request: OrderRequest): OrderResponse {
-        return service.updatePaymentStatus(UUID.fromString(id), request.toUpdatePaymentStatus().paymentStatus).let {
+        return orderInputPort.updatePaymentStatus(UUID.fromString(id), request.toUpdatePaymentStatus().paymentStatus).let {
             OrderResponse.from(it)
         }
     }
 
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
-        service.delete(UUID.fromString(id))
+        orderInputPort.delete(UUID.fromString(id))
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/number/{number}")
-    suspend fun findByNumber(@PathVariable number: UUID): OrderResponse? = service.findBy(number)?.let {
+    suspend fun findByNumber(@PathVariable number: UUID): OrderResponse? = orderInputPort.findBy(number)?.let {
         OrderResponse.from(it)
     }
 }

@@ -1,7 +1,7 @@
-package br.com.pradofigu.maestro.domain.orders
+package br.com.pradofigu.maestro.domain.orders.model
 
 import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.products.Product
+import br.com.pradofigu.maestro.domain.product.model.Product
 import java.util.*
 
 data class Order(

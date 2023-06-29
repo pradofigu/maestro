@@ -1,10 +1,10 @@
-package br.com.pradofigu.maestro.infrastructure.repositories.orders
+package br.com.pradofigu.maestro.output.persistence.order.repository
 
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Order.ORDER
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.OrderRecord
-import br.com.pradofigu.maestro.domain.orders.Order
-import br.com.pradofigu.maestro.domain.orders.Orders
-import br.com.pradofigu.maestro.domain.orders.PaymentStatus
+import br.com.pradofigu.maestro.domain.orders.model.Order
+import br.com.pradofigu.maestro.domain.orders.ports.output.OrderDataAccessPort
+import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
 import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<OrderRecord> {
+class OrderRepository(private val context: DSLContext): JooqRepository<OrderRecord> {
 
     @Transactional
-    override fun save(order: Order): Order {
+    fun save(order: Order): Order {
         val record = OrderRecord()
                 .setCustomerId(order.customer?.id)
                 .setProducts(order.products)
@@ -26,20 +26,20 @@ class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<
                 .fetchOne(this::toOrder)
     }
 
-    override fun findAll(): List<Order> {
+    fun findAll(): List<Order> {
         return context
                 .selectFrom(ORDER)
                 .fetchOne(this::toOrder)
     }
 
-    override fun findBy(id: UUID): Order {
+    fun findBy(id: UUID): Order {
         return context
                 .selectFrom(ORDER)
                 .where(ORDER.ID.eq(id))
                 .fetchOne(this::toOrder)
     }
 
-    override fun findBy(number: Long): Order {
+    fun findBy(number: Long): Order {
         return context
                 .selectFrom(ORDER)
                 .where(ORDER.NUMBER.eq(number))
@@ -47,7 +47,7 @@ class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<
     }
 
     @Transactional
-    override fun update(id: UUID, paymentStatus: PaymentStatus): Order {
+    fun update(id: UUID, paymentStatus: PaymentStatus): Order {
         return context
                 .selectFrom(ORDER)
                 .where(ORDER.ID.eq(id))
@@ -65,7 +65,7 @@ class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<
     }
 
     @Transactional
-    override fun delete(id: UUID): Boolean {
+    fun delete(id: UUID): Boolean {
         val result = context
                 .delete(ORDER)
                 .where(ORDER.ID.eq(id))
@@ -82,5 +82,4 @@ class OrderRepository(private val context: DSLContext) : Orders, JooqRepository<
                 paymentStatus = record.paymentStatus
         )
     }
-
 }

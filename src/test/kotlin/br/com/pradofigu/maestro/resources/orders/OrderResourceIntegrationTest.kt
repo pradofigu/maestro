@@ -1,7 +1,8 @@
 package br.com.pradofigu.maestro.resources.orders
 
+import br.com.pradofigu.maestro.input.restapi.order.controller.OrderController
+import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
 import br.com.pradofigu.maestro.resources.products.ProductRequest
-import br.com.pradofigu.maestro.resources.products.ProductResource
 import br.com.pradofigu.maestro.resources.products.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
@@ -18,10 +19,10 @@ import java.math.BigDecimal
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/orders")
-class OrdersResourceIntegrationTest(
-        @Autowired val orderResource: OrderResource,
-        @Autowired val mvc: MockMvc,
-        @Autowired val objectMapper: ObjectMapper
+class OrderDataAccessPortResourceIntegrationTest(
+    @Autowired val orderController: OrderController,
+    @Autowired val mvc: MockMvc,
+    @Autowired val objectMapper: ObjectMapper
 ) {
 
     @Nested
