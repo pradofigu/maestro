@@ -1,34 +1,37 @@
-package br.com.pradofigu.maestro.domain.products
+package br.com.pradofigu.maestro.domain.product.usecase
 
-import br.com.pradofigu.maestro.domain.products.Product.*
+import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.domain.product.model.Product.*
+import br.com.pradofigu.maestro.domain.product.ports.input.ProductInputPort
+import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException
 import java.util.*
 
 @Service
-class ProductService(@Autowired private val products: Products) {
+class ProductUseCase(@Autowired private val productDataAccessPort: ProductDataAccessPort): ProductInputPort {
 
-    fun register(product: CreateProduct): Product {
-        return products.save(product) ?:
+    override fun register(product: CreateProduct): Product {
+        return productDataAccessPort.save(product) ?:
          throw IllegalArgumentException("Error to save product")
     }
 
-    fun findBy(id: UUID): Product? {
-        return products.findBy(id)
+    override fun findBy(id: UUID): Product? {
+        return productDataAccessPort.findBy(id)
     }
 
-    fun findBy(category: String): List<Product> {
-        return products.findBy(category)
+    override fun findBy(category: String): List<Product> {
+        return productDataAccessPort.findBy(category)
     }
 
-    fun update(id: UUID, product: UpdateProduct): Product {
-        return products.update(id, product) ?:
+    override fun update(id: UUID, product: UpdateProduct): Product {
+        return productDataAccessPort.update(id, product) ?:
         throw IllegalArgumentException("Error to update product")
     }
 
-    fun delete(id: UUID): Boolean {
-        return products.delete(id)
+    override fun delete(id: UUID): Boolean {
+        return productDataAccessPort.delete(id)
     }
 
 }

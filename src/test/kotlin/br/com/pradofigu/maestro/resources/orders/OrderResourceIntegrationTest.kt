@@ -2,8 +2,8 @@ package br.com.pradofigu.maestro.resources.orders
 
 import br.com.pradofigu.maestro.input.restapi.order.controller.OrderController
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
-import br.com.pradofigu.maestro.resources.products.ProductRequest
-import br.com.pradofigu.maestro.resources.products.ProductResponse
+import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
+import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.*

@@ -6,7 +6,7 @@ import br.com.pradofigu.maestro.domain.customers.model.CPF
 import br.com.pradofigu.maestro.domain.customers.model.Customer
 import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
 import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
-import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
+import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-class CustomerRepository(@Autowired private val context: DSLContext) : CustomerDataAccessPort, JooqRepository<CustomerRecord> {
+class CustomerRepository(@Autowired private val context: DSLContext) : CustomerDataAccessPort,
+    JooqRepository<CustomerRecord> {
 
     @Transactional
     override fun save(customer: CreateCustomer): Customer? {

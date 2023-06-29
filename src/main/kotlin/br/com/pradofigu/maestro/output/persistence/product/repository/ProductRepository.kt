@@ -1,11 +1,11 @@
-package br.com.pradofigu.maestro.infrastructure.repositories.products
+package br.com.pradofigu.maestro.output.persistence.product.repository
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Product.PRODUCT
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.ProductRecord
-import br.com.pradofigu.maestro.domain.products.Product.CreateProduct
-import br.com.pradofigu.maestro.domain.products.Product
-import br.com.pradofigu.maestro.domain.products.Products
-import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
+import br.com.pradofigu.maestro.domain.product.model.Product.CreateProduct
+import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
+import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-class ProductRepository(@Autowired private val context: DSLContext) : Products, JooqRepository<ProductRecord> {
+class ProductRepository(@Autowired private val context: DSLContext): JooqRepository<ProductRecord> {
 
     @Transactional
-    override fun save(product: CreateProduct): Product? {
+    fun save(product: CreateProduct): Product? {
         val record = ProductRecord()
             .setName(product.name)
             .setPrice(product.price)
@@ -28,18 +28,18 @@ class ProductRepository(@Autowired private val context: DSLContext) : Products, 
             .fetchOne(this::toProduct)
     }
 
-    override fun findBy(id: UUID): Product? {
+    fun findBy(id: UUID): Product? {
         return context.selectFrom(PRODUCT).where(PRODUCT.ID.eq(id))
             .fetchOne(this::toProduct)
     }
 
-    override fun findBy(category: String): List<Product> {
+    fun findBy(category: String): List<Product> {
         return context.selectFrom(PRODUCT).where(PRODUCT.CATEGORY.eq(category))
             .fetch(this::toProduct)
     }
 
     @Transactional
-    override fun update(id: UUID, product: Product.UpdateProduct): Product? {
+    fun update(id: UUID, product: Product.UpdateProduct): Product? {
         return context.selectFrom(PRODUCT).where(PRODUCT.ID.eq(id)).fetchOne()
             ?.let { record ->
 
@@ -58,7 +58,7 @@ class ProductRepository(@Autowired private val context: DSLContext) : Products, 
     }
 
     @Transactional
-    override fun delete(id: UUID): Boolean {
+    fun delete(id: UUID): Boolean {
         val result = context.delete(PRODUCT).where(PRODUCT.ID.eq(id)).execute()
         return 1 == result;
     }

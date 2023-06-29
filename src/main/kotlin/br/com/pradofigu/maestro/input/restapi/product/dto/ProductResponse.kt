@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.resources.products
+package br.com.pradofigu.maestro.input.restapi.product.dto
 
-import br.com.pradofigu.maestro.domain.products.Product
+import br.com.pradofigu.maestro.domain.product.model.Product
 import java.math.BigDecimal
 
 data class ProductResponse(

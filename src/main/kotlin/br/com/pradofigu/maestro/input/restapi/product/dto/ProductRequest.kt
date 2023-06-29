@@ -1,7 +1,7 @@
-package br.com.pradofigu.maestro.resources.products
+package br.com.pradofigu.maestro.input.restapi.product.dto
 
-import br.com.pradofigu.maestro.domain.products.Product.UpdateProduct
-import br.com.pradofigu.maestro.domain.products.Product.CreateProduct
+import br.com.pradofigu.maestro.domain.product.model.Product.UpdateProduct
+import br.com.pradofigu.maestro.domain.product.model.Product.CreateProduct
 import java.math.BigDecimal
 data class ProductRequest(
     val name: String,

@@ -1,5 +1,8 @@
 package br.com.pradofigu.maestro.resources.products
 
+import br.com.pradofigu.maestro.input.restapi.product.controller.ProductController
+import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
+import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -16,8 +19,8 @@ import java.math.BigDecimal
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/products")
-class ProductResourceIntegrationTest(
-    @Autowired val productResource: ProductResource,
+class ProductControllerIntegrationTest(
+    @Autowired val productController: ProductController,
     @Autowired val mvc: MockMvc,
     @Autowired val objectMapper: ObjectMapper
 ) {

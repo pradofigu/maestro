@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.infrastructure.repositories
+package br.com.pradofigu.maestro.output.persistence
 
 import org.jooq.Record;
 

@@ -1,9 +1,10 @@
-package br.com.pradofigu.maestro.domain.products
+package br.com.pradofigu.maestro.domain.product.ports.output
 
-import br.com.pradofigu.maestro.domain.products.Product.*
+import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.domain.product.model.Product.*
 import java.util.*
 
-interface Products {
+interface ProductDataAccessPort {
 
     fun save(product: CreateProduct): Product?
 

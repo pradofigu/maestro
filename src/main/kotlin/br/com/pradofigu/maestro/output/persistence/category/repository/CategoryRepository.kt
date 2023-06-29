@@ -3,7 +3,7 @@ package br.com.pradofigu.maestro.output.persistence.category.repository
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Category.CATEGORY
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.CategoryRecord
 import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.infrastructure.repositories.JooqRepository
+import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository

@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.products
+package br.com.pradofigu.maestro.domain.product.model
 
 import java.util.*
 import java.math.BigDecimal
