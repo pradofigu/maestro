@@ -1,9 +1,9 @@
-package br.com.pradofigu.maestro.domain.orders.usecase
+package br.com.pradofigu.maestro.domain.order.usecase
 
-import br.com.pradofigu.maestro.domain.orders.ports.output.OrderDataAccessPort
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
-import br.com.pradofigu.maestro.domain.orders.ports.input.OrderInputPort
+import br.com.pradofigu.maestro.domain.order.ports.output.OrderDataAccessPort
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.ports.input.OrderInputPort
 import org.springframework.stereotype.Service
 import java.util.*
 

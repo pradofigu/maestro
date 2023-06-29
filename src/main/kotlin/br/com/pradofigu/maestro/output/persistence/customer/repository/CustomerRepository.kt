@@ -2,10 +2,10 @@ package br.com.pradofigu.maestro.output.persistence.customer.repository
 
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Customer.CUSTOMER
 import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CustomerRecord
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.beans.factory.annotation.Autowired

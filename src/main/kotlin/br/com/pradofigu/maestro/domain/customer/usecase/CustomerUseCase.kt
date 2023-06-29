@@ -1,11 +1,11 @@
-package br.com.pradofigu.maestro.domain.customers.usecase
+package br.com.pradofigu.maestro.domain.customer.usecase
 
-import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.model.Customer.UpdateCustomer
-import br.com.pradofigu.maestro.domain.customers.ports.input.CustomerInputPort
+import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customer.model.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.domain.customer.ports.input.CustomerInputPort
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.lang.IllegalArgumentException

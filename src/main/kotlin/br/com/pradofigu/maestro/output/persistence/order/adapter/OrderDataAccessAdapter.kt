@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.output.persistence.order.adapter
 
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
-import br.com.pradofigu.maestro.domain.orders.ports.output.OrderDataAccessPort
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.ports.output.OrderDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
 import java.util.UUID
 

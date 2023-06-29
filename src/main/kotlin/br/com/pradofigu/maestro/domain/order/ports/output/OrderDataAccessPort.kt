@@ -1,7 +1,7 @@
-package br.com.pradofigu.maestro.domain.orders.ports.output
+package br.com.pradofigu.maestro.domain.order.ports.output
 
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import java.util.*
 
 interface OrderDataAccessPort {

@@ -1,8 +1,8 @@
-package br.com.pradofigu.maestro.domain.customers.ports.output
+package br.com.pradofigu.maestro.domain.customer.ports.output
 
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
 import java.util.*
 
 interface CustomerDataAccessPort {

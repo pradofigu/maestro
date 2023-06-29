@@ -2,8 +2,8 @@ package br.com.pradofigu.maestro.output.persistence.order.repository
 
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Order.ORDER
 import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.OrderRecord
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository

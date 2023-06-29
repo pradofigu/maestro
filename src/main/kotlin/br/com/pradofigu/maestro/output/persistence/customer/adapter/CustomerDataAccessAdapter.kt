@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.output.persistence.customer.adapter
 
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.customers.ports.output.CustomerDataAccessPort
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
 import java.util.*
 

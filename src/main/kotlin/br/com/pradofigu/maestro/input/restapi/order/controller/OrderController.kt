@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.input.restapi.order.controller
 
-import br.com.pradofigu.maestro.domain.orders.ports.input.OrderInputPort
+import br.com.pradofigu.maestro.domain.order.ports.input.OrderInputPort
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderResponse
 import org.springframework.beans.factory.annotation.Autowired

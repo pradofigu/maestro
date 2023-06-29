@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.input.restapi.customer.dto
 
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.model.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customers.model.Customer.UpdateCustomer
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
+import br.com.pradofigu.maestro.domain.customer.model.Customer.UpdateCustomer
 import java.time.LocalDate
 
 data class CustomerRequest(

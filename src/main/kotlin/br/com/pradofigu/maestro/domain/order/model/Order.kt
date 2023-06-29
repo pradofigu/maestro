@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.domain.orders.model
+package br.com.pradofigu.maestro.domain.order.model
 
-import br.com.pradofigu.maestro.domain.customers.model.Customer
+import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.domain.product.model.Product
 import java.util.*
 

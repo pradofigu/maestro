@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.input.restapi.customer.dto
 
-import br.com.pradofigu.maestro.domain.customers.model.Customer
+import br.com.pradofigu.maestro.domain.customer.model.Customer
 import java.time.LocalDate
 
 data class CustomerResponse(

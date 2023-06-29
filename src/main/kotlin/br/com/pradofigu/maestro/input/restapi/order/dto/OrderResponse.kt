@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.input.restapi.order.dto
 
-import br.com.pradofigu.maestro.domain.customers.model.Customer
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.domain.product.model.Product
 
 data class OrderResponse(

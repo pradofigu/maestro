@@ -1,7 +1,7 @@
-package br.com.pradofigu.maestro.domain.orders.ports.input
+package br.com.pradofigu.maestro.domain.order.ports.input
 
-import br.com.pradofigu.maestro.domain.orders.model.Order
-import br.com.pradofigu.maestro.domain.orders.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import java.util.UUID
 
 interface OrderInputPort {

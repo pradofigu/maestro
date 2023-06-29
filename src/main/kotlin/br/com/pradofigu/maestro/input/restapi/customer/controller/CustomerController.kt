@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.input.restapi.customer.controller
 
-import br.com.pradofigu.maestro.domain.customers.model.CPF
-import br.com.pradofigu.maestro.domain.customers.ports.input.CustomerInputPort
+import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.domain.customer.ports.input.CustomerInputPort
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
 import org.springframework.beans.factory.annotation.Autowired
