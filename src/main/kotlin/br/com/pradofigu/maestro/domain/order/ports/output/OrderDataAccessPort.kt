@@ -6,15 +6,15 @@ import java.util.UUID
 
 interface OrderDataAccessPort {
 
-    fun findAll(): List<Order>
+    suspend fun findAll(): List<Order>
 
-    fun findBy(id: UUID): Order?
+    suspend fun findBy(id: UUID): Order?
 
-    fun findBy(number: Long): Order?
+    suspend fun findBy(number: Long): Order?
 
-    fun save(order: Order): Order
+    suspend fun save(order: Order): Order
 
-    fun update(id: UUID, paymentStatus: PaymentStatus): Order
+    suspend fun update(id: UUID, paymentStatus: PaymentStatus): Order
 
-    fun delete(id: UUID)
+    suspend fun delete(id: UUID)
 }

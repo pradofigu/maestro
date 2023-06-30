@@ -6,13 +6,13 @@ import java.util.UUID
 
 interface CustomerDataAccessPort {
 
-    fun findBy(id: UUID): Customer?
+    suspend fun findBy(id: UUID): Customer?
 
-    fun findBy(cpf: CPF): Customer?
+    suspend fun findBy(cpf: CPF): Customer?
 
-    fun save(customer: Customer): Customer
+    suspend fun save(customer: Customer): Customer
 
-    fun update(id: UUID, customer: Customer): Customer
+    suspend fun update(id: UUID, customer: Customer): Customer
 
-    fun delete(id: UUID)
+    suspend fun delete(id: UUID)
 }

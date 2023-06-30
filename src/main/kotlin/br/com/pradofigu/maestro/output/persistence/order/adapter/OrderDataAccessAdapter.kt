@@ -12,16 +12,16 @@ class OrderDataAccessAdapter(
 ): OrderDataAccessPort {
 
 
-    override fun findAll(): List<Order> = orderRepository.findAll()
+    override suspend fun findAll(): List<Order> = orderRepository.findAll()
 
-    override fun findBy(id: UUID): Order? = orderRepository.findBy(id)
+    override suspend fun findBy(id: UUID): Order? = orderRepository.findBy(id)
 
-    override fun findBy(number: Long): Order? = orderRepository.findBy(number)
+    override suspend fun findBy(number: Long): Order? = orderRepository.findBy(number)
 
-    override fun save(order: Order): Order = orderRepository.save(order)
+    override suspend fun save(order: Order): Order = orderRepository.save(order)
         ?: throw DatabaseOperationException("Error to save order", order)
 
-    override fun update(id: UUID, paymentStatus: PaymentStatus): Order {
+    override suspend fun update(id: UUID, paymentStatus: PaymentStatus): Order {
         return orderRepository.update(id, paymentStatus)
             ?: throw DatabaseOperationException(
                 "Error to update order",
@@ -29,7 +29,7 @@ class OrderDataAccessAdapter(
             )
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         orderRepository.delete(id).also {
             if (!it) throw DatabaseOperationException("Error to delete order with ID $id")
         }

@@ -12,17 +12,17 @@ class CustomerUseCase(
     private val customerDataAccessPort: CustomerDataAccessPort
 ): CustomerInputPort {
 
-    override fun register(customer: Customer): Customer = customerDataAccessPort.save(customer)
+    override suspend fun register(customer: Customer): Customer = customerDataAccessPort.save(customer)
 
-    override fun findBy(id: UUID): Customer? = customerDataAccessPort.findBy(id)
+    override suspend fun findBy(id: UUID): Customer? = customerDataAccessPort.findBy(id)
 
-    override fun findBy(cpf: CPF): Customer? = customerDataAccessPort.findBy(cpf)
+    override suspend fun findBy(cpf: CPF): Customer? = customerDataAccessPort.findBy(cpf)
 
-    override fun update(id: UUID, customer: Customer): Customer {
+    override suspend fun update(id: UUID, customer: Customer): Customer {
         return customerDataAccessPort.update(id, customer)
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         customerDataAccessPort.delete(id)
     }
 }

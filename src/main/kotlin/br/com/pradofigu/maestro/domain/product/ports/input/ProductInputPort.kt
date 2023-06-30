@@ -5,13 +5,13 @@ import java.util.UUID
 
 interface ProductInputPort {
 
-    fun register(product: Product): Product
+    suspend fun register(product: Product): Product
 
-    fun findBy(id: UUID): Product?
+    suspend fun findBy(id: UUID): Product?
 
-    fun findBy(category: String): List<Product>
+    suspend fun findBy(category: String): List<Product>
 
-    fun update(id: UUID, product: Product): Product
+    suspend fun update(id: UUID, product: Product): Product
 
-    fun delete(id: UUID)
+    suspend fun delete(id: UUID)
 }

@@ -13,19 +13,19 @@ class CategoryUseCase(
     private val categoryDataAccessPort: CategoryDataAccessPort
 ): CategoryInputPort {
 
-    override fun create(category: Category): Category {
+    override suspend fun create(category: Category): Category {
         return categoryDataAccessPort.save(category) ?: throw IllegalArgumentException("Error to create category")
     }
 
-    override fun findBy(id: UUID): Category? {
+    override suspend fun findBy(id: UUID): Category? {
         return categoryDataAccessPort.findBy(id)
     }
 
-    override fun update(id: UUID, category: Category): Category {
+    override suspend fun update(id: UUID, category: Category): Category {
         return categoryDataAccessPort.update(id, category) ?: throw IllegalArgumentException("Error to update category")
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         categoryDataAccessPort.delete(id)
     }
 }

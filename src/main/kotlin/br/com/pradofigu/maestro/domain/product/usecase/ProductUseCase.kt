@@ -11,17 +11,17 @@ class ProductUseCase(
     private val productDataAccessPort: ProductDataAccessPort
 ): ProductInputPort {
 
-    override fun register(product: Product): Product = productDataAccessPort.save(product)
+    override suspend fun register(product: Product): Product = productDataAccessPort.save(product)
 
-    override fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
+    override suspend fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
 
-    override fun findBy(category: String): List<Product> = productDataAccessPort.findBy(category)
+    override suspend fun findBy(category: String): List<Product> = productDataAccessPort.findBy(category)
 
-    override fun update(id: UUID, product: Product): Product {
+    override suspend fun update(id: UUID, product: Product): Product {
         return productDataAccessPort.update(id, product)
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         productDataAccessPort.delete(id)
     }
 }

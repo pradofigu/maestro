@@ -10,12 +10,12 @@ class CategoryDataAccessAdapter(
     private val categoryRepository: CategoryRepository
 ): CategoryDataAccessPort {
 
-    override fun findBy(id: UUID): Category? = categoryRepository.findBy(id)
+    override suspend fun findBy(id: UUID): Category? = categoryRepository.findBy(id)
 
-    override fun save(category: Category): Category = categoryRepository.save(category)
+    override suspend fun save(category: Category): Category = categoryRepository.save(category)
         ?: throw DatabaseOperationException("Error to create category", category)
 
-    override fun update(id: UUID, category: Category): Category {
+    override suspend fun update(id: UUID, category: Category): Category {
         return categoryRepository.update(id, category)
             ?: throw DatabaseOperationException(
                 "Error to update category",
@@ -23,7 +23,7 @@ class CategoryDataAccessAdapter(
             )
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         categoryRepository.delete(id).also {
             if (!it) throw DatabaseOperationException("Error to delete category with ID $id")
         }

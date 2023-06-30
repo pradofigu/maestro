@@ -5,11 +5,11 @@ import java.util.UUID
 
 interface CategoryDataAccessPort {
 
-    fun findBy(id: UUID): Category?
+    suspend fun findBy(id: UUID): Category?
 
-    fun save(category: Category): Category
+    suspend fun save(category: Category): Category
 
-    fun update(id: UUID, category: Category): Category
+    suspend fun update(id: UUID, category: Category): Category
 
-    fun delete(id: UUID)
+    suspend fun delete(id: UUID)
 }

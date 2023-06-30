@@ -10,14 +10,14 @@ import java.util.UUID
 class CustomerDataAccessAdapter(
     private val customerRepository: CustomerRepository
 ): CustomerDataAccessPort {
-    override fun findBy(id: UUID): Customer? = customerRepository.findBy(id)
+    override suspend fun findBy(id: UUID): Customer? = customerRepository.findBy(id)
 
-    override fun findBy(cpf: CPF): Customer? = customerRepository.findBy(cpf)
+    override suspend fun findBy(cpf: CPF): Customer? = customerRepository.findBy(cpf)
 
-    override fun save(customer: Customer): Customer = customerRepository.save(customer)
+    override suspend fun save(customer: Customer): Customer = customerRepository.save(customer)
         ?: throw DatabaseOperationException("Error to save customer", customer)
 
-    override fun update(id: UUID, customer: Customer): Customer {
+    override suspend fun update(id: UUID, customer: Customer): Customer {
         return customerRepository.update(id, customer)
             ?: throw DatabaseOperationException(
                 "Error to update customer",
@@ -25,7 +25,7 @@ class CustomerDataAccessAdapter(
             )
     }
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         customerRepository.delete(id).also {
             if (!it) throw DatabaseOperationException("Error to delete customer with ID $id")
         }

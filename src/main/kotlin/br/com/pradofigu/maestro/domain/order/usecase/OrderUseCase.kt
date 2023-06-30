@@ -12,20 +12,20 @@ class OrderUseCase(
     private val orderDataAccessPort: OrderDataAccessPort
 ): OrderInputPort {
 
-    override fun createOrder(order: Order): Order = orderDataAccessPort.save(order)
+    override suspend fun createOrder(order: Order): Order = orderDataAccessPort.save(order)
 
-    override fun findAll(): List<Order> = orderDataAccessPort.findAll()
+    override suspend fun findAll(): List<Order> = orderDataAccessPort.findAll()
 
-    override fun findBy(id: UUID): Order? = orderDataAccessPort.findBy(id)
+    override suspend fun findBy(id: UUID): Order? = orderDataAccessPort.findBy(id)
 
-    override fun findBy(number: Long): Order? = orderDataAccessPort.findBy(number)
+    override suspend fun findBy(number: Long): Order? = orderDataAccessPort.findBy(number)
 
-    override fun updatePaymentStatus(
+    override suspend fun updatePaymentStatus(
         id: UUID,
         paymentStatus: PaymentStatus
     ): Order = orderDataAccessPort.update(id, paymentStatus)
 
-    override fun delete(id: UUID) {
+    override suspend fun delete(id: UUID) {
         orderDataAccessPort.delete(id)
     }
 }
