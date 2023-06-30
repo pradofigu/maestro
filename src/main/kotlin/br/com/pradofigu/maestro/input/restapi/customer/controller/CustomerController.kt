@@ -8,7 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
@@ -17,31 +24,36 @@ class CustomerController(@Autowired private val customerInputPort: CustomerInput
 
     @PostMapping
     suspend fun register(@RequestBody request: CustomerRequest): ResponseEntity<CustomerResponse> {
-        val customer = customerInputPort.register(request.toCreateCustomer())
+        val customer = customerInputPort.register(request.toModel())
         return ResponseEntity(CustomerResponse.from(customer), CREATED)
     }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: String): CustomerResponse? {
-        val maybeCustomer = customerInputPort.findBy(UUID.fromString(id))
-        return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
+    suspend fun findById(@PathVariable id: String): ResponseEntity<CustomerResponse> {
+        return customerInputPort.findBy(UUID.fromString(id))?.let {
+            ResponseEntity.ok(CustomerResponse.from(it))
+        } ?: ResponseEntity.notFound().build()
     }
 
     @PutMapping("/{id}")
-    suspend fun update(@PathVariable id: String, @RequestBody request: CustomerRequest): CustomerResponse {
-        val customer = customerInputPort.update(UUID.fromString(id), request.toUpdateCustomer())
-        return CustomerResponse.from(customer)
+    suspend fun update(
+        @PathVariable id: String,
+        @RequestBody request: CustomerRequest
+    ): ResponseEntity<CustomerResponse> {
+        val customer = customerInputPort.update(UUID.fromString(id), request.toModel())
+        return ResponseEntity.ok(CustomerResponse.from(customer))
     }
 
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         customerInputPort.delete(UUID.fromString(id))
-        return ResponseEntity.noContent().build()
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping("/cpf/{cpf}")
-    suspend fun findByCPF(@PathVariable cpf: String): CustomerResponse? {
-        val maybeCustomer = customerInputPort.findBy(CPF(cpf))
-        return maybeCustomer?.let { customer -> CustomerResponse.from(customer) }
+    suspend fun findByCPF(@PathVariable cpf: String): ResponseEntity<CustomerResponse> {
+        return customerInputPort.findBy(CPF(cpf))?.let {
+            ResponseEntity.ok(CustomerResponse.from(it))
+        } ?: ResponseEntity.notFound().build()
     }
 }
