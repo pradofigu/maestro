@@ -5,13 +5,13 @@ import br.com.pradofigu.maestro.domain.customer.model.Customer
 import java.util.UUID
 
 interface CustomerInputPort {
-    fun register(customer: Customer.CreateCustomer): Customer
+    suspend fun register(customer: Customer): Customer
 
-    fun findBy(id: UUID): Customer?
+    suspend fun findBy(id: UUID): Customer?
 
-    fun findBy(cpf: CPF): Customer?
+    suspend fun findBy(cpf: CPF): Customer?
 
-    fun update(id: UUID, customer: Customer.UpdateCustomer): Customer
+    suspend fun update(id: UUID, customer: Customer): Customer
 
-    fun delete(id: UUID): Boolean
+    suspend fun delete(id: UUID)
 }

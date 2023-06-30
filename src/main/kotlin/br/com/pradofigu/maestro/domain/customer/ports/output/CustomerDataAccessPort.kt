@@ -2,19 +2,17 @@ package br.com.pradofigu.maestro.domain.customer.ports.output
 
 import br.com.pradofigu.maestro.domain.customer.model.CPF
 import br.com.pradofigu.maestro.domain.customer.model.Customer
-import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
-import java.util.*
+import java.util.UUID
 
 interface CustomerDataAccessPort {
 
-    fun save(customer: CreateCustomer): Customer?
+    suspend fun findBy(id: UUID): Customer?
 
-    fun findBy(id: UUID): Customer?
+    suspend fun findBy(cpf: CPF): Customer?
 
-    fun update(id: UUID, customer: Customer.UpdateCustomer): Customer?
+    suspend fun save(customer: Customer): Customer
 
-    fun delete(id: UUID)
+    suspend fun update(id: UUID, customer: Customer): Customer
 
-    fun findBy(cpf: CPF): Customer?
-
+    suspend fun delete(id: UUID)
 }
