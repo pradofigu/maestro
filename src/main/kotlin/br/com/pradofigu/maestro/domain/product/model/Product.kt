@@ -1,25 +1,12 @@
 package br.com.pradofigu.maestro.domain.product.model
 
-import java.util.*
+import java.util.UUID
 import java.math.BigDecimal
+
 data class Product(
-    val id: UUID,
+    val id: UUID? = UUID.randomUUID(),
     val name: String,
     val price: BigDecimal,
     val category: String,
-    val preparationTime: BigDecimal) {
-
-    class CreateProduct(
-        val name: String,
-        val price: BigDecimal,
-        val category: String,
-        val preparationTime: BigDecimal
-    )
-
-    class UpdateProduct(
-        val name: String,
-        val price: BigDecimal,
-        val category: String,
-        val preparationTime: BigDecimal
-    )
-}
+    val preparationTime: BigDecimal
+)

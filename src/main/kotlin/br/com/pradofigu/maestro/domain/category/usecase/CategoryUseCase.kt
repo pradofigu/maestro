@@ -1,8 +1,6 @@
 package br.com.pradofigu.maestro.domain.category.usecase
 
 import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.domain.category.model.Category.CreateCategory
-import br.com.pradofigu.maestro.domain.category.model.Category.UpdateCategory
 import br.com.pradofigu.maestro.domain.category.ports.input.CategoryInputPort
 import br.com.pradofigu.maestro.domain.category.ports.output.CategoryDataAccessPort
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,9 +9,11 @@ import java.lang.IllegalArgumentException
 import java.util.UUID
 
 @Service
-class CategoryUseCase(@Autowired private val categoryDataAccessPort: CategoryDataAccessPort): CategoryInputPort {
+class CategoryUseCase(
+    private val categoryDataAccessPort: CategoryDataAccessPort
+): CategoryInputPort {
 
-    override fun create(category: CreateCategory): Category {
+    override fun create(category: Category): Category {
         return categoryDataAccessPort.save(category) ?: throw IllegalArgumentException("Error to create category")
     }
 
@@ -21,11 +21,11 @@ class CategoryUseCase(@Autowired private val categoryDataAccessPort: CategoryDat
         return categoryDataAccessPort.findBy(id)
     }
 
-    override fun update(id: UUID, category: UpdateCategory): Category {
+    override fun update(id: UUID, category: Category): Category {
         return categoryDataAccessPort.update(id, category) ?: throw IllegalArgumentException("Error to update category")
     }
 
-    override fun delete(id: UUID): Boolean {
-        return categoryDataAccessPort.delete(id)
+    override fun delete(id: UUID) {
+        categoryDataAccessPort.delete(id)
     }
 }

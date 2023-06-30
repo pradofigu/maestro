@@ -9,9 +9,11 @@ interface OrderInputPort {
 
     fun findAll(): List<Order>
 
-    fun findBy(id: UUID): Order
+    fun findBy(id: UUID): Order?
+
+    fun findBy(number: Long): Order?
 
     fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus): Order
 
-    fun delete(id: UUID): Boolean
+    fun delete(id: UUID)
 }

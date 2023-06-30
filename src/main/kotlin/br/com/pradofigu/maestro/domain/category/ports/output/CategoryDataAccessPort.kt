@@ -1,16 +1,15 @@
 package br.com.pradofigu.maestro.domain.category.ports.output
 
 import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.domain.category.model.Category.UpdateCategory
-import java.util.*
+import java.util.UUID
 
 interface CategoryDataAccessPort {
 
-    fun save(category: Category.CreateCategory): Category?
-
     fun findBy(id: UUID): Category?
 
-    fun update(id: UUID, category: UpdateCategory): Category?
+    fun save(category: Category): Category
 
-    fun delete(id: UUID): Boolean
+    fun update(id: UUID, category: Category): Category
+
+    fun delete(id: UUID)
 }
