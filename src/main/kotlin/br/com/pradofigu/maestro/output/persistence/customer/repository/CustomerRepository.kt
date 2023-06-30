@@ -1,80 +1,75 @@
 package br.com.pradofigu.maestro.output.persistence.customer.repository
 
-import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.Customer.CUSTOMER
-import br.com.pradofigo.maestro.infrastructure.entities.maestro.tables.records.CustomerRecord
 import br.com.pradofigu.maestro.domain.customer.model.CPF
 import br.com.pradofigu.maestro.domain.customer.model.Customer
-import br.com.pradofigu.maestro.domain.customer.model.Customer.CreateCustomer
-import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
+import br.com.pradofigu.maestro.tables.Customer.CUSTOMER
+import br.com.pradofigu.maestro.tables.records.CustomerRecord
 import org.jooq.DSLContext
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.UUID
 
 @Repository
-class CustomerRepository(@Autowired private val context: DSLContext) : CustomerDataAccessPort,
-    JooqRepository<CustomerRecord> {
+class CustomerRepository(
+    private val context: DSLContext
+): JooqRepository<CustomerRecord> {
+
+    fun save(customer: Customer): Customer? = CustomerRecord()
+        .setName(customer.name)
+        .setEmail(customer.email)
+        .setCpf(customer.cpf.number)
+        .setBirthDate(customer.birthDate)
+        .setPhone(customer.phone)
+        .let {
+            context
+                .insertInto(CUSTOMER).set(it)
+                .returning()
+                .fetchOne(this::toModel)
+        }
+
+    fun findBy(id: UUID): Customer? = context
+        .selectFrom(CUSTOMER)
+        .where(CUSTOMER.ID.eq(id))
+        .fetchOne(this::toModel)
+
+    fun findBy(cpf: CPF): Customer? = context
+        .selectFrom(CUSTOMER)
+        .where(CUSTOMER.CPF.eq(cpf.number))
+        .fetchOne(this::toModel)
 
     @Transactional
-    override fun save(customer: CreateCustomer): Customer? {
-        val record = CustomerRecord()
-            .setName(customer.name)
-            .setEmail(customer.email)
-            .setCpf(customer.cpf.number)
-            .setBirthDate(customer.birthDate)
-            .setPhone(customer.phone)
-
-        return context.insertInto(CUSTOMER).set(record)
-            .returning()
-            .fetchOne(this::toCustomer)
-    }
-
-    override fun findBy(id: UUID): Customer? {
-        return context.selectFrom(CUSTOMER).where(CUSTOMER.ID.eq(id))
-            .fetchOne(this::toCustomer)
-    }
-
-    override fun findBy(cpf: CPF): Customer? {
-        return context.selectFrom(CUSTOMER).where(CUSTOMER.CPF.eq(cpf.number))
-            .fetchOne(this::toCustomer)
-    }
-
-    @Transactional
-    override fun update(id: UUID, customer: Customer.UpdateCustomer): Customer? {
-        return context.selectFrom(CUSTOMER).where(CUSTOMER.ID.eq(id)).fetchOne()
-            ?.let { record ->
-
-                record.setName(customer.name)
-                    .setEmail(customer.email)
-                    .setCpf(customer.cpf.number)
-                    .setBirthDate(customer.birthDate)
-                    .setPhone(customer.phone)
+    fun update(id: UUID, customer: Customer): Customer? = context
+        .selectFrom(CUSTOMER)
+        .where(CUSTOMER.ID.eq(id))
+        .fetchOne()
+        ?.apply {
+            this.setName(customer.name)
+            this.setEmail(customer.email)
+            this.setCpf(customer.cpf.number)
+            this.setBirthDate(customer.birthDate)
+            this.setPhone(customer.phone)
+        }?.let(this::optimizeColumnsUpdateOf)
+        ?.let {
+            context
+                .update(CUSTOMER)
+                .set(it)
+                .where(CUSTOMER.ID.eq(id))
+                .returning()
+                .fetchOne(this::toModel)
             }
-            ?.let(this::optimizeColumnsUpdateOf)
-            ?.let { record ->
-                context.update(CUSTOMER).set(record).where(CUSTOMER.ID.eq(id))
-                    .returning()
-                    .fetchOne(this::toCustomer)
-            }
-    }
 
-    @Transactional
-    override fun delete(id: UUID): Boolean {
-        val result = context.delete(CUSTOMER).where(CUSTOMER.ID.eq(id)).execute()
-        return 1 == result;
-    }
+    fun delete(id: UUID): Boolean = context
+        .delete(CUSTOMER)
+        .where(CUSTOMER.ID.eq(id))
+        .execute().let { it == 1 }
 
-    private fun toCustomer(record: CustomerRecord): Customer {
-        return Customer(
-            id = record.id,
-            name = record.name,
-            email = record.email,
-            phone = record.phone,
-            cpf = CPF(record.cpf),
-            birthDate = record.birthDate
-        )
-    }
-
+    private fun toModel(record: CustomerRecord): Customer = Customer(
+        id = record.id,
+        name = record.name,
+        email = record.email,
+        phone = record.phone,
+        cpf = CPF(record.cpf),
+        birthDate = record.birthDate
+    )
 }
