@@ -4,13 +4,13 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import java.util.UUID
 
 class CategoryResponse(
-    val id: UUID,
+    val id: String,
     val name: String
 ) {
 
     companion object {
         fun from(category: Category) = CategoryResponse(
-            id = category.id!!,
+            id = category.id!!.toString(),
             name = category.name
         )
     }

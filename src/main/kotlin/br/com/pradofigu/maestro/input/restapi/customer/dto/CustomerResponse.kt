@@ -5,7 +5,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 data class CustomerResponse(
-    val id: UUID,
+    val id: String,
     val name: String,
     val cpf: String,
     val email: String,
@@ -14,7 +14,7 @@ data class CustomerResponse(
 ) {
     companion object {
         fun from(customer: Customer) = CustomerResponse(
-            id = customer.id!!,
+            id = customer.id!!.toString(),
             name = customer.name,
             cpf = customer.cpf.number,
             email = customer.email,

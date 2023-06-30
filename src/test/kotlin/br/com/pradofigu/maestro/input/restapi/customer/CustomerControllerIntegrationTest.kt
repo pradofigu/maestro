@@ -1,13 +1,11 @@
 package br.com.pradofigu.maestro.input.restapi.customer
 
 import br.com.caelum.stella.validation.CPFValidator
-import br.com.pradofigu.maestro.input.restapi.customer.controller.CustomerController
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -21,16 +19,14 @@ import java.time.Month
 @AutoConfigureMockMvc
 @DisplayName("/customers")
 class CustomerControllerIntegrationTest(
-    @Autowired val customerController: CustomerController,
-    @Autowired val mvc: MockMvc,
-    @Autowired val objectMapper: ObjectMapper
+    private val mvc: MockMvc,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
     inner class HappyPathIntegrationTest {
-
         private val CPF = CPFValidator().generateRandomValid()
         private var customerId: String? = null
 
@@ -155,8 +151,5 @@ class CustomerControllerIntegrationTest(
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isNoContent())
         }
-
-
     }
-
 }

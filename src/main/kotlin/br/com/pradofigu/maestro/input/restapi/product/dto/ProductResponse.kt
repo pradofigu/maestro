@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.util.UUID
 
 data class ProductResponse(
-    val id: UUID,
+    val id: String,
     val name: String,
     val price: BigDecimal,
     val category: String,
@@ -13,7 +13,7 @@ data class ProductResponse(
 ) {
     companion object {
         fun from(product: Product) = ProductResponse(
-            id = product.id!!,
+            id = product.id!!.toString(),
             name = product.name,
             price = product.price,
             category = product.category,

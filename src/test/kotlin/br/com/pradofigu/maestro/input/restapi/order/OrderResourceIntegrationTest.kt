@@ -1,13 +1,13 @@
 package br.com.pradofigu.maestro.input.restapi.order
 
-import br.com.pradofigu.maestro.input.restapi.order.controller.OrderController
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers
 import org.junit.jupiter.api.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
@@ -15,55 +15,60 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.math.BigDecimal
+import java.time.LocalDate
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/orders")
 class OrderDataAccessPortResourceIntegrationTest(
-    @Autowired val orderController: OrderController,
-    @Autowired val mvc: MockMvc,
-    @Autowired val objectMapper: ObjectMapper
+    private val mvc: MockMvc,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
     inner class HappyPathIntegrationTest {
-
-        private var orderId: String? = null
+        var productId = ""
 
         @Test
         @Order(1)
         @Throws(Exception::class)
         fun `When create a orders should returns 201`() {
+
             val body: String = objectMapper.writeValueAsString(
                     OrderRequest(
-                            "X-Bacon",
-                            BigDecimal("34.90"),
-                            "Lanche",
-                            BigDecimal("35")
+                        number = 1010L,
+                        customer = CustomerRequest(
+                            name = "John Dow",
+                            cpf = "123.123.123-12",
+                            email = "john@doe.co",
+                            phone = "+5511999998888",
+                            birthDate = LocalDate.now()
+                        ).toModel(),
+                        paymentStatus = PaymentStatus.PENDING
                     )
             )
 
             val mvcResult = mvc.perform(
-                    MockMvcRequestBuilders.post("/products")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(body))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
-                    .andExpect(MockMvcResultMatchers.request().asyncStarted())
-                    .andReturn();
+                MockMvcRequestBuilders.post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.request().asyncStarted())
+                .andReturn();
 
             val response = mvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
-                    .andExpect(MockMvcResultMatchers.status().isCreated())
-                    .andExpect(MockMvcResultMatchers.jsonPath("id").isNotEmpty())
-                    .andExpect(MockMvcResultMatchers.jsonPath("name").value("X-Bacon"))
-                    .andExpect(MockMvcResultMatchers.jsonPath("price").value(34.90))
-                    .andExpect(MockMvcResultMatchers.jsonPath("category").value("Lanche"))
-                    .andExpect(MockMvcResultMatchers.jsonPath("preparation_time").value(35))
-                    .andReturn()
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("name").value("X-Bacon"))
+                .andExpect(MockMvcResultMatchers.jsonPath("price").value(34.90))
+                .andExpect(MockMvcResultMatchers.jsonPath("category").value("Lanche"))
+                .andExpect(MockMvcResultMatchers.jsonPath("preparation_time").value(35))
+                .andReturn()
 
-            this.productId =
-                    objectMapper.readValue(response.response.contentAsString, ProductResponse::class.java).id
+            productId =
+                    objectMapper.readValue(response.response.toString(), ProductResponse::class.java).id
             Assertions.assertNotNull(productId, "Created test didn't return the product id")
         }
 
@@ -147,8 +152,5 @@ class OrderDataAccessPortResourceIntegrationTest(
             mvc.perform(MockMvcRequestBuilders.asyncDispatch(mvcResult))
                     .andExpect(MockMvcResultMatchers.status().isNoContent())
         }
-
-
     }
-
 }
