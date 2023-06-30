@@ -1,84 +1,79 @@
 package br.com.pradofigu.maestro.output.persistence.order.repository
 
-import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Order.ORDER
-import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.OrderRecord
 import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
+import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
+import br.com.pradofigu.maestro.tables.Order.ORDER
+import br.com.pradofigu.maestro.tables.records.OrderRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.UUID
 
 @Repository
-class OrderRepository(private val context: DSLContext): JooqRepository<OrderRecord> {
+class OrderRepository(
+    private val context: DSLContext,
+    private val customerRepository: CustomerRepository
+): JooqRepository<OrderRecord> {
 
-    @Transactional
-    fun save(order: Order): Order {
-        val record = OrderRecord()
-                .setCustomerId(order.customer?.id)
-                .setProducts(order.products)
-                .setPaymentStatus(order.paymentStatus)
-
-        return context.insertInto(ORDER).set(record)
-                .returning()
-                .fetchOne(this::toOrder)
-    }
-
-    fun findAll(): List<Order> {
-        return context
-                .selectFrom(ORDER)
-                .fetchOne(this::toOrder)
-    }
-
-    fun findBy(id: UUID): Order {
-        return context
-                .selectFrom(ORDER)
-                .where(ORDER.ID.eq(id))
-                .fetchOne(this::toOrder)
-    }
-
-    fun findBy(number: Long): Order {
-        return context
-                .selectFrom(ORDER)
-                .where(ORDER.NUMBER.eq(number))
-                .fetchOne(this::toOrder)
-    }
-
-    @Transactional
-    fun update(id: UUID, paymentStatus: PaymentStatus): Order {
-        return context
-                .selectFrom(ORDER)
-                .where(ORDER.ID.eq(id))
-                .fetchOne()?.
-        let { it.setPaymentStatus(paymentStatus) }?.
-        let(this::optimizeColumnsUpdateOf)?.
-        let {
+    fun save(order: Order): Order? = OrderRecord()
+        .setId(order.id ?: UUID.randomUUID())
+        .setNumber(order.number?.toInt())
+        .setCustomerId(order.customer?.id)
+        .setPaymentStatus(order.paymentStatus.name)
+        .let {
             context
-                    .update(ORDER)
-                    .set(it)
-                    .where(ORDER.ID.eq(id))
-                    .returning()
-                    .fetchOne(this::toOrder)
+                .insertInto(ORDER)
+                .set(it)
+                .returning()
+                .fetchOne(this::toModel)
         }
-    }
+
+    fun findAll(): List<Order> = context
+        .selectFrom(ORDER)
+        .fetch(this::toModel)
+
+    fun findBy(id: UUID): Order? = context
+        .selectFrom(ORDER)
+        .where(ORDER.ID.eq(id))
+        .fetchOne(this::toModel)
+
+    fun findBy(number: Long): Order? = context
+        .selectFrom(ORDER)
+        .where(ORDER.NUMBER.eq(number.toInt()))
+        .fetchOne(this::toModel)
 
     @Transactional
-    fun delete(id: UUID): Boolean {
-        val result = context
-                .delete(ORDER)
+    fun update(id: UUID, paymentStatus: PaymentStatus): Order? = context
+        .selectFrom(ORDER)
+        .where(ORDER.ID.eq(id))
+        .fetchOne()
+        ?.setPaymentStatus(paymentStatus.name)
+        ?.let(this::optimizeColumnsUpdateOf)
+        ?.let {
+            context
+                .update(ORDER)
+                .set(it)
                 .where(ORDER.ID.eq(id))
-                .execute()
-        return 1 == result;
-    }
+                .returning()
+                .fetchOne(this::toModel)
+        }
 
-    private fun toOrder(record: OrderRecord): Order {
+    fun delete(id: UUID): Boolean = context
+        .delete(ORDER)
+        .where(ORDER.ID.eq(id))
+        .execute()
+        .let { it == 1 }
+
+    private fun toModel(record: OrderRecord): Order {
+        val customer = customerRepository.findBy(record.customerId)
+
         return Order(
-                id = record.id,
-                number = record.number,
-                customer = record.customer,
-                products = record.products,
-                paymentStatus = record.paymentStatus
+            id = record.id,
+            number = record.number.toLong(),
+            customer = customer,
+            paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
         )
     }
 }

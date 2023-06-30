@@ -4,11 +4,11 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import java.util.UUID
 
 interface CategoryInputPort {
-    fun create(category: Category.CreateCategory): Category
+    suspend fun create(category: Category): Category
 
-    fun findBy(id: UUID): Category?
+    suspend fun findBy(id: UUID): Category?
 
-    fun update(id: UUID, category: Category.UpdateCategory): Category
+    suspend fun update(id: UUID, category: Category): Category
 
-    fun delete(id: UUID): Boolean
+    suspend fun delete(id: UUID)
 }

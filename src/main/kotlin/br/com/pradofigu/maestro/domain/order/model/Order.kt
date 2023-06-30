@@ -1,14 +1,12 @@
 package br.com.pradofigu.maestro.domain.order.model
 
 import br.com.pradofigu.maestro.domain.customer.model.Customer
-import br.com.pradofigu.maestro.domain.product.model.Product
-import java.util.*
+import java.util.UUID
 
 data class Order(
-    val id: UUID? = null,
-    val number: Long? = null,
-    val customer: Customer? = null,
-    val products: List<Product>? = null,
+    val id: UUID? = UUID.randomUUID(),
+    val number: Long,
+    val customer: Customer,
     val paymentStatus: PaymentStatus = PaymentStatus.PENDING
 )
 enum class PaymentStatus { PENDING, PAID, REJECT }

@@ -1,49 +1,51 @@
 package br.com.pradofigu.maestro.output.persistence.category.repository
 
-import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.Category.CATEGORY
-import br.com.pradofigu.maestro.infrastructure.entities.maestro.tables.records.CategoryRecord
 import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
+import br.com.pradofigu.maestro.tables.Category.CATEGORY
+import br.com.pradofigu.maestro.tables.records.CategoryRecord
 import org.jooq.DSLContext
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
-import java.util.*
+import java.util.UUID
 
 @Repository
-class CategoryRepository(@Autowired private val context: DSLContext): JooqRepository<CategoryRecord> {
+class CategoryRepository(
+    private val context: DSLContext
+): JooqRepository<CategoryRecord> {
 
-    fun save(category: Category.CreateCategory): Category? {
-        return context.insertInto(CATEGORY)
-            .set(CATEGORY.NAME, category.name)
-            .returning()
-            .fetchOne(this::toCategory)
-    }
+    fun save(category: Category): Category? = context
+        .insertInto(CATEGORY)
+        .set(CATEGORY.NAME, category.name)
+        .returning()
+        .fetchOne(this::toModel)
 
-    fun findBy(id: UUID): Category? {
-        return context.selectFrom(CATEGORY).where(CATEGORY.ID.eq(id))
-            .fetchOne(this::toCategory)
-    }
+    fun findBy(id: UUID): Category? = context
+        .selectFrom(CATEGORY)
+        .where(CATEGORY.ID.eq(id))
+        .fetchOne(this::toModel)
 
-    fun update(id: UUID, category: Category.UpdateCategory): Category? {
-        return context.selectFrom(CATEGORY).where(CATEGORY.ID.eq(id)).fetchOne()
-            ?.let { it.setName(category.name) }
-            ?.let(this::optimizeColumnsUpdateOf)
-            ?.let { record ->
-                context.update(CATEGORY).set(record).where(CATEGORY.ID.eq(id))
-                    .returning()
-                    .fetchOne(this::toCategory)
-            }
-    }
+    fun update(id: UUID, category: Category): Category? = context
+        .selectFrom(CATEGORY)
+        .where(CATEGORY.ID.eq(id))
+        .fetchOne()
+        ?.setName(category.name)
+        ?.let(this::optimizeColumnsUpdateOf)
+        ?.let {
+            context
+                .update(CATEGORY)
+                .set(it)
+                .where(CATEGORY.ID.eq(id))
+                .returning()
+                .fetchOne(this::toModel)
+        }
 
-    fun delete(id: UUID): Boolean {
-        val result = context.delete(CATEGORY).where(CATEGORY.ID.eq(id)).execute()
-        return 1 == result;
-    }
+    fun delete(id: UUID): Boolean = context
+        .delete(CATEGORY)
+        .where(CATEGORY.ID.eq(id))
+        .execute().let { it == 1 }
 
-    private fun toCategory(record: CategoryRecord): Category {
-        return Category(
-            id = record.id,
-            name = record.name
-        )
-    }
+    private fun toModel(record: CategoryRecord): Category = Category(
+        id = record.id,
+        name = record.name
+    )
 }

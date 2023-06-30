@@ -5,13 +5,15 @@ import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import java.util.UUID
 
 interface OrderInputPort {
-    fun createOrder(order: Order): Order
+    suspend fun createOrder(order: Order): Order
 
-    fun findAll(): List<Order>
+    suspend fun findAll(): List<Order>
 
-    fun findBy(id: UUID): Order
+    suspend fun findBy(id: UUID): Order?
 
-    fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus): Order
+    suspend fun findBy(number: Long): Order?
 
-    fun delete(id: UUID): Boolean
+    suspend fun updatePaymentStatus(id: UUID, paymentStatus: PaymentStatus): Order
+
+    suspend fun delete(id: UUID)
 }

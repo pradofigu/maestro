@@ -1,13 +1,11 @@
 package br.com.pradofigu.maestro.input.restapi.product
 
-import br.com.pradofigu.maestro.input.restapi.product.controller.ProductController
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -20,16 +18,14 @@ import java.math.BigDecimal
 @AutoConfigureMockMvc
 @DisplayName("/products")
 class ProductControllerIntegrationTest(
-    @Autowired val productController: ProductController,
-    @Autowired val mvc: MockMvc,
-    @Autowired val objectMapper: ObjectMapper
+    private val mvc: MockMvc,
+    private val objectMapper: ObjectMapper
 ) {
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
     inner class HappyPathIntegrationTest {
-
         private var productId: String? = null
 
         @Test
@@ -147,8 +143,5 @@ class ProductControllerIntegrationTest(
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isNoContent())
         }
-
-
     }
-
 }
