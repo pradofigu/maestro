@@ -20,7 +20,7 @@ class OrderRepository(
     fun save(order: Order): Order? = OrderRecord()
         .setId(order.id ?: UUID.randomUUID())
         .setNumber(order.number.toInt())
-        .setCustomerId(order.customer.id)
+        .setCustomerId(order.customer?.id)
         .setPaymentStatus(order.paymentStatus.name)
         .let {
             context
@@ -68,7 +68,6 @@ class OrderRepository(
 
     private fun toModel(record: OrderRecord): Order {
         val customer = customerRepository.findBy(record.customerId)
-            ?: throw IllegalStateException("Customer not found for order ${record.id}")
 
         return Order(
             id = record.id,

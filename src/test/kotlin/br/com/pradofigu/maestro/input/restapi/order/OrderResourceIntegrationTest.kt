@@ -1,6 +1,7 @@
 package br.com.pradofigu.maestro.input.restapi.order
 
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
 import br.com.pradofigu.maestro.input.restapi.order.dto.OrderRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -118,7 +120,7 @@ class OrderDataAccessPortResourceIntegrationTest(
                     ProductRequest(
                             "X-Bacon",
                             BigDecimal("39.90"),
-                            "Lanche",
+                        CategoryRequest(UUID.fromString("c85b8201-29c4-495a-be86-7dd3a1d16b81"), "Lanche"),
                             BigDecimal("35")
                     )
             )

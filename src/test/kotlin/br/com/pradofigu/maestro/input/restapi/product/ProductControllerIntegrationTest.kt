@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.input.restapi.product
 
+import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.math.BigDecimal
+import java.util.*
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -21,6 +24,7 @@ class ProductControllerIntegrationTest(
     private val mvc: MockMvc,
     private val objectMapper: ObjectMapper
 ) {
+    private val lanche = CategoryRequest(UUID.fromString("c85b8201-29c4-495a-be86-7dd3a1d16b81"), "Lanche")
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
@@ -36,7 +40,7 @@ class ProductControllerIntegrationTest(
                 ProductRequest(
                     "X-Bacon",
                     BigDecimal("34.90"),
-                    "Lanche",
+                    lanche,
                     BigDecimal("35")
                 )
             )
@@ -54,7 +58,7 @@ class ProductControllerIntegrationTest(
                 .andExpect(jsonPath("id").isNotEmpty())
                 .andExpect(jsonPath("name").value("X-Bacon"))
                 .andExpect(jsonPath("price").value(34.90))
-                .andExpect(jsonPath("category").value("Lanche"))
+                .andExpect(jsonPath("category").value(lanche.id))
                 .andExpect(jsonPath("preparation_time").value(35))
                 .andReturn()
 
@@ -78,7 +82,7 @@ class ProductControllerIntegrationTest(
                 .andExpect(jsonPath("id").value(productId))
                 .andExpect(jsonPath("name").value("X-Bacon"))
                 .andExpect(jsonPath("price").value(34.90))
-                .andExpect(jsonPath("category").value("Lanche"))
+                .andExpect(jsonPath("category").value(lanche.id))
                 .andExpect(jsonPath("preparation_time").value(35))
         }
 
@@ -86,7 +90,7 @@ class ProductControllerIntegrationTest(
         @Order(3)
         @Throws(java.lang.Exception::class)
         fun `When get a product by category should returns 200`() {
-            val mvcResult = mvc.perform(get("/products/category/Lanche")
+            val mvcResult = mvc.perform(get("/products/category/${lanche.id}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
@@ -97,7 +101,7 @@ class ProductControllerIntegrationTest(
                 .andExpect(jsonPath("[*].id", hasItem(productId)))
                 .andExpect(jsonPath("[*].name", hasItem("X-Bacon")))
                 .andExpect(jsonPath("[*].price", hasItem(34.90)))
-                .andExpect(jsonPath("[*].category", hasItem("Lanche")))
+                .andExpect(jsonPath("[*].category", hasItem(lanche.id)))
                 .andExpect(jsonPath("[*].preparation_time", hasItem(35)))
         }
 
@@ -109,7 +113,7 @@ class ProductControllerIntegrationTest(
                 ProductRequest(
                     "X-Bacon",
                     BigDecimal("39.90"),
-                    "Lanche",
+                    lanche,
                     BigDecimal("35")
                 )
             )
@@ -126,7 +130,7 @@ class ProductControllerIntegrationTest(
                 .andExpect(jsonPath("id").value(productId))
                 .andExpect(jsonPath("name").value("X-Bacon"))
                 .andExpect(jsonPath("price").value(39.90))
-                .andExpect(jsonPath("category").value("Lanche"))
+                .andExpect(jsonPath("category").value(lanche.id))
                 .andExpect(jsonPath("preparation_time").value(35))
                 .andReturn()
         }

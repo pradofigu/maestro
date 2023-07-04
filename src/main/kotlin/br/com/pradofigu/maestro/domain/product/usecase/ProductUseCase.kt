@@ -15,7 +15,7 @@ class ProductUseCase(
 
     override suspend fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
 
-    override suspend fun findBy(category: String): List<Product> = productDataAccessPort.findBy(category)
+    override suspend fun findByCategory(category: UUID): List<Product> = productDataAccessPort.findByCategory(category)
 
     override suspend fun update(id: UUID, product: Product): Product {
         return productDataAccessPort.update(id, product)
