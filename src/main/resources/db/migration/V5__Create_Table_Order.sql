@@ -1,15 +1,14 @@
-CREATE TABLE IF NOT EXISTS maestro.order (
-    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+CREATE TABLE IF NOT EXISTS "order" (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     number SERIAL UNIQUE NOT NULL,
-    customer_id uuid NULL REFERENCES maestro.customer(id),
+    customer_id UUID NULL REFERENCES customer(id),
     payment_status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    update_at TIMESTAMP DEFAULT NOW(),
-    PRIMARY KEY (id)
+    update_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS maestro.order_product (
-    order_id uuid REFERENCES maestro.order(id),
-    product_id uuid REFERENCES maestro.product(id),
+CREATE TABLE IF NOT EXISTS order_product (
+    order_id UUID REFERENCES "order"(id),
+    product_id UUID REFERENCES product(id),
     PRIMARY KEY (order_id, product_id)
 );
