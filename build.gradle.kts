@@ -55,40 +55,47 @@ val props = Properties().apply {
     load(rootProject.file("src/main/resources/application.properties").reader())
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+tasks {
+    bootJar {
+        archiveBaseName.set("maestro")
+        archiveVersion.set("")
     }
-}
 
-tasks.named<Test>("test") {
-    useJUnitPlatform() {
-        filter {
-            setExcludePatterns("*IntegrationTest")
+    withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "17"
         }
     }
-}
 
-tasks.create("integrationTest", Test::class) {
-    useJUnitPlatform() {
-        filter {
-            setIncludePatterns("*IntegrationTest")
+    named<Test>("test") {
+        useJUnitPlatform() {
+            filter {
+                setExcludePatterns("*IntegrationTest")
+            }
         }
     }
-}
 
-tasks.named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
-    driver = props.getProperty("datasource.driver")
-    url = props.getProperty("datasource.jdbc-url")
-    user = props.getProperty("datasource.username")
-    password = props.getProperty("datasource.password")
-    baselineOnMigrate = true
-    createSchemas = true
-    defaultSchema = "flyway"
-    schemas=arrayOf("flyway")
-    table="schema_version"
-    locations = arrayOf("filesystem:src/main/resources/db/migration")
+    create("integrationTest", Test::class) {
+        useJUnitPlatform() {
+            filter {
+                setIncludePatterns("*IntegrationTest")
+            }
+        }
+    }
+
+    named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
+        driver = props.getProperty("datasource.driver")
+        url = props.getProperty("datasource.jdbc-url")
+        user = props.getProperty("datasource.username")
+        password = props.getProperty("datasource.password")
+        baselineOnMigrate = true
+        createSchemas = true
+        defaultSchema = "flyway"
+        schemas=arrayOf("flyway")
+        table="schema_version"
+        locations = arrayOf("filesystem:src/main/resources/db/migration")
+    }
 }
 
 jooq {
@@ -125,7 +132,7 @@ jooq {
                         isFluentSetters = true
                     }
                     target.apply {
-                        packageName = "br.com.pradofigu"
+                        packageName = "br.com.pradofigu.maestro"
                         directory = "build/generated-sources/jooq/main"  // default (can be omitted)
                     }
                     strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"

@@ -1,16 +1,29 @@
+version: '3.9'
 services:
+  app:
+    restart: always
+    build: .
+    container_name: maestro-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - maestro-network
 
   database:
     image: 'postgres:15.3'
     container_name: maestro-postgres
     environment:
-        POSTGRES_DB: maestro
-        POSTGRES_USER: admin
-        POSTGRES_PASSWORD: admin
+      POSTGRES_DB: maestro
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     ports:
       - "5432:5432"
     volumes:
       - maestro-postgres-data:/var/lib/postgresql/data
+    networks:
+      - maestro-network
     healthcheck:
       test: "exit 0"
 
@@ -29,12 +42,12 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    networks:
+      - maestro-network
 
 volumes:
   maestro-postgres-data:
   maestro-pgadmin4-data:
 
 networks:
-  default:
-    external: false
-    name: development
+  maestro-network:
