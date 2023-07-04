@@ -14,15 +14,15 @@ class CategoryUseCase(
 ): CategoryInputPort {
 
     override suspend fun create(category: Category): Category {
-        return categoryDataAccessPort.save(category) ?: throw IllegalArgumentException("Error to create category")
+        return categoryDataAccessPort.save(category)
     }
 
     override suspend fun findBy(id: UUID): Category? {
         return categoryDataAccessPort.findBy(id)
     }
 
-    override suspend fun update(id: UUID, category: Category): Category {
-        return categoryDataAccessPort.update(id, category) ?: throw IllegalArgumentException("Error to update category")
+    override suspend fun update(category: Category): Category {
+        return categoryDataAccessPort.update(category)
     }
 
     override suspend fun delete(id: UUID) {

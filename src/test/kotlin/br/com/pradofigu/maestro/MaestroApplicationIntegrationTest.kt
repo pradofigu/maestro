@@ -12,7 +12,7 @@ class MaestroApplicationIntegrationTest(@Autowired val applicationContext: Appli
 
     @Test
     fun `When load application should load contexts`() {
-        assertThat(applicationContext).isNotNull();
+        assertThat(applicationContext).isNotNull()
     }
 
 }

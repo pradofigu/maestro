@@ -15,11 +15,10 @@ class CategoryDataAccessAdapter(
     override suspend fun save(category: Category): Category = categoryRepository.save(category)
         ?: throw DatabaseOperationException("Error to create category", category)
 
-    override suspend fun update(id: UUID, category: Category): Category {
-        return categoryRepository.update(id, category)
+    override suspend fun update(category: Category): Category {
+        return categoryRepository.update(category)
             ?: throw DatabaseOperationException(
-                "Error to update category",
-                mapOf("id" to id, "category" to category)
+                "Error to update category", category
             )
     }
 

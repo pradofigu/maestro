@@ -24,9 +24,9 @@ class CategoryRepository(
         .where(CATEGORY.ID.eq(id))
         .fetchOne(this::toModel)
 
-    fun update(id: UUID, category: Category): Category? = context
+    fun update(category: Category): Category? = context
         .selectFrom(CATEGORY)
-        .where(CATEGORY.ID.eq(id))
+        .where(CATEGORY.ID.eq(category.id))
         .fetchOne()
         ?.setName(category.name)
         ?.let(this::optimizeColumnsUpdateOf)
@@ -34,7 +34,7 @@ class CategoryRepository(
             context
                 .update(CATEGORY)
                 .set(it)
-                .where(CATEGORY.ID.eq(id))
+                .where(CATEGORY.ID.eq(category.id))
                 .returning()
                 .fetchOne(this::toModel)
         }

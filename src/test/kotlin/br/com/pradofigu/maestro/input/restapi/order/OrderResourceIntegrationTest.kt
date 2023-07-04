@@ -45,7 +45,7 @@ class OrderDataAccessPortResourceIntegrationTest(
                             email = "john@doe.co",
                             phone = "+5511999998888",
                             birthDate = LocalDate.now()
-                        ).toModel(),
+                        ),
                         paymentStatus = PaymentStatus.PENDING
                     )
             )
