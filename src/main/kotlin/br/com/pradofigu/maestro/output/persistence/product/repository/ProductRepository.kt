@@ -1,13 +1,15 @@
 package br.com.pradofigu.maestro.output.persistence.product.repository
 
+import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
-import br.com.pradofigu.maestro.flyway.tables.Product.PRODUCT
-import br.com.pradofigu.maestro.flyway.tables.records.ProductRecord
+import br.com.pradofigu.maestro.maestro.Tables.PRODUCT
+import br.com.pradofigu.maestro.maestro.tables.records.ProductRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 import java.util.UUID
 
 @Repository
@@ -20,7 +22,7 @@ class ProductRepository(
         .setId(product.id)
         .setName(product.name)
         .setPrice(product.price)
-        .setCategoryId(product.category.id)
+//        .setCategoryId(product.category.id)
         .setPreparationTime(product.preparationTime)
         .let {
             context
@@ -37,7 +39,7 @@ class ProductRepository(
 
     fun findByCategory(category_id: UUID): List<Product> = context
         .selectFrom(PRODUCT)
-        .where(PRODUCT.CATEGORY_ID.eq(category_id))
+//        .where(PRODUCT.CATEGORY_ID.eq(category_id))
         .fetch(this::toModel)
 
     @Transactional
@@ -48,7 +50,7 @@ class ProductRepository(
         ?.apply {
             this.setName(product.name)
             this.setPrice(product.price)
-            this.setCategoryId(product.category.id)
+//            this.setCategoryId(product.category.id)
             this.setPreparationTime(product.preparationTime)
         }
         ?.let(this::optimizeColumnsUpdateOf)
@@ -68,15 +70,25 @@ class ProductRepository(
         .let { it == 1 }
 
     private fun toModel(record: ProductRecord): Product {
-        val category = categoryRepository.findBy(record.categoryId)
-            ?: throw IllegalStateException("Category not found for id ${record.categoryId}")
-
+//        val category = categoryRepository.findBy(record.categoryId)
+//            ?: throw IllegalStateException("Category not found for id ${record.categoryId}")
+//
+//        return Product(
+//            id = record.id,
+//            name = record.name,
+//            price = record.price,
+//            category = category,
+//            preparationTime = record.preparationTime
+//        )
         return Product(
-            id = record.id,
-            name = record.name,
-            price = record.price,
-            category = category,
-            preparationTime = record.preparationTime
+            id = UUID.randomUUID(),
+            name = "",
+            price = BigDecimal("10.99"),
+            category = Category(
+                id = UUID.randomUUID(),
+                name = "",
+            ),
+            preparationTime = BigDecimal("10.99")
         )
     }
 }

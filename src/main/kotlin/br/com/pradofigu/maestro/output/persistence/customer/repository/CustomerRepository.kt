@@ -3,8 +3,8 @@ package br.com.pradofigu.maestro.output.persistence.customer.repository
 import br.com.pradofigu.maestro.domain.customer.model.CPF
 import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
-import br.com.pradofigu.maestro.flyway.tables.Customer.CUSTOMER
-import br.com.pradofigu.maestro.flyway.tables.records.CustomerRecord
+import br.com.pradofigu.maestro.maestro.tables.Customer.CUSTOMER
+import br.com.pradofigu.maestro.maestro.tables.records.CustomerRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
