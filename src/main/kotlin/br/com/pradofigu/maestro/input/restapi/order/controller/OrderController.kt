@@ -58,7 +58,7 @@ class OrderController(@Autowired private val orderInputPort: OrderInputPort) {
     }
 
     @GetMapping("/number/{number}")
-    suspend fun findByNumber(@PathVariable number: UUID): ResponseEntity<OrderResponse> {
+    suspend fun findByNumber(@PathVariable number: Long): ResponseEntity<OrderResponse> {
         return orderInputPort.findBy(number)?.let {
             ResponseEntity.ok(OrderResponse.from(it))
         } ?: ResponseEntity.notFound().build()

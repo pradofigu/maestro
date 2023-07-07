@@ -37,9 +37,9 @@ class ProductRepository(
         .where(PRODUCT.ID.eq(id))
         .fetchOne(this::toModel)
 
-    fun findByCategory(category_id: UUID): List<Product> = context
+    fun findByCategory(categoryId: UUID): List<Product> = context
         .selectFrom(PRODUCT)
-//        .where(PRODUCT.CATEGORY_ID.eq(category_id))
+//        .where(PRODUCT.CATEGORY_ID.eq(categoryId))
         .fetch(this::toModel)
 
     @Transactional
