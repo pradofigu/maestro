@@ -2,7 +2,7 @@ package br.com.pradofigu.maestro.domain.product.usecase
 
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.domain.product.ports.input.ProductInputPort
-import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort import org.springframework.beans.factory.annotation.Autowired
+import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -15,11 +15,10 @@ class ProductUseCase(
 
     override suspend fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
 
-    override suspend fun findByCategory(category: UUID): List<Product> = productDataAccessPort.findByCategory(category)
+    override suspend fun findByCategory(categoryId: UUID): List<Product> =
+        productDataAccessPort.findByCategory(categoryId)
 
-    override suspend fun update(id: UUID, product: Product): Product {
-        return productDataAccessPort.update(id, product)
-    }
+    override suspend fun update(id: UUID, product: Product): Product = productDataAccessPort.update(id, product)
 
     override suspend fun delete(id: UUID) {
         productDataAccessPort.delete(id)

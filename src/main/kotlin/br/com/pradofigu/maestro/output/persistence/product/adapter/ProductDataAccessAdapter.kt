@@ -13,8 +13,8 @@ class ProductDataAccessAdapter(
 ): ProductDataAccessPort {
     override suspend fun findBy(id: UUID): Product? = productRepository.findBy(id)
 
-    override suspend fun findByCategory(category: UUID): List<Product> {
-        return productRepository.findByCategory(category)
+    override suspend fun findByCategory(categoryId: UUID): List<Product> {
+        return productRepository.findByCategory(categoryId)
     }
 
     override suspend fun save(product: Product): Product = productRepository.save(product)
