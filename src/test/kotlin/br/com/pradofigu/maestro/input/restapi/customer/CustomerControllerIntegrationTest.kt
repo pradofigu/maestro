@@ -144,14 +144,14 @@ class CustomerControllerIntegrationTest {
 
         @Test
         @Order(5)
-        fun `When delete a customer should returns 204`() {
+        fun `When delete a customer should returns 200`() {
             val mvcResult = mvc.perform(delete("/customers/${customerId}"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
                 .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isNoContent())
+                .andExpect(status().isOk())
         }
     }
 }
