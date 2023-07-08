@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -20,11 +21,15 @@ import java.util.*
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/products")
-class ProductControllerIntegrationTest(
-    private val mvc: MockMvc,
-    private val objectMapper: ObjectMapper
-) {
-    private val lanche = CategoryRequest(UUID.fromString("c85b8201-29c4-495a-be86-7dd3a1d16b81"), "Lanche")
+class ProductControllerIntegrationTest {
+
+    @Autowired private lateinit var mvc: MockMvc
+    @Autowired private lateinit var objectMapper: ObjectMapper
+
+    private val lanche = CategoryRequest(
+        id = UUID.fromString("c85b8201-29c4-495a-be86-7dd3a1d16b81"),
+        name = "Lanche"
+    )
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)

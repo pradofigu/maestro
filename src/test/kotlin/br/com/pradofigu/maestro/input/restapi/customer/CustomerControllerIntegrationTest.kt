@@ -6,6 +6,7 @@ import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -18,10 +19,10 @@ import java.time.Month
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("/customers")
-class CustomerControllerIntegrationTest(
-    private val mvc: MockMvc,
-    private val objectMapper: ObjectMapper
-) {
+class CustomerControllerIntegrationTest {
+
+    @Autowired private lateinit var mvc: MockMvc
+    @Autowired private lateinit var objectMapper: ObjectMapper
 
     @Nested
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
