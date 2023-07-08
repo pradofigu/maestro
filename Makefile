@@ -20,12 +20,12 @@ build: migrate compile ## Runs Flyway migrations and compiles the project
 
 test: ## Runs unit tests
 	@echo "-------------- Starting Unit Tests--------------"
-	-@./gradlew test
+	-@./gradlew test -Dspring.profiles.active=test
 	@echo "-------------- Finish Unit Tests--------------"
 
 integration-test: ## Runs integration tests
 	@echo "-------------- Starting Integration Tests--------------"
-	-@./gradlew integrationTest
+	-@./gradlew integrationTest -Dspring.profiles.active=test --stacktrace
 	@echo "-------------- Finish Integration Tests--------------"
 
 all-tests: test integration-test ## Runs all tests

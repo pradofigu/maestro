@@ -13,11 +13,14 @@ class CategoryRepository(
     private val context: DSLContext
 ): JooqRepository<CategoryRecord> {
 
-    fun save(category: Category): Category? = context
-        .insertInto(CATEGORY)
-        .set(CATEGORY.NAME, category.name)
-        .returning()
-        .fetchOne(this::toModel)
+    fun save(category: Category): Category? {
+      return context
+          .insertInto(CATEGORY)
+          .columns(CATEGORY.ID, CATEGORY.NAME)
+          .values(category.id, category.name)
+          .returning()
+          .fetchOne(this::toModel)
+    }
 
     fun findBy(id: UUID): Category? = context
         .selectFrom(CATEGORY)

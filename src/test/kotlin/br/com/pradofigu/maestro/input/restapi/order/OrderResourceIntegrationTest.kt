@@ -126,10 +126,7 @@ class OrderDataAccessPortResourceIntegrationTest {
                 ProductRequest(
                     name = "X-Bacon",
                     price = BigDecimal("39.90"),
-                    category = CategoryRequest(
-                        id = UUID.fromString("c85b8201-29c4-495a-be86-7dd3a1d16b81"),
-                        name = "Lanche"
-                    ),
+                    category = CategoryRequest(name = "Lanche"),
                     preparationTime = BigDecimal("35")
                 )
             )
