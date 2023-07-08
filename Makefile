@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_FILE_PATH?="docker/docker-compose.yaml"
+DOCKER_COMPOSE_FILE_PATH?="docker-compose.yaml"
 
 run: ## Runs the application through Gradle bootRun task
 	@./gradlew bootRun
