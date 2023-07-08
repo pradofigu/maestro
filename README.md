@@ -1,4 +1,4 @@
-# maestro
+# Maestro
 Fast food monolith service
 
 ## Software Architecture
@@ -42,3 +42,8 @@ $ make run # Runs the application through bootRun task (alternatively you can ru
     - **password**: admin *(the same to connect to the database)*
 
 Use `make help` to see all available commands.
+
+## Documentation
+
+- **Event Storming Project Board**: https://miro.com/app/board/uXjVMDHdGWk=/
+- **Maestro Ubiquitous Language**: [Documentation](docs/Glossário%20de%20Linguagem%20Ubiqua.md)
