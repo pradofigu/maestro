@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.time.LocalDate
 import java.time.Month
+import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,8 +29,8 @@ class CustomerControllerIntegrationTest {
     @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
     @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
     inner class HappyPathIntegrationTest {
-        private val CPF = CPFValidator().generateRandomValid()
-        private var customerId: String? = null
+        private val cpf = CPFValidator().generateRandomValid()
+        private var customerId = UUID.randomUUID().toString()
 
         @Test
         @Order(1)
@@ -37,11 +38,11 @@ class CustomerControllerIntegrationTest {
         fun `When create a customers should returns 201`() {
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
-                    "John Smith",
-                    CPF,
-                    "john.smith@example.com.br",
-                    "(11)98555-4321",
-                    LocalDate.of(1980, Month.SEPTEMBER, 3)
+                    name = "John Smith",
+                    cpf = cpf,
+                    email = "john.smith@example.com.br",
+                    phone = "(11)98555-4321",
+                    birthDate = LocalDate.of(1980, Month.SEPTEMBER, 3)
                 )
             )
 
@@ -57,20 +58,22 @@ class CustomerControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value(CPF))
+                .andExpect(jsonPath("cpf").value(cpf))
                 .andExpect(jsonPath("email").value("john.smith@example.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
                 .andReturn()
 
-            this.customerId =
-                objectMapper.readValue(response.response.contentAsString, CustomerResponse::class.java).id
+            this.customerId = objectMapper.readValue(
+                response.response.contentAsString,
+                CustomerResponse::class.java
+            ).id
+
             assertNotNull(customerId, "Created test didn't return the customer id")
         }
 
         @Test
         @Order(2)
-        @Throws(java.lang.Exception::class)
         fun `When get a customer by id should returns 200`() {
             val mvcResult = mvc.perform(get("/customers/$customerId")
                     .contentType(APPLICATION_JSON))
@@ -82,7 +85,7 @@ class CustomerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value(CPF))
+                .andExpect(jsonPath("cpf").value(cpf))
                 .andExpect(jsonPath("email").value("john.smith@example.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -90,9 +93,8 @@ class CustomerControllerIntegrationTest {
 
         @Test
         @Order(3)
-        @Throws(java.lang.Exception::class)
         fun `When get a customer by cpf should returns 200`() {
-            val mvcResult = mvc.perform(get("/customers/cpf/${CPF}")
+            val mvcResult = mvc.perform(get("/customers/cpf/${cpf}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
@@ -102,7 +104,7 @@ class CustomerControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value(CPF))
+                .andExpect(jsonPath("cpf").value(cpf))
                 .andExpect(jsonPath("email").value("john.smith@example.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -110,30 +112,30 @@ class CustomerControllerIntegrationTest {
 
         @Test
         @Order(4)
-        @Throws(java.lang.Exception::class)
         fun `When update a customer should returns 200`() {
             val body: String = objectMapper.writeValueAsString(
                 CustomerRequest(
-                    "John Smith",
-                    CPF,
-                    "john.smith@example-altera-email.com.br",
-                    "(11)98555-4321",
-                    LocalDate.of(1980, Month.SEPTEMBER, 3)
+                    name = "John Smith",
+                    cpf = cpf,
+                    email = "john.smith@example-altera-email.com.br",
+                    phone = "(11)98555-4321",
+                    birthDate = LocalDate.of(1980, Month.SEPTEMBER, 3)
                 )
             )
+
             val mvcResult = mvc.perform(
                 put("/customers/${customerId}")
                     .contentType(APPLICATION_JSON)
                     .content(body))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
-                .andReturn();
+                .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(customerId))
                 .andExpect(jsonPath("name").value("John Smith"))
-                .andExpect(jsonPath("cpf").value(CPF))
+                .andExpect(jsonPath("cpf").value(cpf))
                 .andExpect(jsonPath("email").value("john.smith@example-altera-email.com.br"))
                 .andExpect(jsonPath("phone").value("(11)98555-4321"))
                 .andExpect(jsonPath("birthDate").value("1980-09-03"))
@@ -142,12 +144,11 @@ class CustomerControllerIntegrationTest {
 
         @Test
         @Order(5)
-        @Throws(java.lang.Exception::class)
         fun `When delete a customer should returns 204`() {
             val mvcResult = mvc.perform(delete("/customers/${customerId}"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
-                .andReturn();
+                .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isNoContent())
