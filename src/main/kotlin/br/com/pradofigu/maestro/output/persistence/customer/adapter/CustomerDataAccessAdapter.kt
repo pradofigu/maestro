@@ -17,7 +17,6 @@ class CustomerDataAccessAdapter(
     override suspend fun findBy(cpf: CPF): Customer? = customerRepository.findBy(cpf)
 
     override suspend fun save(customer: Customer): Customer = customerRepository.save(customer)
-        ?: throw DatabaseOperationException("Error to save customer", customer)
 
     override suspend fun update(id: UUID, customer: Customer): Customer {
         return customerRepository.update(id, customer)

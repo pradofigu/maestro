@@ -18,7 +18,6 @@ class ProductDataAccessAdapter(
     }
 
     override suspend fun save(product: Product): Product = productRepository.save(product)
-        ?: throw DatabaseOperationException("Error to save product", product)
 
     override suspend fun update(id: UUID, product: Product): Product {
         return productRepository.update(id, product)

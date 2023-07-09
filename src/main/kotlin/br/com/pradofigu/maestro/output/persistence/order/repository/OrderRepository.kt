@@ -17,7 +17,7 @@ class OrderRepository(
     private val customerRepository: CustomerRepository
 ): JooqRepository<OrderRecord> {
 
-    fun save(order: Order): Order? = OrderRecord()
+    fun save(order: Order): Order = OrderRecord()
         .setId(order.id ?: UUID.randomUUID())
         .setNumber(order.number.toInt())
         .setCustomerId(order.customer?.id)
@@ -28,7 +28,7 @@ class OrderRepository(
                 .set(it)
                 .returning()
                 .fetchOne(this::toModel)
-        }
+        } ?: throw DatabaseOperationException("Error on save order", order)
 
     fun findAll(): List<Order> = context
         .selectFrom(ORDER)

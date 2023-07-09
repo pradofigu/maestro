@@ -5,6 +5,7 @@ import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
 import br.com.pradofigu.maestro.flyway.Tables.PRODUCT
 import br.com.pradofigu.maestro.flyway.tables.records.ProductRecord
+import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +17,7 @@ class ProductRepository(
     private val categoryRepository: CategoryRepository
 ): JooqRepository<ProductRecord> {
 
-    fun save(product: Product): Product? = ProductRecord()
+    fun save(product: Product): Product = ProductRecord()
         .setId(product.id)
         .setName(product.name)
         .setPrice(product.price)
@@ -28,7 +29,7 @@ class ProductRepository(
                 .set(it)
                 .returning()
                 .fetchOne(this::toModel)
-        }
+        } ?: throw DatabaseOperationException("Error on save product", product)
 
     fun findBy(id: UUID): Product? = context
         .selectFrom(PRODUCT)

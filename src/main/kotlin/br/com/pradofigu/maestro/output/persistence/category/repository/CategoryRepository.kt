@@ -4,6 +4,7 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.flyway.Tables.CATEGORY
 import br.com.pradofigu.maestro.flyway.tables.records.CategoryRecord
+import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import java.util.UUID
@@ -13,13 +14,13 @@ class CategoryRepository(
     private val context: DSLContext
 ): JooqRepository<CategoryRecord> {
 
-    fun save(category: Category): Category? {
+    fun save(category: Category): Category {
       return context
           .insertInto(CATEGORY)
           .columns(CATEGORY.ID, CATEGORY.NAME)
           .values(category.id, category.name)
           .returning()
-          .fetchOne(this::toModel)
+          .fetchOne(this::toModel) ?: throw DatabaseOperationException("Error on save category", category)
     }
 
     fun findBy(id: UUID): Category? = context

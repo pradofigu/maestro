@@ -5,6 +5,7 @@ import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.flyway.tables.Customer.CUSTOMER
 import br.com.pradofigu.maestro.flyway.tables.records.CustomerRecord
+import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +16,7 @@ class CustomerRepository(
     private val context: DSLContext
 ): JooqRepository<CustomerRecord> {
 
-    fun save(customer: Customer): Customer? = CustomerRecord()
+    fun save(customer: Customer): Customer = CustomerRecord()
         .setName(customer.name)
         .setEmail(customer.email)
         .setCpf(customer.cpf.number)
@@ -26,7 +27,7 @@ class CustomerRepository(
                 .insertInto(CUSTOMER).set(it)
                 .returning()
                 .fetchOne(this::toModel)
-        }
+        } ?: throw DatabaseOperationException("Error on save customer", customer)
 
     fun findBy(id: UUID): Customer? = context
         .selectFrom(CUSTOMER)
