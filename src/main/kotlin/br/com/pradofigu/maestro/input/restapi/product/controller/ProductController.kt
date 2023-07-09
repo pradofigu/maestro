@@ -1,6 +1,7 @@
 package br.com.pradofigu.maestro.input.restapi.product.controller
 
 import br.com.pradofigu.maestro.domain.product.ports.input.ProductInputPort
+import br.com.pradofigu.maestro.input.restapi.order.dto.OrderResponse
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
 import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
 import org.springframework.http.HttpStatus.CREATED
@@ -24,6 +25,12 @@ class ProductController(private val productInputPort: ProductInputPort) {
     suspend fun register(@RequestBody request: ProductRequest): ResponseEntity<ProductResponse> {
         val product = productInputPort.register(request.toModel())
         return ResponseEntity(ProductResponse.from(product), CREATED)
+    }
+
+    @GetMapping
+    suspend fun findAll(): ResponseEntity<List<ProductResponse>> {
+        val product = productInputPort.findAll().map { ProductResponse.from(it) }
+        return ResponseEntity.ok(product)
     }
 
     @GetMapping("/{id}")

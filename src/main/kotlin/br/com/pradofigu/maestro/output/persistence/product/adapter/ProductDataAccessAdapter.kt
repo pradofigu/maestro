@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.output.persistence.product.adapter
 
+import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
@@ -11,6 +12,9 @@ import java.util.UUID
 class ProductDataAccessAdapter(
     private val productRepository: ProductRepository
 ): ProductDataAccessPort {
+
+    override suspend fun findAll(): List<Product> = productRepository.findAll()
+
     override suspend fun findBy(id: UUID): Product? = productRepository.findBy(id)
 
     override suspend fun findByCategory(categoryId: UUID): List<Product> {

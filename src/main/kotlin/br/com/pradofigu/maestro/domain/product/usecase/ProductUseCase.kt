@@ -13,6 +13,8 @@ class ProductUseCase(
 
     override suspend fun register(product: Product): Product = productDataAccessPort.save(product)
 
+    override suspend fun findAll(): List<Product> = productDataAccessPort.findAll()
+
     override suspend fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
 
     override suspend fun findByCategory(categoryId: UUID): List<Product> =
