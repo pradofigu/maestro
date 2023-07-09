@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS "order" (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     number SERIAL UNIQUE NOT NULL,
     customer_id UUID NULL REFERENCES customer(id),
-    product_id UUID REFERENCES product(id)
+    product_id UUID REFERENCES product(id),
     payment_status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     update_at TIMESTAMP DEFAULT NOW()
