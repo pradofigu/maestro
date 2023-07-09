@@ -5,8 +5,10 @@ import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
+import org.springframework.stereotype.Service
 import java.util.UUID
 
+@Service
 class CustomerDataAccessAdapter(
     private val customerRepository: CustomerRepository
 ): CustomerDataAccessPort {

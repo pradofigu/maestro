@@ -4,8 +4,10 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.category.ports.output.CategoryDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
+import org.springframework.stereotype.Service
 import java.util.UUID
 
+@Service
 class CategoryDataAccessAdapter(
     private val categoryRepository: CategoryRepository
 ): CategoryDataAccessPort {
@@ -15,11 +17,10 @@ class CategoryDataAccessAdapter(
     override suspend fun save(category: Category): Category = categoryRepository.save(category)
         ?: throw DatabaseOperationException("Error to create category", category)
 
-    override suspend fun update(id: UUID, category: Category): Category {
-        return categoryRepository.update(id, category)
+    override suspend fun update(category: Category): Category {
+        return categoryRepository.update(category)
             ?: throw DatabaseOperationException(
-                "Error to update category",
-                mapOf("id" to id, "category" to category)
+                "Error to update category", category
             )
     }
 

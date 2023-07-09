@@ -8,7 +8,7 @@ interface CategoryInputPort {
 
     suspend fun findBy(id: UUID): Category?
 
-    suspend fun update(id: UUID, category: Category): Category
+    suspend fun update(category: Category): Category
 
     suspend fun delete(id: UUID)
 }

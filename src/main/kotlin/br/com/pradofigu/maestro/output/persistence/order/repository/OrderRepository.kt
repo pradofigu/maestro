@@ -4,8 +4,8 @@ import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
-import br.com.pradofigu.maestro.tables.Order.ORDER
-import br.com.pradofigu.maestro.tables.records.OrderRecord
+import br.com.pradofigu.maestro.flyway.Tables.ORDER
+import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -19,7 +19,7 @@ class OrderRepository(
 
     fun save(order: Order): Order? = OrderRecord()
         .setId(order.id ?: UUID.randomUUID())
-        .setNumber(order.number?.toInt())
+        .setNumber(order.number.toInt())
         .setCustomerId(order.customer?.id)
         .setPaymentStatus(order.paymentStatus.name)
         .let {

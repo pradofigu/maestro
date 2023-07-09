@@ -7,7 +7,7 @@ interface ProductDataAccessPort {
 
     suspend fun findBy(id: UUID): Product?
 
-    suspend fun findBy(category: String): List<Product>
+    suspend fun findByCategory(categoryId: UUID): List<Product>
 
     suspend fun update(id: UUID, product: Product): Product
 

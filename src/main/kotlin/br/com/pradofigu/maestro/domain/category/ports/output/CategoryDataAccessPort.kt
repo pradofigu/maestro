@@ -9,7 +9,7 @@ interface CategoryDataAccessPort {
 
     suspend fun save(category: Category): Category
 
-    suspend fun update(id: UUID, category: Category): Category
+    suspend fun update(category: Category): Category
 
     suspend fun delete(id: UUID)
 }

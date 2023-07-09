@@ -5,8 +5,10 @@ import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.domain.order.ports.output.OrderDataAccessPort
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
+import org.springframework.stereotype.Service
 import java.util.UUID
 
+@Service
 class OrderDataAccessAdapter(
     private val orderRepository: OrderRepository
 ): OrderDataAccessPort {

@@ -1,5 +1,6 @@
 package br.com.pradofigu.maestro.input.restapi.category.controller
 
+import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.category.ports.input.CategoryInputPort
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryResponse
@@ -23,7 +24,7 @@ class CategoryController(@Autowired private val categoryInputPort: CategoryInput
 
     @PostMapping
     suspend fun create(@RequestBody request: CategoryRequest): ResponseEntity<CategoryResponse> {
-        val category = categoryInputPort.create(request.name)
+        val category = categoryInputPort.create(Category(name = request.name))
         return ResponseEntity(CategoryResponse.from(category), CREATED)
     }
 
@@ -39,7 +40,10 @@ class CategoryController(@Autowired private val categoryInputPort: CategoryInput
         @PathVariable id: String,
         @RequestBody request: CategoryRequest
     ): ResponseEntity<CategoryResponse> {
-        val category = categoryInputPort.update(UUID.fromString(id), request.name)
+        val category = categoryInputPort.update(
+            Category(id = UUID.fromString(id), name = request.name)
+        )
+
         return ResponseEntity.ok(CategoryResponse.from(category))
     }
 

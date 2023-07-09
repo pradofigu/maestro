@@ -1,4 +1,4 @@
-# maestro
+# Maestro
 Fast food monolith service
 
 ## Software Architecture
@@ -17,25 +17,33 @@ Fast food monolith service
 
 1. Clone the repo
 
-2. Set up the project infrastructure creating the docker containers
-    - Execute the `make start` command
-    - (Optional) Execute the `make stop` command - To stop the containers 
+2. You have 2 options to work on. You can: 
+- Run the application and databases inside docker containers 
 
-3. Now you have 3 options to work on. You can:
-   1. Only migrate the script with flyway executing the `make migrate` command
-   2. Compile the project to generate JOOQ entities executing the `make compile` command
-      - Check the `build/generated-sources/jooq` folder to see the database record entities generated
-   3. Steps 1 and 2 in a row executing the `make build` command
+```bash
+$ make up
+```
 
-4. Run the Application:
-    - Execute the `make run` command
+- Run the application using `make` commands (or debugging)
+```bash
+$ make start-db # Starts the database container and PgAdmin
+$ make build # Compile the project to generate JOOQ entities
+$ make run # Runs the application through bootRun task (alternatively you can run the application through IntelliJ
+
+# PS: Check the `build/generated-sources/jooq` folder to see the database record entities JOOQ generated
+```
 
 ## Application
 
 - **Host**: http://localhost:8080
-
 - **Swagger API**: http://localhost:8080/swagger-ui
-
 - **PgAdmin**: http://localhost:5050/login
-    - **use**r: admin@admin.com
+    - **user**: admin@admin.com
     - **password**: admin *(the same to connect to the database)*
+
+Use `make help` to see all available commands.
+
+## Documentation
+
+- **Event Storming Project Board**: https://miro.com/app/board/uXjVMDHdGWk=/
+- **Maestro Ubiquitous Language**: [Documentation](docs/Glossário%20de%20Linguagem%20Ubiqua.md)

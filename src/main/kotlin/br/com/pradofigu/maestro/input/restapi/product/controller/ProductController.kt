@@ -48,9 +48,9 @@ class ProductController(private val productInputPort: ProductInputPort) {
         return ResponseEntity.ok().build()
     }
 
-    @GetMapping("/category/{category}")
-    suspend fun findByCategory(@PathVariable category: String): ResponseEntity<List<ProductResponse>> {
-        val products = productInputPort.findBy(category).map {
+    @GetMapping("/category/{categoryId}")
+    suspend fun findByCategory(@PathVariable categoryId: UUID): ResponseEntity<List<ProductResponse>> {
+        val products = productInputPort.findByCategory(categoryId).map {
             ProductResponse.from(it)
         }
 
