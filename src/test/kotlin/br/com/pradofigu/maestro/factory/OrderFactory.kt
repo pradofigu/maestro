@@ -1,9 +1,12 @@
 package br.com.pradofigu.maestro.factory
 
+import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
 import java.util.UUID
 import kotlin.random.Random
 
@@ -15,6 +18,12 @@ class OrderFactory(
 
     fun create(
         customerId: UUID? = null,
+        products: List<Product> = listOf(Product(
+            name = "X-Egg",
+            price = BigDecimal(29.90),
+            category = Category(name = "Lanche"),
+            preparationTime = BigDecimal(30)
+        )),
         paymentStatus: PaymentStatus = PaymentStatus.PENDING
     ): Order {
         val customer = if (customerId == null) {
@@ -27,6 +36,7 @@ class OrderFactory(
             Order(
                 number = Random.nextLong(1, 9999),
                 customerId = customer.id,
+                products = products,
                 paymentStatus = paymentStatus
             )
         )

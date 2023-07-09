@@ -1,8 +1,6 @@
 package br.com.pradofigu.maestro.output.persistence.product.repository
 
-import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.product.model.Product
-import br.com.pradofigu.maestro.flyway.Tables
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
 import br.com.pradofigu.maestro.flyway.Tables.PRODUCT

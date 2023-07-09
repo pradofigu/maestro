@@ -20,6 +20,7 @@ class OrderRepository(
         .setId(order.id ?: UUID.randomUUID())
         .setNumber(order.number.toInt())
         .setCustomerId(order.customerId)
+        .setProducts(order.products)
         .setPaymentStatus(order.paymentStatus.name)
         .let {
             context
@@ -69,6 +70,7 @@ class OrderRepository(
         id = record.id,
         number = record.number.toLong(),
         customerId = record.customerId,
+        products = record.products,
         paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
     )
 }
