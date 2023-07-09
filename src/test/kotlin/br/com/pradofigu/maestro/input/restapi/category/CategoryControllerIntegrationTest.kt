@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @SpringBootTest
@@ -23,12 +25,15 @@ class CategoryControllerIntegrationTest {
     @Autowired private lateinit var objectMapper: ObjectMapper
 
     @Nested
+    @Transactional
     inner class HappyPathIntegrationTest {
 
         @Test
+        @Rollback
         fun `When create a category should returns 201`() {
+            val randomComplement = UUID.randomUUID().toString()
             val body: String = objectMapper.writeValueAsString(
-                CategoryRequest(name = "Chef's Plate")
+                CategoryRequest(name = "Chef's Plate $randomComplement")
             )
 
             val mvcResult = mvc.perform(
@@ -42,13 +47,15 @@ class CategoryControllerIntegrationTest {
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("name").value("Chef's Plate"))
+                .andExpect(jsonPath("name").value("Chef's Plate $randomComplement"))
                 .andReturn()
         }
 
         @Test
+        @Rollback
         fun `When get a category by id should returns 200`() {
-            val category = categoryFactory.create("Chef's Plate")!!
+            val randomComplement = UUID.randomUUID().toString()
+            val category = categoryFactory.create("Chef's Plate $randomComplement")!!
 
             val mvcResult = mvc.perform(
                 get("/categories/${category.id}")
@@ -59,16 +66,18 @@ class CategoryControllerIntegrationTest {
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(category.id))
-                .andExpect(jsonPath("name").value("Chef's Plate"))
+                .andExpect(jsonPath("id").value(category.id.toString()))
+                .andExpect(jsonPath("name").value("Chef's Plate $randomComplement"))
         }
 
         @Test
+        @Rollback
         fun `When update a category should returns 200`() {
-            val category = categoryFactory.create("Special Chef's Plate")!!
+            val randomComplement = UUID.randomUUID().toString()
+            val category = categoryFactory.create("Special Chef's Plate $randomComplement")!!
 
             val body: String = objectMapper.writeValueAsString(
-                CategoryRequest(name = category.name)
+                CategoryRequest(name = "New Special Chef's Plate $randomComplement")
             )
 
             val mvcResult = mvc.perform(
@@ -81,14 +90,15 @@ class CategoryControllerIntegrationTest {
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(category.id))
-                .andExpect(jsonPath("name").value("Special Chef's Plate"))
+                .andExpect(jsonPath("id").value(category.id.toString()))
+                .andExpect(jsonPath("name").value("New Special Chef's Plate $randomComplement"))
                 .andReturn()
         }
 
         @Test
+        @Rollback
         fun `When delete a category should returns 204`() {
-            val category = categoryFactory.create("Special Chef's Plate")!!
+            val category = categoryFactory.create("Special Chef's Plate ${UUID.randomUUID().toString()}")!!
 
             val mvcResult = mvc.perform(delete("/categories/${category.id}"))
                 .andExpect(status().isOk())

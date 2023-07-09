@@ -50,6 +50,6 @@ class CategoryController(@Autowired private val categoryInputPort: CategoryInput
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         categoryInputPort.delete(UUID.fromString(id))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 }
