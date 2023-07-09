@@ -21,7 +21,6 @@ class OrderDataAccessAdapter(
     override suspend fun findBy(number: Long): Order? = orderRepository.findBy(number)
 
     override suspend fun save(order: Order): Order = orderRepository.save(order)
-        ?: throw DatabaseOperationException("Error to save order", order)
 
     override suspend fun update(id: UUID, paymentStatus: PaymentStatus): Order {
         return orderRepository.update(id, paymentStatus)

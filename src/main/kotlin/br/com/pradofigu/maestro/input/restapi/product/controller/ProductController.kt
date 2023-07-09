@@ -45,7 +45,7 @@ class ProductController(private val productInputPort: ProductInputPort) {
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         productInputPort.delete(UUID.fromString(id))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/category/{categoryId}")

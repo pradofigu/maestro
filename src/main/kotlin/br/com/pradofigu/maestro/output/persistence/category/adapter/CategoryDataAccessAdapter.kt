@@ -15,7 +15,6 @@ class CategoryDataAccessAdapter(
     override suspend fun findBy(id: UUID): Category? = categoryRepository.findBy(id)
 
     override suspend fun save(category: Category): Category = categoryRepository.save(category)
-        ?: throw DatabaseOperationException("Error to create category", category)
 
     override suspend fun update(category: Category): Category {
         return categoryRepository.update(category)

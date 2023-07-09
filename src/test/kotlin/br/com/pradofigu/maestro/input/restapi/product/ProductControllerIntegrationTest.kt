@@ -1,22 +1,19 @@
 package br.com.pradofigu.maestro.input.restapi.product
 
-import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.factory.CategoryFactory
-import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
-import br.com.pradofigu.maestro.input.restapi.product.dto.ProductRequest
-import br.com.pradofigu.maestro.input.restapi.product.dto.ProductResponse
+import br.com.pradofigu.maestro.factory.ProductFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.math.BigDecimal
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 
@@ -25,35 +22,19 @@ import java.util.*
 @DisplayName("/products")
 class ProductControllerIntegrationTest {
 
+    @Autowired private lateinit var productFactory: ProductFactory
     @Autowired private lateinit var categoryFactory: CategoryFactory
     @Autowired private lateinit var mvc: MockMvc
     @Autowired private lateinit var objectMapper: ObjectMapper
 
-    @Nested
-    @TestMethodOrder(value = MethodOrderer.OrderAnnotation::class)
-    @TestInstance(value = TestInstance.Lifecycle.PER_CLASS)
+    @Transactional
     inner class HappyPathIntegrationTest {
-        private var productId: String = UUID.randomUUID().toString()
-        private var sandwichCategory: Category? = null
-
-        fun setup () {
-            sandwichCategory = categoryFactory.create("Sandwiches")
-        }
 
         @Test
-        @Order(1)
+        @Rollback
         fun `When create a products should returns 201`() {
-            val body: String = objectMapper.writeValueAsString(
-                ProductRequest(
-                    name = "X-Bacon",
-                    price = BigDecimal("34.90"),
-                    category = CategoryRequest(
-                        id = sandwichCategory!!.id,
-                        name = sandwichCategory!!.name
-                    ),
-                    preparationTime = BigDecimal("35")
-                )
-            )
+            val product = productFactory.create()
+            val body: String = objectMapper.writeValueAsString(product)
 
             val mvcResult = mvc.perform(
                 post("/products")
@@ -63,27 +44,22 @@ class ProductControllerIntegrationTest {
                 .andExpect(request().asyncStarted())
                 .andReturn()
 
-            val response = mvc.perform(asyncDispatch(mvcResult))
+            mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("name").value("X-Bacon"))
-                .andExpect(jsonPath("price").value(34.90))
-                .andExpect(jsonPath("category").value(sandwichCategory!!.id))
-                .andExpect(jsonPath("preparation_time").value(35))
+                .andExpect(jsonPath("name").value(product.name))
+                .andExpect(jsonPath("price").value(100.0))
+                .andExpect(jsonPath("category.name").value(product.category.name))
+                .andExpect(jsonPath("preparationTime").value(10.0))
                 .andReturn()
-
-            this.productId = objectMapper.readValue(
-                response.response.contentAsString,
-                ProductResponse::class.java
-            ).id
-
-            assertNotNull(productId, "Created test didn't return the product id")
         }
 
         @Test
-        @Order(2)
+        @Rollback
         fun `When get a product by id should returns 200`() {
-            val mvcResult = mvc.perform(get("/products/$productId")
+            val product = productFactory.create()
+
+            val mvcResult = mvc.perform(get("/products/${product.id}")
                     .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
@@ -91,17 +67,23 @@ class ProductControllerIntegrationTest {
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(productId))
-                .andExpect(jsonPath("name").value("X-Bacon"))
-                .andExpect(jsonPath("price").value(34.90))
-                .andExpect(jsonPath("category").value(sandwichCategory!!.id))
-                .andExpect(jsonPath("preparation_time").value(35))
+                .andExpect(jsonPath("id").value(product.id.toString()))
+                .andExpect(jsonPath("name").value(product.name))
+                .andExpect(jsonPath("price").value(110.0))
+                .andExpect(jsonPath("category.name").value(product.category.name))
+                .andExpect(jsonPath("preparationTime").value(10.0))
         }
 
         @Test
-        @Order(3)
+        @Rollback
         fun `When get a product by category should returns 200`() {
-            val mvcResult = mvc.perform(get("/products/category/${sandwichCategory!!.id}")
+            val category = categoryFactory.create()
+
+            val product1 = productFactory.create(category)
+            val product2 = productFactory.create(category)
+            productFactory.create()
+
+            val mvcResult = mvc.perform(get("/products/category/${category.id}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
@@ -109,30 +91,23 @@ class ProductControllerIntegrationTest {
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("[*].id", hasItem(productId)))
-                .andExpect(jsonPath("[*].name", hasItem("X-Bacon")))
-                .andExpect(jsonPath("[*].price", hasItem(34.90)))
-                .andExpect(jsonPath("[*].category", hasItem(sandwichCategory!!.id)))
-                .andExpect(jsonPath("[*].preparation_time", hasItem(35)))
+                .andExpect(jsonPath("$", hasSize<Any>(2)))
+                .andExpect(jsonPath("$[0].id").value(product1.id))
+                .andExpect(jsonPath("$[0].name").value(product1.name))
+                .andExpect(jsonPath("$[0].category.name").value(category.name))
+                .andExpect(jsonPath("$[1].id").value(product2.id))
+                .andExpect(jsonPath("$[1].name").value(product2.name))
+                .andExpect(jsonPath("$[1].category.name").value(category.name))
         }
 
         @Test
-        @Order(4)
+        @Rollback
         fun `When update a product should returns 200`() {
-            val body: String = objectMapper.writeValueAsString(
-                ProductRequest(
-                    name = "X-Bacon",
-                    price = BigDecimal("39.90"),
-                    category = CategoryRequest(
-                        id = sandwichCategory!!.id,
-                        name = sandwichCategory!!.name
-                    ),
-                    preparationTime = BigDecimal("35")
-                )
-            )
+            val product = productFactory.create()
+            val body: String = objectMapper.writeValueAsString(product.copy(name = "Updated product name"))
 
             val mvcResult = mvc.perform(
-                put("/products/${productId}")
+                put("/products/${product.id}")
                     .contentType(APPLICATION_JSON)
                     .content(body))
                 .andExpect(status().isOk())
@@ -141,19 +116,16 @@ class ProductControllerIntegrationTest {
 
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(productId))
-                .andExpect(jsonPath("name").value("X-Bacon"))
-                .andExpect(jsonPath("price").value(39.90))
-                .andExpect(jsonPath("category").value(sandwichCategory!!.id))
-                .andExpect(jsonPath("preparation_time").value(35))
+                .andExpect(jsonPath("name").value("Updated product name"))
                 .andReturn()
         }
 
         @Test
-        @Order(5)
-        @Throws(java.lang.Exception::class)
+        @Rollback
         fun `When delete a product should returns 204`() {
-            val mvcResult = mvc.perform(delete("/products/${productId}"))
+            val product = productFactory.create()
+
+            val mvcResult = mvc.perform(delete("/products/${product.id}"))
                 .andExpect(status().isOk())
                 .andExpect(request().asyncStarted())
                 .andReturn()

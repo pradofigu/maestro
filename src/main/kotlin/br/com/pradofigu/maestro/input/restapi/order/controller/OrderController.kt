@@ -54,7 +54,7 @@ class OrderController(@Autowired private val orderInputPort: OrderInputPort) {
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         orderInputPort.delete(UUID.fromString(id))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/number/{number}")
