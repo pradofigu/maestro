@@ -26,6 +26,7 @@ class OrderDataAccessPortResourceIntegrationTest {
     @Autowired private lateinit var objectMapper: ObjectMapper
     @Autowired private lateinit var orderFactory: OrderFactory
 
+    @Nested
     @Transactional
     inner class HappyPathIntegrationTest {
 
