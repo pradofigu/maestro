@@ -1,4 +1,4 @@
-DOCKER_COMPOSE_FILE_PATH?="docker-compose.yaml"
+DOCKER_COMPOSE_FILE_PATH="docker-compose.yaml"
 
 run: ## Runs the application through Gradle bootRun task
 	@./gradlew bootRun
@@ -51,8 +51,8 @@ kill: stop ## Stops and removes all containers (application, database, pgadmin)
 
 clean: kill ## Stops and removes all containers (application, database, pgadmin) and deletes all volumes
 	@echo "-------------- Deleting Named volumes --------------"
-	@docker volume rm docker_maestro-postgres-data
-	@docker volume rm docker_maestro-pgadmin4-data
+	@docker volume rm maestro_maestro-postgres-data
+	@docker volume rm maestro_maestro-pgadmin4-data
 
 # Necessary order to run migrations from Flyway before compiling the application
 # (JOOQ classes must be generated with the migrations already applied)
