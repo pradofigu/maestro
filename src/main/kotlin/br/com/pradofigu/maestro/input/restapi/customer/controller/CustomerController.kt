@@ -4,6 +4,7 @@ import br.com.pradofigu.maestro.domain.customer.model.CPF
 import br.com.pradofigu.maestro.domain.customer.ports.input.CustomerInputPort
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
 import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerResponse
+import br.com.pradofigu.maestro.input.restapi.order.dto.OrderResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -26,6 +27,12 @@ class CustomerController(@Autowired private val customerInputPort: CustomerInput
     suspend fun register(@RequestBody request: CustomerRequest): ResponseEntity<CustomerResponse> {
         val customer = customerInputPort.register(request.toModel())
         return ResponseEntity(CustomerResponse.from(customer), CREATED)
+    }
+
+    @GetMapping
+    suspend fun findAll(): ResponseEntity<List<CustomerResponse>> {
+        val customers = customerInputPort.findAll().map { CustomerResponse.from(it) }
+        return ResponseEntity.ok(customers)
     }
 
     @GetMapping("/{id}")

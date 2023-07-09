@@ -1,6 +1,8 @@
 package br.com.pradofigu.maestro.output.persistence.category.repository
 
 import br.com.pradofigu.maestro.domain.category.model.Category
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.flyway.Tables
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.flyway.Tables.CATEGORY
 import br.com.pradofigu.maestro.flyway.tables.records.CategoryRecord
@@ -22,6 +24,10 @@ class CategoryRepository(
           .returning()
           .fetchOne(this::toModel) ?: throw DatabaseOperationException("Error on save category", category)
     }
+
+    fun findAll(): List<Category> = context
+        .selectFrom(CATEGORY)
+        .fetch(this::toModel)
 
     fun findBy(id: UUID): Category? = context
         .selectFrom(CATEGORY)

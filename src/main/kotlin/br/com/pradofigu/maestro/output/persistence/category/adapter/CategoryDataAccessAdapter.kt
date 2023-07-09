@@ -12,6 +12,8 @@ class CategoryDataAccessAdapter(
     private val categoryRepository: CategoryRepository
 ): CategoryDataAccessPort {
 
+    override suspend fun findAll(): List<Category> = categoryRepository.findAll()
+
     override suspend fun findBy(id: UUID): Category? = categoryRepository.findBy(id)
 
     override suspend fun save(category: Category): Category = categoryRepository.save(category)

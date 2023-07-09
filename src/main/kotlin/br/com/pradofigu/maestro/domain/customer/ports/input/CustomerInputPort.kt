@@ -7,6 +7,8 @@ import java.util.UUID
 interface CustomerInputPort {
     suspend fun register(customer: Customer): Customer
 
+    suspend fun findAll(): List<Customer>
+
     suspend fun findBy(id: UUID): Customer?
 
     suspend fun findBy(cpf: CPF): Customer?

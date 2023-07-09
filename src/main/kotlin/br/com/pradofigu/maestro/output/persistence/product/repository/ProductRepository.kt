@@ -31,10 +31,6 @@ class ProductRepository(
                 .fetchOne(this::toModel)
         } ?: throw DatabaseOperationException("Error on save product", product)
 
-    fun findAll(): List<Product>  = context
-        .selectFrom(PRODUCT)
-        .fetch(this::toModel)
-
     fun findBy(id: UUID): Product? = context
         .selectFrom(PRODUCT)
         .where(PRODUCT.ID.eq(id))

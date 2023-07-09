@@ -14,6 +14,8 @@ class CustomerUseCase(
 
     override suspend fun register(customer: Customer): Customer = customerDataAccessPort.save(customer)
 
+    override suspend fun findAll(): List<Customer> = customerDataAccessPort.findAll()
+
     override suspend fun findBy(id: UUID): Customer? = customerDataAccessPort.findBy(id)
 
     override suspend fun findBy(cpf: CPF): Customer? = customerDataAccessPort.findBy(cpf)

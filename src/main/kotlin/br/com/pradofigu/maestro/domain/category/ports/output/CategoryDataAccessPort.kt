@@ -5,6 +5,8 @@ import java.util.UUID
 
 interface CategoryDataAccessPort {
 
+    suspend fun findAll(): List<Category>
+
     suspend fun findBy(id: UUID): Category?
 
     suspend fun save(category: Category): Category
