@@ -1,6 +1,8 @@
 package br.com.pradofigu.maestro.output.persistence.product.repository
 
+import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.flyway.Tables
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
 import br.com.pradofigu.maestro.flyway.Tables.PRODUCT
@@ -20,8 +22,10 @@ class ProductRepository(
     fun save(product: Product): Product = ProductRecord()
         .setId(product.id)
         .setName(product.name)
+        .setDescription(product.description)
         .setPrice(product.price)
         .setCategoryId(product.category.id)
+        .setImageUrl(product.imageUrl)
         .setPreparationTime(product.preparationTime)
         .let {
             context
@@ -30,6 +34,10 @@ class ProductRepository(
                 .returning()
                 .fetchOne(this::toModel)
         } ?: throw DatabaseOperationException("Error on save product", product)
+
+    fun findAll(): List<Product> = context
+        .selectFrom(PRODUCT)
+        .fetch(this::toModel)
 
     fun findBy(id: UUID): Product? = context
         .selectFrom(PRODUCT)
@@ -77,6 +85,8 @@ class ProductRepository(
             name = record.name,
             price = record.price,
             category = category,
+            description = record.description,
+            imageUrl = record.imageUrl,
             preparationTime = record.preparationTime
         )
     }
