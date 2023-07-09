@@ -2,10 +2,10 @@ package br.com.pradofigu.maestro.output.persistence.order.repository
 
 import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
-import br.com.pradofigu.maestro.output.persistence.JooqRepository
-import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
 import br.com.pradofigu.maestro.flyway.Tables.ORDER
 import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
+import br.com.pradofigu.maestro.output.persistence.JooqRepository
+import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -13,14 +13,13 @@ import java.util.UUID
 
 @Repository
 class OrderRepository(
-    private val context: DSLContext,
-    private val customerRepository: CustomerRepository
+    private val context: DSLContext
 ): JooqRepository<OrderRecord> {
 
     fun save(order: Order): Order = OrderRecord()
         .setId(order.id ?: UUID.randomUUID())
         .setNumber(order.number.toInt())
-        .setCustomerId(order.customer?.id)
+        .setCustomerId(order.customerId)
         .setPaymentStatus(order.paymentStatus.name)
         .let {
             context
@@ -66,14 +65,10 @@ class OrderRepository(
         .execute()
         .let { it == 1 }
 
-    private fun toModel(record: OrderRecord): Order {
-        val customer = customerRepository.findBy(record.customerId)
-
-        return Order(
-            id = record.id,
-            number = record.number.toLong(),
-            customer = customer,
-            paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
-        )
-    }
+    private fun toModel(record: OrderRecord): Order = Order(
+        id = record.id,
+        number = record.number.toLong(),
+        customerId = record.customerId,
+        paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
+    )
 }
