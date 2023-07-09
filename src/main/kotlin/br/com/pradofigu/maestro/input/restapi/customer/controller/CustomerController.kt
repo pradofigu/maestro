@@ -47,7 +47,7 @@ class CustomerController(@Autowired private val customerInputPort: CustomerInput
     @DeleteMapping("/{id}")
     suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
         customerInputPort.delete(UUID.fromString(id))
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/cpf/{cpf}")

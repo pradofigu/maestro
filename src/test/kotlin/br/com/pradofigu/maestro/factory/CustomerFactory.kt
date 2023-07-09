@@ -6,20 +6,22 @@ import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.output.persistence.customer.repository.CustomerRepository
 import org.springframework.stereotype.Component
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Component
 class CustomerFactory(private val customerRepository: CustomerRepository) {
 
-        fun create() = customerRepository.save(
-            Customer(
-                name = "John Doe",
-                email = "john@doe.co",
-                phone = "+5511999998888",
-                cpf = CPF(CPFValidator().generateRandomValid()),
-                birthDate = LocalDate.of(1980, 1, 1)
-            )
+    fun create(cpf: String = generateCpfAsString()) = customerRepository.save(
+        Customer(
+            name = "John Doe",
+            email = "john@doe.co",
+            phone = "+5511999998888",
+            cpf = CPF(cpf),
+            birthDate = LocalDate.of(1980, 1, 1)
         )
+    )
 
-        fun findById(id: UUID) = customerRepository.findBy(id)
+    fun findById(id: UUID) = customerRepository.findBy(id)
+
+    fun generateCpfAsString() = CPFValidator().generateRandomValid()!!
 }
