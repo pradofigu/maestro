@@ -3,14 +3,14 @@ package br.com.pradofigu.maestro.input.restapi.product.dto
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryResponse
 import java.math.BigDecimal
-import java.util.UUID
+import java.math.BigInteger
 
 data class ProductResponse(
     val id: String,
     val name: String,
     val price: BigDecimal,
     val category: CategoryResponse,
-    val preparationTime: BigDecimal
+    val preparationTime: BigInteger
 ) {
     companion object {
         fun from(product: Product) = ProductResponse(

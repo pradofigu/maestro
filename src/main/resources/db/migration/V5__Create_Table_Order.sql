@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "order" (
-    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+    id UUID /* [jooq ignore start] */ DEFAULT uuid_generate_v4() /* [jooq ignore stop] */ NOT NULL PRIMARY KEY,
     number SERIAL UNIQUE NOT NULL,
     customer_id UUID NULL REFERENCES customer(id),
     payment_status VARCHAR NOT NULL,

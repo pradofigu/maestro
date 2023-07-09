@@ -2,8 +2,8 @@ package br.com.pradofigu.maestro.output.persistence.category.repository
 
 import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
-import br.com.pradofigu.maestro.flyway.Tables.CATEGORY
-import br.com.pradofigu.maestro.flyway.tables.records.CategoryRecord
+import br.com.pradofigu.maestro.flyway.default_schema.Tables.CATEGORY
+import br.com.pradofigu.maestro.flyway.default_schema.tables.records.CategoryRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import java.util.UUID

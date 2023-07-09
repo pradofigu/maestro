@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.*
 
 
@@ -43,6 +44,7 @@ class ProductControllerIntegrationTest {
         @Test
         @Order(1)
         fun `When create a products should returns 201`() {
+            setup();
             val body: String = objectMapper.writeValueAsString(
                 ProductRequest(
                     name = "X-Bacon",
@@ -51,7 +53,7 @@ class ProductControllerIntegrationTest {
                         id = sandwichCategory!!.id,
                         name = sandwichCategory!!.name
                     ),
-                    preparationTime = BigDecimal("35")
+                    preparationTime = BigInteger("35")
                 )
             )
 
@@ -68,7 +70,8 @@ class ProductControllerIntegrationTest {
                 .andExpect(jsonPath("id").isNotEmpty())
                 .andExpect(jsonPath("name").value("X-Bacon"))
                 .andExpect(jsonPath("price").value(34.90))
-                .andExpect(jsonPath("category").value(sandwichCategory!!.id))
+                .andExpect(jsonPath("category.id").value(sandwichCategory!!.id))
+                .andExpect(jsonPath("category.name").value(sandwichCategory!!.name))
                 .andExpect(jsonPath("preparation_time").value(35))
                 .andReturn()
 
@@ -127,7 +130,7 @@ class ProductControllerIntegrationTest {
                         id = sandwichCategory!!.id,
                         name = sandwichCategory!!.name
                     ),
-                    preparationTime = BigDecimal("35")
+                    preparationTime = BigInteger("35")
                 )
             )
 

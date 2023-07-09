@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.time.LocalDate
 import java.util.*
 
@@ -127,7 +128,7 @@ class OrderDataAccessPortResourceIntegrationTest {
                     name = "X-Bacon",
                     price = BigDecimal("39.90"),
                     category = CategoryRequest(name = "Lanche"),
-                    preparationTime = BigDecimal("35")
+                    preparationTime = BigInteger("35")
                 )
             )
 

@@ -15,7 +15,7 @@ import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("/categories")
+P@DisplayName("/categories")
 class CategoryControllerIntegrationTest {
 
     @Autowired private lateinit var categoryFactory: CategoryFactory

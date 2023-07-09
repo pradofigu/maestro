@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS product (
-    id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    name VARCHAR,
-    price DECIMAL(6,2),
+    id UUID /* [jooq ignore start] */ DEFAULT uuid_generate_v4() /* [jooq ignore stop] */ NOT NULL PRIMARY KEY,
+    name VARCHAR NOT NULL,
+    price DECIMAL(6,2) NOT NULL,
     category_id UUID NOT NULL REFERENCES category(id),
-    preparation_time NUMERIC,
+    preparation_time NUMERIC NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+/* [jooq ignore start] */
 /* Lanches */
 INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uuid_generate_v4(), 'X-Salada', '29.90', 'c85b8201-29c4-495a-be86-7dd3a1d16b81', '30');
 INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uuid_generate_v4(), 'X-Egg', '29.90', 'c85b8201-29c4-495a-be86-7dd3a1d16b81', '30');
@@ -40,3 +41,4 @@ INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uui
 INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uuid_generate_v4(), 'Combo X-Burger (Fritas + Bebida)', '45.90', '507c1aeb-4aca-476f-a175-b41392ddc10a', '45');
 INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uuid_generate_v4(), 'Combo Cachorro-quente (Fritas + Bebida)', '55.90', '507c1aeb-4aca-476f-a175-b41392ddc10a', '45');
 INSERT INTO product (id, name, price, category_id, preparation_time) VALUES (uuid_generate_v4(), 'Combo X-Vegano (Fritas + Bebida)', '65.90', '507c1aeb-4aca-476f-a175-b41392ddc10a', '45');
+/* [jooq ignore stop] */

@@ -3,8 +3,8 @@ package br.com.pradofigu.maestro.output.persistence.product.repository
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
-import br.com.pradofigu.maestro.flyway.Tables.PRODUCT
-import br.com.pradofigu.maestro.flyway.tables.records.ProductRecord
+import br.com.pradofigu.maestro.flyway.default_schema.Tables.PRODUCT
+import br.com.pradofigu.maestro.flyway.default_schema.tables.records.ProductRecord
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
