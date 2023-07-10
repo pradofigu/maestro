@@ -19,6 +19,8 @@ class ProductFactory(
         return productRepository.save(
             Product(
                 name = "Product ${Random.nextInt(1, 9999)}",
+                description = "Lorem Ipsum",
+                imageUrl = "https://my-image.com",
                 price = BigDecimal(100),
                 category = category,
                 preparationTime = BigDecimal(10)
