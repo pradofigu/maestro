@@ -77,7 +77,6 @@ class OrderRepository(
             ORDER_TRACKING.ID,
             ORDER_TRACKING.ORDER_ID,
             ORDER_TRACKING.STATUS,
-            DSL.max(ORDER_TRACKING.CREATED_AT).`as`("createdAt"),
             ORDER.NUMBER,
             PRODUCT.ID,
             PRODUCT.PREPARATION_TIME
@@ -90,8 +89,15 @@ class OrderRepository(
             .join(PRODUCT)
             .on(ORDER_PRODUCT.PRODUCT_ID.eq(PRODUCT.ID))
             .where(ORDER_TRACKING.STATUS.notEqual(OrderStatus.FINISHED.name))
-            .groupBy(ORDER_TRACKING.ORDER_ID)
-            .orderBy(DSL.field("createdAt").desc())
+            .groupBy(
+                ORDER_TRACKING.ID,
+                ORDER_TRACKING.ORDER_ID,
+                ORDER_TRACKING.STATUS,
+                ORDER.NUMBER,
+                PRODUCT.ID,
+                PRODUCT.PREPARATION_TIME
+            )
+            .orderBy(ORDER_TRACKING.CREATED_AT.desc())
             .fetch()
 
         val products = orderTrackingRecord.map { record ->
