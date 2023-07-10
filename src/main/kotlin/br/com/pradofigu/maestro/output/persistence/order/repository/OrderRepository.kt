@@ -1,12 +1,7 @@
 package br.com.pradofigu.maestro.output.persistence.order.repository
 
-import br.com.pradofigu.maestro.domain.order.model.CreateOrder
-import br.com.pradofigu.maestro.domain.order.model.PendingPaymentOrder
-import br.com.pradofigu.maestro.domain.order.model.OrderPayment
-import br.com.pradofigu.maestro.domain.order.model.Order
-import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
-import br.com.pradofigu.maestro.flyway.Tables.ORDER
-import br.com.pradofigu.maestro.flyway.Tables.ORDER_PRODUCT
+import br.com.pradofigu.maestro.domain.order.model.*
+import br.com.pradofigu.maestro.flyway.Tables.*
 import br.com.pradofigu.maestro.flyway.tables.records.OrderProductRecord
 import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
@@ -14,6 +9,7 @@ import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationEx
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Repository
 class OrderRepository(
@@ -57,6 +53,21 @@ class OrderRepository(
         .where(ORDER.NUMBER.eq(number))
         .fetchOne(this::toModel)
 
+    fun findTracking(orderId: String): OrderTracking? = context.select()
+        .from(ORDER_TRACKING)
+        .join(ORDER)
+        .on(ORDER_TRACKING.ORDER_ID.eq(ORDER.ID))
+        .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(orderId)))
+        .fetchOne { record ->
+            OrderTracking(
+                id = record.get(ORDER_TRACKING.ID),
+                orderId = record.get(ORDER_TRACKING.ORDER_ID),
+                status = OrderStatus.valueOf(record.get(ORDER_TRACKING.STATUS)),
+                createdAt = record.get(ORDER_TRACKING.CREATED_AT)
+            ).apply {
+                this.orderNumber = record.get(ORDER.NUMBER).toLong()
+            }
+        }
 
     private fun toModel(record: OrderRecord): Order = Order(
         id = record.id,

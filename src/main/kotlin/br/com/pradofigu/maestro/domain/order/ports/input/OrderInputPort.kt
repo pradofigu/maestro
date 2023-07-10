@@ -10,5 +10,5 @@ interface OrderInputPort {
 
     suspend fun findByNumber(number: Long): Order?
 
-
+    suspend fun findTracking(orderId: String): OrderTracking?
 }

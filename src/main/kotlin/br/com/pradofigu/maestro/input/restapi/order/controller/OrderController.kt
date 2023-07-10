@@ -36,4 +36,11 @@ class OrderController(private val orderInputPort: OrderInputPort) {
             ResponseEntity.ok(OrderResponse.from(it))
         } ?: ResponseEntity.notFound().build()
     }
+
+    @GetMapping("/{orderId}/tracking")
+    suspend fun findTracking(@PathVariable orderId: String): ResponseEntity<TrackingResponse> {
+        return orderInputPort.findTracking(orderId)?.let {
+            ResponseEntity.ok(TrackingResponse.from(it))
+        } ?: ResponseEntity.notFound().build()
+    }
 }
