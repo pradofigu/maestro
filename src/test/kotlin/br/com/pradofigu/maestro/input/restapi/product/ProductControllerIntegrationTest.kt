@@ -27,6 +27,7 @@ class ProductControllerIntegrationTest {
     @Autowired private lateinit var mvc: MockMvc
     @Autowired private lateinit var objectMapper: ObjectMapper
 
+    @Nested
     @Transactional
     inner class HappyPathIntegrationTest {
 

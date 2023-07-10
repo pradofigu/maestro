@@ -1,13 +1,11 @@
 package br.com.pradofigu.maestro.input.restapi.order
 
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
-import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.factory.CustomerFactory
 import br.com.pradofigu.maestro.factory.OrderFactory
 import br.com.pradofigu.maestro.factory.ProductFactory
 import br.com.pradofigu.maestro.input.restapi.order.dto.CreateOrderRequest
 import br.com.pradofigu.maestro.input.restapi.order.dto.PayOrderRequest
-import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +27,6 @@ class OrderDataAccessPortResourceIntegrationTest {
     @Autowired private lateinit var mvc: MockMvc
     @Autowired private lateinit var objectMapper: ObjectMapper
     @Autowired private lateinit var orderFactory: OrderFactory
-    @Autowired private lateinit var orderRepository: OrderRepository
     @Autowired private lateinit var customerFactory: CustomerFactory
     @Autowired private lateinit var productFactory: ProductFactory
 
@@ -40,11 +37,13 @@ class OrderDataAccessPortResourceIntegrationTest {
         @Test
         @Rollback
         fun `When create an order should returns 201`() {
-
             val customer = customerFactory.create()
-            val products = listOf<Product>(productFactory.create(), productFactory.create())
+            val products = listOf(productFactory.create(), productFactory.create())
 
-            val request = CreateOrderRequest(customerId = customer.id, productsId = products.map { product -> product.id!! })
+            val request = CreateOrderRequest(
+                customerId = customer.id,
+                productsId = products.map { it.id!! }
+            )
 
             val body: String = objectMapper.writeValueAsString(request)
 
@@ -113,7 +112,5 @@ class OrderDataAccessPortResourceIntegrationTest {
                 .andExpect(jsonPath("customerId").isNotEmpty)
                 .andExpect(jsonPath("paymentStatus").value("PENDING"))
         }
-
-
     }
 }
