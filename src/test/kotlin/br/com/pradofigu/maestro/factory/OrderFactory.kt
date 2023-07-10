@@ -21,12 +21,7 @@ class OrderFactory(
 
     fun create(
         customerId: UUID? = null,
-        products: List<Product> = listOf(Product(
-            name = "X-Egg",
-            price = BigDecimal(29.90),
-            category = Category(name = "Lanche ${Random.nextInt(1, 9999)}"),
-            preparationTime = BigDecimal(30)
-        )),
+        products: List<Product> = generateProducts(),
         paymentStatus: PaymentStatus = PaymentStatus.PENDING
     ): PendingPaymentOrder {
         val customer = if (customerId == null) {
@@ -45,5 +40,14 @@ class OrderFactory(
         )
     }
 
-//    fun findById(id: UUID): Order? = orderRepository.findBy(id)
+    private fun generateProducts(): List<Product> = listOf(
+        Product(
+            name = "X-Egg",
+            description = "Lorem Ipsum",
+            imageUrl = "https://my-image.com",
+            price = BigDecimal(29.90),
+            category = Category(name = "Lanche ${Random.nextInt(1, 9999)}"),
+            preparationTime = BigDecimal(30)
+        )
+    )
 }
