@@ -13,4 +13,6 @@ interface OrderInputPort {
     suspend fun findTracking(orderId: String): OrderTracking?
 
     suspend fun findPreparationDetails(orderId: String): OrderTracking
+
+    suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking
 }

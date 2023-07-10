@@ -18,4 +18,7 @@ class OrderUseCase(private val orderDataAccessPort: OrderDataAccessPort): OrderI
 
     override suspend fun findPreparationDetails(orderId: String): OrderTracking =
         orderDataAccessPort.findPreparationDetails(orderId)
+
+    override suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking =
+        orderDataAccessPort.updateOrderTracking(id, orderStatus)
 }

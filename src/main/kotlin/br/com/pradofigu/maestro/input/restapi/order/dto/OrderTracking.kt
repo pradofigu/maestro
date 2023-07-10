@@ -4,6 +4,8 @@ import br.com.pradofigu.maestro.domain.order.model.OrderStatus
 import br.com.pradofigu.maestro.domain.order.model.OrderTracking
 import java.math.BigDecimal
 
+data class OrderTrackingRequest(val status: OrderStatus)
+
 data class TrackingResponse(
     val orderNumber: Long,
     val status: OrderStatus

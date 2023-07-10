@@ -123,6 +123,20 @@ class OrderRepository(
         }
     }
 
+    fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking  = context
+        .update(ORDER_TRACKING)
+        .set(ORDER_TRACKING.STATUS, orderStatus.name)
+        .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(id)))
+        .returning()
+        .fetchOne()?.let { record ->
+            OrderTracking(
+                id = record.get(ORDER_TRACKING.ID),
+                orderId = record.get(ORDER_TRACKING.ORDER_ID),
+                status = OrderStatus.valueOf(record.get(ORDER_TRACKING.STATUS)),
+                createdAt = record.get(ORDER_TRACKING.CREATED_AT)
+            )
+        } ?: throw DatabaseOperationException("Error to update order tracking for orderId $id")
+
     private fun toModel(record: OrderRecord): Order = Order(
         id = record.id,
         number = record.number.toLong(),

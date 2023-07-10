@@ -50,4 +50,11 @@ class OrderController(private val orderInputPort: OrderInputPort) {
             ResponseEntity.ok(PreparationResponse.from(it))
         }
     }
+
+    @PutMapping("/{id}/tracking")
+    suspend fun updateOrderTracking(@PathVariable id: String, @RequestBody request: OrderTrackingRequest): ResponseEntity<TrackingResponse> {
+        return orderInputPort.updateOrderTracking(id, request.status).let {
+            ResponseEntity.ok(TrackingResponse.from(it))
+        }
+    }
 }
