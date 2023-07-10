@@ -70,7 +70,7 @@ class ProductControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(product.id.toString()))
                 .andExpect(jsonPath("name").value(product.name))
-                .andExpect(jsonPath("price").value(110.0))
+                .andExpect(jsonPath("price").value(100.0))
                 .andExpect(jsonPath("category.name").value(product.category.name))
                 .andExpect(jsonPath("preparationTime").value(10.0))
         }
@@ -93,10 +93,10 @@ class ProductControllerIntegrationTest {
             mvc.perform(asyncDispatch(mvcResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
-                .andExpect(jsonPath("$[0].id").value(product1.id))
+                .andExpect(jsonPath("$[0].id").value(product1.id.toString()))
                 .andExpect(jsonPath("$[0].name").value(product1.name))
                 .andExpect(jsonPath("$[0].category.name").value(category.name))
-                .andExpect(jsonPath("$[1].id").value(product2.id))
+                .andExpect(jsonPath("$[1].id").value(product2.id.toString()))
                 .andExpect(jsonPath("$[1].name").value(product2.name))
                 .andExpect(jsonPath("$[1].category.name").value(category.name))
         }

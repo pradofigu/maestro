@@ -19,4 +19,11 @@ class OrderDataAccessAdapter(
 
     }
 
+    override suspend fun findTrackingDetails(): List<OrderTracking> {
+        return orderRepository.findTrackingDetails()
+    }
+
+    override suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking {
+        return orderRepository.updateOrderTracking(id, orderStatus)
+    }
 }
