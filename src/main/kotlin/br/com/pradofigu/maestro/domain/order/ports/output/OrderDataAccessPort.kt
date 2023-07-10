@@ -10,9 +10,7 @@ interface OrderDataAccessPort {
 
     suspend fun process(orderPayment: OrderPayment): Order
 
-    suspend fun findTracking(orderId: String): OrderTracking?
-
-    suspend fun findPreparationDetails(orderId: String): OrderTracking
+    suspend fun findTrackingDetails(): List<OrderTracking>
 
     suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking
 }

@@ -14,10 +14,8 @@ class OrderUseCase(private val orderDataAccessPort: OrderDataAccessPort): OrderI
 
     override suspend fun process(orderPayment: OrderPayment): Order = orderDataAccessPort.process(orderPayment)
 
-    override suspend fun findTracking(orderId: String): OrderTracking? = orderDataAccessPort.findTracking(orderId)
-
-    override suspend fun findPreparationDetails(orderId: String): OrderTracking =
-        orderDataAccessPort.findPreparationDetails(orderId)
+    override suspend fun findTrackingDetails(): List<OrderTracking> =
+        orderDataAccessPort.findTrackingDetails()
 
     override suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking =
         orderDataAccessPort.updateOrderTracking(id, orderStatus)

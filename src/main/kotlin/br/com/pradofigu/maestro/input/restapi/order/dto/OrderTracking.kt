@@ -18,13 +18,13 @@ data class TrackingResponse(
     }
 }
 
-data class PreparationResponse(
+data class TrackingDetailsResponse(
     val orderNumber: Long,
     val status: OrderStatus,
     val amount: BigDecimal
 ) {
     companion object {
-        fun from(orderTracking: OrderTracking) = PreparationResponse(
+        fun from(orderTracking: OrderTracking) = TrackingDetailsResponse(
             orderNumber = orderTracking.orderNumber!!,
             status = orderTracking.status,
             amount = orderTracking.calculatePreparationTime()

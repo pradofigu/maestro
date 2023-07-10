@@ -71,23 +71,7 @@ class OrderRepository(
         .where(ORDER.NUMBER.eq(number))
         .fetchOne(this::toModel)
 
-    fun findTracking(orderId: String): OrderTracking? = context.select()
-        .from(ORDER_TRACKING)
-        .join(ORDER)
-        .on(ORDER_TRACKING.ORDER_ID.eq(ORDER.ID))
-        .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(orderId)))
-        .fetchOne { record ->
-            OrderTracking(
-                id = record.get(ORDER_TRACKING.ID),
-                orderId = record.get(ORDER_TRACKING.ORDER_ID),
-                status = OrderStatus.valueOf(record.get(ORDER_TRACKING.STATUS)),
-                createdAt = record.get(ORDER_TRACKING.CREATED_AT)
-            ).apply {
-                this.orderNumber = record.get(ORDER.NUMBER).toLong()
-            }
-        }
-
-    fun findTrackingDetails(orderId: String): OrderTracking {
+    fun findTrackingDetails(): List<OrderTracking> {
         val orderTrackingRecord = context.select()
             .from(ORDER_TRACKING)
             .join(ORDER)
@@ -96,12 +80,9 @@ class OrderRepository(
             .on(ORDER_PRODUCT.ORDER_ID.eq(ORDER.ID))
             .join(PRODUCT)
             .on(ORDER_PRODUCT.PRODUCT_ID.eq(PRODUCT.ID))
-            .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(orderId)))
+            .where(ORDER_TRACKING.STATUS.notEqual(OrderStatus.FINISHED.name))
+            .orderBy(ORDER_TRACKING.CREATED_AT.desc())
             .fetch()
-
-        if (orderTrackingRecord.isEmpty()) {
-            throw DatabaseOperationException("Error to find tracking details for orderId $orderId")
-        }
 
         val products = orderTrackingRecord.map { record ->
             ProductPreparation(
@@ -110,7 +91,7 @@ class OrderRepository(
             )
         }
 
-        return orderTrackingRecord.first().let { record ->
+        return orderTrackingRecord.map { record ->
             OrderTracking(
                 id = record.get(ORDER_TRACKING.ID),
                 orderId = record.get(ORDER_TRACKING.ORDER_ID),

@@ -37,17 +37,10 @@ class OrderController(private val orderInputPort: OrderInputPort) {
         } ?: ResponseEntity.notFound().build()
     }
 
-    @GetMapping("/{id}/tracking")
-    suspend fun findTracking(@PathVariable id: String): ResponseEntity<TrackingResponse> {
-        return orderInputPort.findTracking(id)?.let {
-            ResponseEntity.ok(TrackingResponse.from(it))
-        } ?: ResponseEntity.notFound().build()
-    }
-
-    @GetMapping("/{id}/preparation")
-    suspend fun getPreparationDetails(@PathVariable id: String): ResponseEntity<PreparationResponse> {
-        return orderInputPort.findPreparationDetails(id).let {
-            ResponseEntity.ok(PreparationResponse.from(it))
+    @GetMapping("/tracking")
+    suspend fun getTrackingDetails(): ResponseEntity<List<TrackingDetailsResponse>> {
+        return orderInputPort.findTrackingDetails().let {
+            ResponseEntity.ok(it.map { orderTracking ->  TrackingDetailsResponse.from(orderTracking) })
         }
     }
 
