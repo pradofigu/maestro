@@ -1,6 +1,7 @@
 package br.com.pradofigu.maestro.output.persistence.order.repository
 
 import br.com.pradofigu.maestro.domain.order.model.*
+import br.com.pradofigu.maestro.domain.product.model.ProductPreparation
 import br.com.pradofigu.maestro.flyway.Tables.*
 import br.com.pradofigu.maestro.flyway.tables.records.OrderProductRecord
 import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
@@ -69,11 +70,46 @@ class OrderRepository(
             }
         }
 
+    fun findTrackingDetails(orderId: String): OrderTracking {
+        val orderTrackingRecord = context.select()
+            .from(ORDER_TRACKING)
+            .join(ORDER)
+            .on(ORDER_TRACKING.ORDER_ID.eq(ORDER.ID))
+            .join(ORDER_PRODUCT)
+            .on(ORDER_PRODUCT.ORDER_ID.eq(ORDER.ID))
+            .join(PRODUCT)
+            .on(ORDER_PRODUCT.PRODUCT_ID.eq(PRODUCT.ID))
+            .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(orderId)))
+            .fetch()
+
+        if (orderTrackingRecord.isEmpty()) {
+            throw DatabaseOperationException("Error to find tracking details for orderId $orderId")
+        }
+
+        val products = orderTrackingRecord.map { record ->
+            ProductPreparation(
+                id = record.get(PRODUCT.ID),
+                preparationTime = record.get(PRODUCT.PREPARATION_TIME)
+            )
+        }
+
+        return orderTrackingRecord.first().let { record ->
+            OrderTracking(
+                id = record.get(ORDER_TRACKING.ID),
+                orderId = record.get(ORDER_TRACKING.ORDER_ID),
+                status = OrderStatus.valueOf(record.get(ORDER_TRACKING.STATUS)),
+                createdAt = record.get(ORDER_TRACKING.CREATED_AT)
+            ).apply {
+                this.orderNumber = record.get(ORDER.NUMBER).toLong()
+                this.products = products
+            }
+        }
+    }
+
     private fun toModel(record: OrderRecord): Order = Order(
         id = record.id,
         number = record.number.toLong(),
         customerId = record.customerId,
         paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
     )
-
 }

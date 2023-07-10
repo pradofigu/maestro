@@ -2,6 +2,7 @@ package br.com.pradofigu.maestro.input.restapi.order.dto
 
 import br.com.pradofigu.maestro.domain.order.model.OrderStatus
 import br.com.pradofigu.maestro.domain.order.model.OrderTracking
+import java.math.BigDecimal
 
 data class TrackingResponse(
     val orderNumber: Long,
@@ -11,6 +12,20 @@ data class TrackingResponse(
         fun from(orderTracking: OrderTracking) = TrackingResponse(
             orderNumber = orderTracking.orderNumber!!,
             status = orderTracking.status
+        )
+    }
+}
+
+data class PreparationResponse(
+    val orderNumber: Long,
+    val status: OrderStatus,
+    val amount: BigDecimal
+) {
+    companion object {
+        fun from(orderTracking: OrderTracking) = PreparationResponse(
+            orderNumber = orderTracking.orderNumber!!,
+            status = orderTracking.status,
+            amount = orderTracking.calculatePreparationTime()
         )
     }
 }

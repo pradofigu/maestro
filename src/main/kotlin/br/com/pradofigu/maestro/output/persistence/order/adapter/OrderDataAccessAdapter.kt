@@ -22,4 +22,8 @@ class OrderDataAccessAdapter(
     override suspend fun findTracking(orderId: String): OrderTracking? {
         return orderRepository.findTracking(orderId)
     }
+
+    override suspend fun findPreparationDetails(orderId: String): OrderTracking {
+        return orderRepository.findTrackingDetails(orderId)
+    }
 }

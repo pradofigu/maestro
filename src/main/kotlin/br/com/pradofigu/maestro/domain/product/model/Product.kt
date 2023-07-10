@@ -13,3 +13,8 @@ data class Product(
     val category: Category,
     val preparationTime: BigDecimal
 )
+
+data class ProductPreparation(
+    val id: UUID? = UUID.randomUUID(),
+    val preparationTime: BigDecimal
+)
