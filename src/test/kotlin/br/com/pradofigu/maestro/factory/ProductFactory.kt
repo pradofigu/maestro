@@ -25,4 +25,11 @@ class ProductFactory(
             )
         )
     }
+
+    fun create(products: List<Product>): List<Product> {
+        return products.map { product ->
+            val category = categoryFactory.create(product.category.name)
+            productRepository.save(product.copy(category = category))
+        }
+    }
 }
