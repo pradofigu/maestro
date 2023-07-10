@@ -18,7 +18,7 @@ services:
       - maestro-network
 
   database:
-    image: 'fbadaro/fiap.maestro.data:latest'
+    image: 'postgres:15.3'
     container_name: maestro-postgres
     environment:
       POSTGRES_DB: maestro
