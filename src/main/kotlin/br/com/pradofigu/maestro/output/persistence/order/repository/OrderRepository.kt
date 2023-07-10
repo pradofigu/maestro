@@ -40,13 +40,30 @@ class OrderRepository(
 
     @Transactional
     fun update(orderPayment: OrderPayment): Order {
-        return context
+        val orderPaymentRecord = context
             .update(ORDER)
             .set(ORDER.PAYMENT_STATUS, orderPayment.status.name)
             .where(ORDER.ID.eq(orderPayment.id).and(ORDER.NUMBER.eq(orderPayment.number)))
             .returning()
             .fetchOne(this::toModel)
             ?: throw DatabaseOperationException("Error to update order", orderPayment)
+
+        when (orderPaymentRecord.paymentStatus) {
+            PaymentStatus.PAID -> {
+                context.insertInto(ORDER_TRACKING)
+                    .set(ORDER_TRACKING.ORDER_ID, orderPaymentRecord.id)
+                    .set(ORDER_TRACKING.STATUS, OrderStatus.RECEIVED.name)
+                    .execute()
+            }
+            else -> {
+                context.insertInto(ORDER_TRACKING)
+                    .set(ORDER_TRACKING.ORDER_ID, orderPaymentRecord.id)
+                    .set(ORDER_TRACKING.STATUS, OrderStatus.FINISHED.name)
+                    .execute()
+            }
+        }
+
+        return orderPaymentRecord
     }
 
     fun findByNumber(number: Long): Order? = context
