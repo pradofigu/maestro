@@ -6,6 +6,8 @@ import java.util.UUID
 
 interface CustomerDataAccessPort {
 
+    suspend fun findAll(): List<Customer>
+
     suspend fun findBy(id: UUID): Customer?
 
     suspend fun findBy(cpf: CPF): Customer?

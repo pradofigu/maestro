@@ -26,6 +26,12 @@ class ProductController(private val productInputPort: ProductInputPort) {
         return ResponseEntity(ProductResponse.from(product), CREATED)
     }
 
+    @GetMapping
+    suspend fun findAll(): ResponseEntity<List<ProductResponse>> {
+        val product = productInputPort.findAll().map { ProductResponse.from(it) }
+        return ResponseEntity.ok(product)
+    }
+
     @GetMapping("/{id}")
     suspend fun findById(@PathVariable id: String): ResponseEntity<Any> {
         return productInputPort.findBy(UUID.fromString(id))?.let {

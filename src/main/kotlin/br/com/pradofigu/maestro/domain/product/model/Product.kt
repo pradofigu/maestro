@@ -7,6 +7,8 @@ import java.math.BigDecimal
 data class Product(
     val id: UUID? = UUID.randomUUID(),
     val name: String,
+    val description: String,
+    val imageUrl: String? = null,
     val price: BigDecimal,
     val category: Category,
     val preparationTime: BigDecimal

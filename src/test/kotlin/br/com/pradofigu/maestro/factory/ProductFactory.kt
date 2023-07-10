@@ -19,10 +19,19 @@ class ProductFactory(
         return productRepository.save(
             Product(
                 name = "Product ${Random.nextInt(1, 9999)}",
+                description = "Lorem Ipsum",
+                imageUrl = "https://my-image.com",
                 price = BigDecimal(100),
                 category = category,
                 preparationTime = BigDecimal(10)
             )
         )
+    }
+
+    fun create(products: List<Product>): List<Product> {
+        return products.map { product ->
+            val category = categoryFactory.create(product.category.name)
+            productRepository.save(product.copy(category = category))
+        }
     }
 }

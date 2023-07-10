@@ -7,6 +7,8 @@ interface ProductInputPort {
 
     suspend fun register(product: Product): Product
 
+    suspend fun findAll(): List<Product>
+
     suspend fun findBy(id: UUID): Product?
 
     suspend fun findByCategory(categoryId: UUID): List<Product>

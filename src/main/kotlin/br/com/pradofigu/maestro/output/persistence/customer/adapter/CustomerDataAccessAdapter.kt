@@ -12,6 +12,9 @@ import java.util.UUID
 class CustomerDataAccessAdapter(
     private val customerRepository: CustomerRepository
 ): CustomerDataAccessPort {
+
+    override suspend fun findAll(): List<Customer> = customerRepository.findAll()
+
     override suspend fun findBy(id: UUID): Customer? = customerRepository.findBy(id)
 
     override suspend fun findBy(cpf: CPF): Customer? = customerRepository.findBy(cpf)

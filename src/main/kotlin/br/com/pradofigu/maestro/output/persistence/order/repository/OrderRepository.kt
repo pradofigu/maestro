@@ -1,69 +1,62 @@
 package br.com.pradofigu.maestro.output.persistence.order.repository
 
+import br.com.pradofigu.maestro.domain.order.model.CreateOrder
+import br.com.pradofigu.maestro.domain.order.model.PendingPaymentOrder
+import br.com.pradofigu.maestro.domain.order.model.OrderPayment
 import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.flyway.Tables.ORDER
+import br.com.pradofigu.maestro.flyway.Tables.ORDER_PRODUCT
+import br.com.pradofigu.maestro.flyway.tables.records.OrderProductRecord
 import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
 
 @Repository
 class OrderRepository(
     private val context: DSLContext
-): JooqRepository<OrderRecord> {
-
-    fun save(order: Order): Order = OrderRecord()
-        .setId(order.id ?: UUID.randomUUID())
-        .setNumber(order.number.toInt())
-        .setCustomerId(order.customerId)
-        .setPaymentStatus(order.paymentStatus.name)
-        .let {
-            context
-                .insertInto(ORDER)
-                .set(it)
-                .returning()
-                .fetchOne(this::toModel)
-        } ?: throw DatabaseOperationException("Error on save order", order)
-
-    fun findAll(): List<Order> = context
-        .selectFrom(ORDER)
-        .fetch(this::toModel)
-
-    fun findBy(id: UUID): Order? = context
-        .selectFrom(ORDER)
-        .where(ORDER.ID.eq(id))
-        .fetchOne(this::toModel)
-
-    fun findBy(number: Long): Order? = context
-        .selectFrom(ORDER)
-        .where(ORDER.NUMBER.eq(number.toInt()))
-        .fetchOne(this::toModel)
+) : JooqRepository<OrderRecord> {
 
     @Transactional
-    fun update(id: UUID, paymentStatus: PaymentStatus): Order? = context
-        .selectFrom(ORDER)
-        .where(ORDER.ID.eq(id))
-        .fetchOne()
-        ?.setPaymentStatus(paymentStatus.name)
-        ?.let(this::optimizeColumnsUpdateOf)
-        ?.let {
-            context
-                .update(ORDER)
-                .set(it)
-                .where(ORDER.ID.eq(id))
-                .returning()
-                .fetchOne(this::toModel)
-        }
+    fun save(order: CreateOrder): PendingPaymentOrder {
+        val orderRecord = OrderRecord()
+            .setCustomerId(order.customerId)
+            .setPaymentStatus(order.paymentStatus.name)
 
-    fun delete(id: UUID): Boolean = context
-        .delete(ORDER)
-        .where(ORDER.ID.eq(id))
-        .execute()
-        .let { it == 1 }
+        val orderSaved = context.insertInto(ORDER)
+            .set(orderRecord)
+            .returning()
+            .fetchOne{record -> PendingPaymentOrder(
+                id = record.id,
+                number = record.number,
+            )}
+
+        order.productsId
+            .map { productId -> OrderProductRecord().setOrderId(orderSaved?.id).setProductId(productId) }
+            .map { record -> context.insertInto(ORDER_PRODUCT).set(record).execute() }
+
+       return orderSaved ?: throw DatabaseOperationException("Error on save order", order)
+    }
+
+    @Transactional
+    fun update(orderPayment: OrderPayment): Order {
+        return context
+            .update(ORDER)
+            .set(ORDER.PAYMENT_STATUS, orderPayment.status.name)
+            .where(ORDER.ID.eq(orderPayment.id).and(ORDER.NUMBER.eq(orderPayment.number)))
+            .returning()
+            .fetchOne(this::toModel)
+            ?: throw DatabaseOperationException("Error to update order", orderPayment)
+    }
+
+    fun findByNumber(number: Long): Order? = context
+        .selectFrom(ORDER)
+        .where(ORDER.NUMBER.eq(number))
+        .fetchOne(this::toModel)
+
 
     private fun toModel(record: OrderRecord): Order = Order(
         id = record.id,
@@ -71,4 +64,5 @@ class OrderRepository(
         customerId = record.customerId,
         paymentStatus = PaymentStatus.valueOf(record.paymentStatus)
     )
+
 }

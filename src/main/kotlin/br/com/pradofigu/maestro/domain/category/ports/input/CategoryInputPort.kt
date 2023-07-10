@@ -6,6 +6,8 @@ import java.util.UUID
 interface CategoryInputPort {
     suspend fun create(category: Category): Category
 
+    suspend fun findAll(): List<Category>
+
     suspend fun findBy(id: UUID): Category?
 
     suspend fun update(category: Category): Category

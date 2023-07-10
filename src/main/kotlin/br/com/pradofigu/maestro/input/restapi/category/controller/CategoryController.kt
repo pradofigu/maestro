@@ -4,7 +4,6 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.category.ports.input.CategoryInputPort
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryResponse
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
@@ -20,12 +19,18 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/categories"], produces = [APPLICATION_JSON_VALUE])
-class CategoryController(@Autowired private val categoryInputPort: CategoryInputPort) {
+class CategoryController(private val categoryInputPort: CategoryInputPort) {
 
     @PostMapping
     suspend fun create(@RequestBody request: CategoryRequest): ResponseEntity<CategoryResponse> {
         val category = categoryInputPort.create(Category(name = request.name))
         return ResponseEntity(CategoryResponse.from(category), CREATED)
+    }
+
+    @GetMapping
+    suspend fun findAll(): ResponseEntity<List<CategoryResponse>> {
+        val categories = categoryInputPort.findAll().map { CategoryResponse.from(it) }
+        return ResponseEntity.ok(categories)
     }
 
     @GetMapping("/{id}")
