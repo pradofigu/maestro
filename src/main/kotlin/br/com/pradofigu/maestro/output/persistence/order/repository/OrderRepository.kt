@@ -8,6 +8,7 @@ import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -73,8 +74,8 @@ class OrderRepository(
 
     fun findTrackingDetails(): List<OrderTracking> {
         val orderTrackingRecord = context.select(
+            ORDER.ID,
             ORDER_TRACKING.ID,
-            ORDER_TRACKING.ORDER_ID,
             ORDER_TRACKING.STATUS,
             ORDER.NUMBER,
             PRODUCT.ID,
@@ -90,14 +91,19 @@ class OrderRepository(
             .on(ORDER_PRODUCT.PRODUCT_ID.eq(PRODUCT.ID))
             .where(ORDER_TRACKING.STATUS.notEqual(OrderStatus.FINISHED.name))
             .groupBy(
+                ORDER.ID,
                 ORDER_TRACKING.ID,
-                ORDER_TRACKING.ORDER_ID,
                 ORDER_TRACKING.STATUS,
                 ORDER.NUMBER,
                 PRODUCT.ID,
                 PRODUCT.PREPARATION_TIME,
                 ORDER_TRACKING.CREATED_AT
             )
+            .having(ORDER_TRACKING.CREATED_AT.eq(
+                context.select(DSL.max(ORDER_TRACKING.CREATED_AT))
+                    .from(ORDER_TRACKING)
+                    .where(ORDER_TRACKING.ORDER_ID.eq(ORDER.ID))
+            ))
             .orderBy(ORDER_TRACKING.CREATED_AT.desc())
             .fetch()
 
@@ -111,7 +117,7 @@ class OrderRepository(
         return orderTrackingRecord.map { record ->
             OrderTracking(
                 id = record.get(ORDER_TRACKING.ID),
-                orderId = record.get(ORDER_TRACKING.ORDER_ID),
+                orderId = record.get(ORDER.ID),
                 status = OrderStatus.valueOf(record.get(ORDER_TRACKING.STATUS)),
                 createdAt = record.get(ORDER_TRACKING.CREATED_AT)
             ).apply {
