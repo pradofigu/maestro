@@ -8,6 +8,7 @@ import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import br.com.pradofigu.maestro.output.persistence.JooqRepository
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import org.jooq.DSLContext
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -72,7 +73,15 @@ class OrderRepository(
         .fetchOne(this::toModel)
 
     fun findTrackingDetails(): List<OrderTracking> {
-        val orderTrackingRecord = context.select()
+        val orderTrackingRecord = context.select(
+            ORDER_TRACKING.ID,
+            ORDER_TRACKING.ORDER_ID,
+            ORDER_TRACKING.STATUS,
+            DSL.max(ORDER_TRACKING.CREATED_AT).`as`("createdAt"),
+            ORDER.NUMBER,
+            PRODUCT.ID,
+            PRODUCT.PREPARATION_TIME
+        )
             .from(ORDER_TRACKING)
             .join(ORDER)
             .on(ORDER_TRACKING.ORDER_ID.eq(ORDER.ID))
@@ -81,7 +90,8 @@ class OrderRepository(
             .join(PRODUCT)
             .on(ORDER_PRODUCT.PRODUCT_ID.eq(PRODUCT.ID))
             .where(ORDER_TRACKING.STATUS.notEqual(OrderStatus.FINISHED.name))
-            .orderBy(ORDER_TRACKING.CREATED_AT.desc())
+            .groupBy(ORDER_TRACKING.ORDER_ID)
+            .orderBy(DSL.field("createdAt").desc())
             .fetch()
 
         val products = orderTrackingRecord.map { record ->
