@@ -1,6 +1,10 @@
 package br.com.pradofigu.maestro.output.persistence.order.repository
 
-import br.com.pradofigu.maestro.domain.order.model.*
+import br.com.pradofigu.maestro.domain.order.model.CreateOrder
+import br.com.pradofigu.maestro.domain.order.model.PendingPaymentOrder
+import br.com.pradofigu.maestro.domain.order.model.OrderPayment
+import br.com.pradofigu.maestro.domain.order.model.Order
+import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.flyway.Tables.ORDER
 import br.com.pradofigu.maestro.flyway.Tables.ORDER_PRODUCT
 import br.com.pradofigu.maestro.flyway.tables.records.OrderProductRecord
