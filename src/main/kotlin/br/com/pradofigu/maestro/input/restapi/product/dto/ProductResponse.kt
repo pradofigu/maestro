@@ -9,7 +9,7 @@ data class ProductResponse(
     val price: BigDecimal,
     val category: CategoryResponse,
     val description: String,
-    val imageUrl: String,
+    val imageUrl: String?,
     val preparationTime: BigDecimal
 ) {
     companion object {

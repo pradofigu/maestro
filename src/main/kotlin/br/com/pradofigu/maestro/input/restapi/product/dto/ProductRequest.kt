@@ -9,7 +9,7 @@ data class ProductRequest(
     val price: BigDecimal,
     val category: CategoryRequest,
     val description: String,
-    val imageUrl: String,
+    val imageUrl: String?,
     val preparationTime: BigDecimal
 ) {
     fun toModel() = Product(
