@@ -6,15 +6,16 @@ import br.com.pradofigu.maestro.domain.product.model.Product
 import java.util.UUID
 
 data class OrderRequest(
+    val id: UUID?,
     val number: Long,
     val customerId: UUID?,
     val products: List<Product>,
     val paymentStatus: PaymentStatus
 ) {
     fun toModel() = Order(
+        id = id,
         number = number,
         customerId = customerId,
-        products = products,
         paymentStatus = paymentStatus
     )
 }
