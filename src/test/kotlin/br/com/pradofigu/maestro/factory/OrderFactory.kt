@@ -1,8 +1,10 @@
 package br.com.pradofigu.maestro.factory
 
 import br.com.pradofigu.maestro.domain.category.model.Category
+import br.com.pradofigu.maestro.domain.order.model.CreateOrder
 import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.domain.order.model.PendingPaymentOrder
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
 import org.springframework.stereotype.Component
@@ -16,31 +18,29 @@ class OrderFactory(
     private val orderRepository: OrderRepository
 ) {
 
-    fun create(
-        customerId: UUID? = null,
-        products: List<Product> = listOf(Product(
-            name = "X-Egg",
-            price = BigDecimal(29.90),
-            category = Category(name = "Lanche"),
-            preparationTime = BigDecimal(30)
-        )),
-        paymentStatus: PaymentStatus = PaymentStatus.PENDING
-    ): Order {
-        val customer = if (customerId == null) {
-            customerFactory.create()
-        } else {
-            customerFactory.findById(customerId)!!
-        }
+//    fun create(
+//        customerId: UUID? = null,
+//        products: List<Product> = listOf(Product(
+//            name = "X-Egg",
+//            price = BigDecimal(29.90),
+//            category = Category(name = "Lanche"),
+//            preparationTime = BigDecimal(30)
+//        )),
+//        paymentStatus: PaymentStatus = PaymentStatus.PENDING
+//    ): PendingPaymentOrder {
+//        val customer = if (customerId == null) {
+//            customerFactory.create()
+//        } else {
+//            customerFactory.findById(customerId)!!
+//        }
+//
+//        return orderRepository.save(
+//            CreateOrder(
+//                customerId = customer.id,
+//                paymentStatus = paymentStatus
+//            )
+//        )
+//    }
 
-        return orderRepository.save(
-            Order(
-                number = Random.nextLong(1, 9999),
-                customerId = customer.id,
-                products = products,
-                paymentStatus = paymentStatus
-            )
-        )
-    }
-
-    fun findById(id: UUID): Order? = orderRepository.findBy(id)
+//    fun findById(id: UUID): Order? = orderRepository.findBy(id)
 }
