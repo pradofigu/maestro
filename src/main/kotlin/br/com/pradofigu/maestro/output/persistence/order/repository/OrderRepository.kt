@@ -79,7 +79,8 @@ class OrderRepository(
             ORDER_TRACKING.STATUS,
             ORDER.NUMBER,
             PRODUCT.ID,
-            PRODUCT.PREPARATION_TIME
+            PRODUCT.PREPARATION_TIME,
+            ORDER_TRACKING.CREATED_AT
         )
             .from(ORDER_TRACKING)
             .join(ORDER)
@@ -95,7 +96,8 @@ class OrderRepository(
                 ORDER_TRACKING.STATUS,
                 ORDER.NUMBER,
                 PRODUCT.ID,
-                PRODUCT.PREPARATION_TIME
+                PRODUCT.PREPARATION_TIME,
+                ORDER_TRACKING.CREATED_AT
             )
             .orderBy(ORDER_TRACKING.CREATED_AT.desc())
             .fetch()

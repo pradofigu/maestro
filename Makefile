@@ -14,7 +14,7 @@ migrate: ## Runs Flyway migrations (it also generates the database entity classe
 	@./gradlew flywayMigrate
 	@echo "-------------- Finish migration --------------"
 
-rebuild-migrations: clean stop start-db migrate ## Stops and removes all containers, starts the database container and runs Flyway migrations
+rebuild-migrations: clean start-db migrate ## Stops and removes all containers, starts the database container and runs Flyway migrations
 
 build: migrate compile ## Runs Flyway migrations and compiles the project
 
