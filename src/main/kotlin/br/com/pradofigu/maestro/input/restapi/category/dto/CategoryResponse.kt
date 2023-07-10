@@ -1,9 +1,8 @@
 package br.com.pradofigu.maestro.input.restapi.category.dto
 
 import br.com.pradofigu.maestro.domain.category.model.Category
-import java.util.UUID
 
-class CategoryResponse(
+data class CategoryResponse(
     val id: String,
     val name: String
 ) {
@@ -14,5 +13,4 @@ class CategoryResponse(
             name = category.name
         )
     }
-
 }

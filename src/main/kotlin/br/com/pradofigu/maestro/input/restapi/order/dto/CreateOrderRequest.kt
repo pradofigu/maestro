@@ -7,8 +7,5 @@ data class CreateOrderRequest(
     val customerId: UUID?,
     val productsId: List<UUID>
 ) {
-    fun toModel() = CreateOrder(
-        customerId = customerId,
-        productsId = productsId
-    )
+    fun toModel() = CreateOrder(customerId, productsId)
 }

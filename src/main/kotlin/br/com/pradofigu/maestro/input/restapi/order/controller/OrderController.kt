@@ -2,7 +2,6 @@ package br.com.pradofigu.maestro.input.restapi.order.controller
 
 import br.com.pradofigu.maestro.domain.order.ports.input.OrderInputPort
 import br.com.pradofigu.maestro.input.restapi.order.dto.*
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/orders"], produces = [APPLICATION_JSON_VALUE])
-class OrderController(@Autowired private val orderInputPort: OrderInputPort) {
+class OrderController(private val orderInputPort: OrderInputPort) {
 
     @PostMapping
     suspend fun create(@RequestBody request: CreateOrderRequest): ResponseEntity<CreateOrderResponse> {
@@ -37,5 +36,4 @@ class OrderController(@Autowired private val orderInputPort: OrderInputPort) {
             ResponseEntity.ok(OrderResponse.from(it))
         } ?: ResponseEntity.notFound().build()
     }
-
 }

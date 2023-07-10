@@ -4,8 +4,6 @@ import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.category.ports.input.CategoryInputPort
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
 import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryResponse
-import br.com.pradofigu.maestro.input.restapi.order.dto.OrderResponse
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
@@ -21,7 +19,7 @@ import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/categories"], produces = [APPLICATION_JSON_VALUE])
-class CategoryController(@Autowired private val categoryInputPort: CategoryInputPort) {
+class CategoryController(private val categoryInputPort: CategoryInputPort) {
 
     @PostMapping
     suspend fun create(@RequestBody request: CategoryRequest): ResponseEntity<CategoryResponse> {
