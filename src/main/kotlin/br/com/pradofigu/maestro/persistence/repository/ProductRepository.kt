@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.usecase.model.Product
 import br.com.pradofigu.maestro.flyway.Tables.PRODUCT
 import br.com.pradofigu.maestro.flyway.tables.records.ProductRecord
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException

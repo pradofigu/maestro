@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.order.model.OrderPayment
-import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.usecase.model.OrderPayment
+import br.com.pradofigu.maestro.usecase.model.PaymentStatus
 import java.util.*
 
 data class PayOrderRequest(

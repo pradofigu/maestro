@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.domain.category.model.Category
+import br.com.pradofigu.maestro.usecase.model.Category
 import br.com.pradofigu.maestro.flyway.Tables.CATEGORY
 import br.com.pradofigu.maestro.flyway.tables.records.CategoryRecord
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.customer.model.CPF
-import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.usecase.model.CPF
+import br.com.pradofigu.maestro.usecase.model.Customer
 import java.time.LocalDate
 
 data class CustomerRequest(

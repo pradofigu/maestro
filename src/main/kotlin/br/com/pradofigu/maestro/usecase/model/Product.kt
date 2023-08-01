@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.domain.product.model
+package br.com.pradofigu.maestro.usecase.model
 
-import br.com.pradofigu.maestro.domain.category.model.Category
+import br.com.pradofigu.maestro.usecase.model.Category
 import java.util.UUID
 import java.math.BigDecimal
 

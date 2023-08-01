@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.usecase.model.Product
 import java.math.BigDecimal
 
 data class ProductRequest(

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.order.model.Order
-import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.usecase.model.Order
+import br.com.pradofigu.maestro.usecase.model.PaymentStatus
 
 data class OrderResponse(
     val id: String,

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.persistence.adapter
 
-import br.com.pradofigu.maestro.domain.product.model.Product
-import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
+import br.com.pradofigu.maestro.usecase.model.Product
+import br.com.pradofigu.maestro.usecase.persistence.ProductDataAccessPort
 import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
 import br.com.pradofigu.maestro.persistence.repository.ProductRepository
 import org.springframework.stereotype.Service

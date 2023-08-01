@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.domain.product.ports.output
+package br.com.pradofigu.maestro.usecase.persistence
 
-import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.usecase.model.Product
 import java.util.UUID
 
 interface ProductDataAccessPort {

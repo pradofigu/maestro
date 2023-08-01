@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.persistence.adapter
 
-import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.domain.category.ports.output.CategoryDataAccessPort
+import br.com.pradofigu.maestro.usecase.model.Category
+import br.com.pradofigu.maestro.usecase.persistence.CategoryDataAccessPort
 import br.com.pradofigu.maestro.persistence.repository.CategoryRepository
 import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
 import org.springframework.stereotype.Service

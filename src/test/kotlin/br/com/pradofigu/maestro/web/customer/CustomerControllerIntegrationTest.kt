@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.web.customer
 
-import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.factory.CustomerFactory
 import br.com.pradofigu.maestro.web.dto.CustomerRequest
 import com.fasterxml.jackson.databind.ObjectMapper

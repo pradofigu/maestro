@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.factory
 
 import br.com.caelum.stella.validation.CPFValidator
-import br.com.pradofigu.maestro.domain.customer.model.CPF
-import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.usecase.model.CPF
+import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.persistence.repository.CustomerRepository
 import org.springframework.stereotype.Component
 import java.time.LocalDate

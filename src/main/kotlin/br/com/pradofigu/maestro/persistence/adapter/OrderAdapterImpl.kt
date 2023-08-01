@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.persistence.adapter
 
-import br.com.pradofigu.maestro.domain.order.model.*
-import br.com.pradofigu.maestro.domain.order.ports.output.OrderDataAccessPort
+import br.com.pradofigu.maestro.usecase.persistence.OrderDataAccessPort
 import br.com.pradofigu.maestro.persistence.repository.OrderRepository
+import br.com.pradofigu.maestro.usecase.model.*
 import org.springframework.stereotype.Service
 
 @Service

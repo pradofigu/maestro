@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.order.model.CreateOrder
-import br.com.pradofigu.maestro.domain.order.model.PendingPaymentOrder
+import br.com.pradofigu.maestro.usecase.model.CreateOrder
+import br.com.pradofigu.maestro.usecase.model.PendingPaymentOrder
 import java.util.UUID
 
 data class CreateOrderRequest(

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.factory
 
-import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.domain.product.model.Product
+import br.com.pradofigu.maestro.usecase.model.Category
+import br.com.pradofigu.maestro.usecase.model.Product
 import br.com.pradofigu.maestro.persistence.repository.ProductRepository
 import org.springframework.stereotype.Component
 import java.math.BigDecimal

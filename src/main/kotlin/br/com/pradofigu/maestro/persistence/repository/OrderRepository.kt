@@ -1,12 +1,13 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.domain.order.model.*
-import br.com.pradofigu.maestro.domain.product.model.ProductPreparation
+import br.com.pradofigu.maestro.usecase.order.model.*
+import br.com.pradofigu.maestro.usecase.model.ProductPreparation
 import br.com.pradofigu.maestro.flyway.Tables.*
 import br.com.pradofigu.maestro.flyway.tables.records.OrderProductRecord
 import br.com.pradofigu.maestro.flyway.tables.records.OrderRecord
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import br.com.pradofigu.maestro.persistence.config.JooqRepository
+import br.com.pradofigu.maestro.usecase.model.*
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
@@ -30,7 +31,8 @@ class OrderRepository(
             .fetchOne{record -> PendingPaymentOrder(
                 id = record.id,
                 number = record.number,
-            )}
+            )
+            }
 
         order.productsId
             .map { productId -> OrderProductRecord().setOrderId(orderSaved?.id).setProductId(productId) }
@@ -127,7 +129,7 @@ class OrderRepository(
         }
     }
 
-    fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking  = context
+    fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking = context
         .update(ORDER_TRACKING)
         .set(ORDER_TRACKING.STATUS, orderStatus.name)
         .where(ORDER_TRACKING.ORDER_ID.eq(UUID.fromString(id)))

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.customer
 
 import br.com.caelum.stella.validation.InvalidStateException
-import br.com.pradofigu.maestro.domain.customer.model.CPF
+import br.com.pradofigu.maestro.usecase.model.CPF
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.function.Executable

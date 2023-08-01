@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.domain.category.model
+package br.com.pradofigu.maestro.usecase.model
 
 import java.util.UUID
 

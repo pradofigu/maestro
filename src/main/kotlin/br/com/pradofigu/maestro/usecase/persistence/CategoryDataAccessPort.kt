@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.domain.category.ports.output
+package br.com.pradofigu.maestro.usecase.persistence
 
-import br.com.pradofigu.maestro.domain.category.model.Category
+import br.com.pradofigu.maestro.usecase.model.Category
 import java.util.UUID
 
 interface CategoryDataAccessPort {

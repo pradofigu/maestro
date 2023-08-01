@@ -1,8 +1,8 @@
 package br.com.pradofigu.maestro.persistence.adapter
 
-import br.com.pradofigu.maestro.domain.customer.model.CPF
-import br.com.pradofigu.maestro.domain.customer.model.Customer
-import br.com.pradofigu.maestro.domain.customer.ports.output.CustomerDataAccessPort
+import br.com.pradofigu.maestro.usecase.model.CPF
+import br.com.pradofigu.maestro.usecase.model.Customer
+import br.com.pradofigu.maestro.usecase.persistence.CustomerDataAccessPort
 import br.com.pradofigu.maestro.persistence.repository.CustomerRepository
 import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
 import org.springframework.stereotype.Service

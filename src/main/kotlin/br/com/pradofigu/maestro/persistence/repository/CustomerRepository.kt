@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.domain.customer.model.CPF
-import br.com.pradofigu.maestro.domain.customer.model.Customer
+import br.com.pradofigu.maestro.usecase.model.CPF
+import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.flyway.tables.Customer.CUSTOMER
 import br.com.pradofigu.maestro.flyway.tables.records.CustomerRecord
 import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException

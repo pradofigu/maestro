@@ -1,6 +1,6 @@
-package br.com.pradofigu.maestro.domain.order.ports.output
+package br.com.pradofigu.maestro.usecase.persistence
 
-import br.com.pradofigu.maestro.domain.order.model.*
+import br.com.pradofigu.maestro.usecase.model.*
 
 interface OrderDataAccessPort {
 

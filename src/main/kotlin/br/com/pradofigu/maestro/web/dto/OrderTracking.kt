@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.domain.order.model.OrderStatus
-import br.com.pradofigu.maestro.domain.order.model.OrderTracking
+import br.com.pradofigu.maestro.usecase.model.OrderStatus
+import br.com.pradofigu.maestro.usecase.model.OrderTracking
 import java.math.BigDecimal
 
 data class OrderTrackingRequest(val status: OrderStatus)

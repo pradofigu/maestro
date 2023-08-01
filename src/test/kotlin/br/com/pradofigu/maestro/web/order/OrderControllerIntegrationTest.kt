@@ -1,6 +1,6 @@
 package br.com.pradofigu.maestro.web.order
 
-import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
+import br.com.pradofigu.maestro.usecase.model.PaymentStatus
 import br.com.pradofigu.maestro.factory.CustomerFactory
 import br.com.pradofigu.maestro.factory.OrderFactory
 import br.com.pradofigu.maestro.factory.ProductFactory
