@@ -1,12 +1,12 @@
-package br.com.pradofigu.maestro.output.persistence.order.adapter
+package br.com.pradofigu.maestro.persistence.adapter
 
 import br.com.pradofigu.maestro.domain.order.model.*
 import br.com.pradofigu.maestro.domain.order.ports.output.OrderDataAccessPort
-import br.com.pradofigu.maestro.output.persistence.order.repository.OrderRepository
+import br.com.pradofigu.maestro.persistence.repository.OrderRepository
 import org.springframework.stereotype.Service
 
 @Service
-class OrderDataAccessAdapter(
+class OrderAdapterImpl(
     private val orderRepository: OrderRepository
 ): OrderDataAccessPort {
 

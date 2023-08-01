@@ -1,15 +1,14 @@
-package br.com.pradofigu.maestro.output.persistence.product.adapter
+package br.com.pradofigu.maestro.persistence.adapter
 
-import br.com.pradofigu.maestro.domain.order.model.Order
 import br.com.pradofigu.maestro.domain.product.model.Product
 import br.com.pradofigu.maestro.domain.product.ports.output.ProductDataAccessPort
-import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
-import br.com.pradofigu.maestro.output.persistence.product.repository.ProductRepository
+import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
+import br.com.pradofigu.maestro.persistence.repository.ProductRepository
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class ProductDataAccessAdapter(
+class ProductAdapterImpl(
     private val productRepository: ProductRepository
 ): ProductDataAccessPort {
 

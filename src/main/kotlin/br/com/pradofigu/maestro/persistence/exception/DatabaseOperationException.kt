@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.output.persistence.exception
+package br.com.pradofigu.maestro.persistence.exception
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 

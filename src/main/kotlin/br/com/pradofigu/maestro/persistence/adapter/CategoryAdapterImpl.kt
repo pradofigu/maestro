@@ -1,14 +1,14 @@
-package br.com.pradofigu.maestro.output.persistence.category.adapter
+package br.com.pradofigu.maestro.persistence.adapter
 
 import br.com.pradofigu.maestro.domain.category.model.Category
 import br.com.pradofigu.maestro.domain.category.ports.output.CategoryDataAccessPort
-import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
-import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
+import br.com.pradofigu.maestro.persistence.repository.CategoryRepository
+import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class CategoryDataAccessAdapter(
+class CategoryAdapterImpl(
     private val categoryRepository: CategoryRepository
 ): CategoryDataAccessPort {
 

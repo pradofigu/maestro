@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.output.persistence
+package br.com.pradofigu.maestro.persistence.config
 
 import org.jooq.Record
 
