@@ -1,15 +1,15 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.usecase.model.CPF
-import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.flyway.tables.Customer.CUSTOMER
 import br.com.pradofigu.maestro.flyway.tables.records.CustomerRecord
-import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import br.com.pradofigu.maestro.persistence.config.JooqRepository
+import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
+import br.com.pradofigu.maestro.usecase.model.CPF
+import br.com.pradofigu.maestro.usecase.model.Customer
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
+import java.util.*
 
 @Repository
 class CustomerRepository(

@@ -1,13 +1,13 @@
 package br.com.pradofigu.maestro.persistence.repository
 
-import br.com.pradofigu.maestro.usecase.model.Category
 import br.com.pradofigu.maestro.flyway.Tables.CATEGORY
 import br.com.pradofigu.maestro.flyway.tables.records.CategoryRecord
-import br.com.pradofigu.maestro.output.persistence.exception.DatabaseOperationException
 import br.com.pradofigu.maestro.persistence.config.JooqRepository
+import br.com.pradofigu.maestro.persistence.exception.DatabaseOperationException
+import br.com.pradofigu.maestro.usecase.model.Category
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
-import java.util.UUID
+import java.util.*
 
 @Repository
 class CategoryRepository(
