@@ -17,5 +17,4 @@ data class OrderResponse(
             paymentStatus = order.paymentStatus
         )
     }
-
 }
