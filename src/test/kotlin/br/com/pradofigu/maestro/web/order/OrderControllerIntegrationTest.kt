@@ -4,8 +4,8 @@ import br.com.pradofigu.maestro.domain.order.model.PaymentStatus
 import br.com.pradofigu.maestro.factory.CustomerFactory
 import br.com.pradofigu.maestro.factory.OrderFactory
 import br.com.pradofigu.maestro.factory.ProductFactory
-import br.com.pradofigu.maestro.input.restapi.order.dto.CreateOrderRequest
-import br.com.pradofigu.maestro.input.restapi.order.dto.PayOrderRequest
+import br.com.pradofigu.maestro.web.dto.CreateOrderRequest
+import br.com.pradofigu.maestro.web.dto.PayOrderRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired

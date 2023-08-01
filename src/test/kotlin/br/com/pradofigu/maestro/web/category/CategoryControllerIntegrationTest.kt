@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.web.category
 
 import br.com.pradofigu.maestro.factory.CategoryFactory
-import br.com.pradofigu.maestro.input.restapi.category.dto.CategoryRequest
+import br.com.pradofigu.maestro.web.dto.CategoryRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,7 +1,7 @@
 package br.com.pradofigu.maestro.factory
 
 import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.output.persistence.category.repository.CategoryRepository
+import br.com.pradofigu.maestro.persistence.repository.CategoryRepository
 import org.springframework.stereotype.Component
 import kotlin.random.Random
 

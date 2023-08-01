@@ -2,7 +2,7 @@ package br.com.pradofigu.maestro.web.customer
 
 import br.com.pradofigu.maestro.domain.customer.model.Customer
 import br.com.pradofigu.maestro.factory.CustomerFactory
-import br.com.pradofigu.maestro.input.restapi.customer.dto.CustomerRequest
+import br.com.pradofigu.maestro.web.dto.CustomerRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
