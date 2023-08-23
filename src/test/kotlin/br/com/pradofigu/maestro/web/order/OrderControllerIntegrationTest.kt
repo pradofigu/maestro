@@ -4,6 +4,8 @@ import br.com.pradofigu.maestro.usecase.model.PaymentStatus
 import br.com.pradofigu.maestro.factory.CustomerFactory
 import br.com.pradofigu.maestro.factory.OrderFactory
 import br.com.pradofigu.maestro.factory.ProductFactory
+import br.com.pradofigu.maestro.web.controller.CategoryController
+import br.com.pradofigu.maestro.web.controller.OrderController
 import br.com.pradofigu.maestro.web.dto.CreateOrderRequest
 import br.com.pradofigu.maestro.web.dto.PayOrderRequest
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,7 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-@SpringBootTest
+@SpringBootTest(classes = [OrderController::class])
 @AutoConfigureMockMvc
 @DisplayName("/orders")
 class OrderDataAccessPortResourceIntegrationTest {

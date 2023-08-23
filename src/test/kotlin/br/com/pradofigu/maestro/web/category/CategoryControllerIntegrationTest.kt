@@ -1,6 +1,7 @@
 package br.com.pradofigu.maestro.web.category
 
 import br.com.pradofigu.maestro.factory.CategoryFactory
+import br.com.pradofigu.maestro.web.controller.CategoryController
 import br.com.pradofigu.maestro.web.dto.CategoryRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.random.Random
 
-@SpringBootTest
+@SpringBootTest(classes = [CategoryController::class])
 @AutoConfigureMockMvc
 @DisplayName("/categories")
 class CategoryControllerIntegrationTest {
@@ -34,22 +35,22 @@ class CategoryControllerIntegrationTest {
         fun `When create a category should returns 201`() {
             val categoryName = "Chef's Plate ${Random.nextInt(1, 9999)}"
             val body: String = objectMapper.writeValueAsString(
-                CategoryRequest(name = categoryName)
+                    CategoryRequest(name = categoryName)
             )
 
             val mvcResult = mvc.perform(
-                post("/categories")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+                    post("/categories")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(body))
+                    .andExpect(status().isOk())
+                    .andExpect(request().asyncStarted())
+                    .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("name").value(categoryName))
-                .andReturn()
+                    .andExpect(status().isCreated())
+                    .andExpect(jsonPath("id").isNotEmpty())
+                    .andExpect(jsonPath("name").value(categoryName))
+                    .andReturn()
         }
 
         @Test
@@ -58,16 +59,16 @@ class CategoryControllerIntegrationTest {
             val category = categoryFactory.create()
 
             val mvcResult = mvc.perform(
-                get("/categories/${category.id}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+                    get("/categories/${category.id}")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(request().asyncStarted())
+                    .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(category.id.toString()))
-                .andExpect(jsonPath("name").value(category.name))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("id").value(category.id.toString()))
+                    .andExpect(jsonPath("name").value(category.name))
         }
 
         @Test
@@ -76,22 +77,22 @@ class CategoryControllerIntegrationTest {
             val category = categoryFactory.create()
 
             val body: String = objectMapper.writeValueAsString(
-                category.copy(name = "New Special Chef's Plate")
+                    category.copy(name = "New Special Chef's Plate")
             )
 
             val mvcResult = mvc.perform(
-                put("/categories/${category.id}")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(body))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+                    put("/categories/${category.id}")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(body))
+                    .andExpect(status().isOk())
+                    .andExpect(request().asyncStarted())
+                    .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(category.id.toString()))
-                .andExpect(jsonPath("name").value("New Special Chef's Plate"))
-                .andReturn()
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("id").value(category.id.toString()))
+                    .andExpect(jsonPath("name").value("New Special Chef's Plate"))
+                    .andReturn()
         }
 
         @Test
@@ -100,12 +101,12 @@ class CategoryControllerIntegrationTest {
             val category = categoryFactory.create()
 
             val mvcResult = mvc.perform(delete("/categories/${category.id}"))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+                    .andExpect(status().isOk())
+                    .andExpect(request().asyncStarted())
+                    .andReturn()
 
             mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isNoContent())
+                    .andExpect(status().isNoContent())
         }
     }
 }

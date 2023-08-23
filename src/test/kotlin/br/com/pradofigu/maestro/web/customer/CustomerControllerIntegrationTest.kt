@@ -2,6 +2,8 @@ package br.com.pradofigu.maestro.web.customer
 
 import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.factory.CustomerFactory
+import br.com.pradofigu.maestro.web.controller.CategoryController
+import br.com.pradofigu.maestro.web.controller.CustomerController
 import br.com.pradofigu.maestro.web.dto.CustomerRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
@@ -18,7 +20,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.util.*
 
-@SpringBootTest
+@SpringBootTest(classes = [CustomerController::class])
 @AutoConfigureMockMvc
 @DisplayName("/customers")
 class CustomerControllerIntegrationTest {

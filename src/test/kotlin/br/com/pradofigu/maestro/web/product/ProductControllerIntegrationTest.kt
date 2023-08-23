@@ -2,6 +2,8 @@ package br.com.pradofigu.maestro.web.product
 
 import br.com.pradofigu.maestro.factory.CategoryFactory
 import br.com.pradofigu.maestro.factory.ProductFactory
+import br.com.pradofigu.maestro.web.controller.CategoryController
+import br.com.pradofigu.maestro.web.controller.ProductController
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.*
@@ -16,7 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-@SpringBootTest
+@SpringBootTest(classes = [ProductController::class])
 @AutoConfigureMockMvc
 @DisplayName("/products")
 class ProductControllerIntegrationTest {
