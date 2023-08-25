@@ -1,118 +1,120 @@
-package br.com.pradofigu.maestro.web.order
+package br.com.pradofigu.maestro.web.controller
 
+import br.com.pradofigu.maestro.usecase.model.CreateOrder
+import br.com.pradofigu.maestro.usecase.model.OrderPayment
 import br.com.pradofigu.maestro.usecase.model.PaymentStatus
-import br.com.pradofigu.maestro.factory.CustomerFactory
-import br.com.pradofigu.maestro.factory.OrderFactory
-import br.com.pradofigu.maestro.factory.ProductFactory
-import br.com.pradofigu.maestro.web.controller.CategoryController
-import br.com.pradofigu.maestro.web.controller.OrderController
-import br.com.pradofigu.maestro.web.dto.CreateOrderRequest
-import br.com.pradofigu.maestro.web.dto.PayOrderRequest
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.junit.jupiter.api.*
+import br.com.pradofigu.maestro.usecase.service.OrderService
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @SpringBootTest(classes = [OrderController::class])
 @AutoConfigureMockMvc
-@DisplayName("/orders")
-class OrderDataAccessPortResourceIntegrationTest {
+class OrderControllerIntegrationTest {
 
-    @Autowired private lateinit var mvc: MockMvc
-    @Autowired private lateinit var objectMapper: ObjectMapper
-    @Autowired private lateinit var orderFactory: OrderFactory
-    @Autowired private lateinit var customerFactory: CustomerFactory
-    @Autowired private lateinit var productFactory: ProductFactory
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
-    @Nested
-    @Transactional
-    inner class HappyPathIntegrationTest {
+    @Autowired
+    private lateinit var orderService: OrderService
 
-        @Test
-        @Rollback
-        fun `When create an order should returns 201`() {
-            val customer = customerFactory.create()
-            val products = listOf(productFactory.create(), productFactory.create())
-
-            val request = CreateOrderRequest(
-                customerId = customer.id,
-                productsId = products.map { it.id!! }
-            )
-
-            val body: String = objectMapper.writeValueAsString(request)
-
-            val mvcResult = mvc.perform(
-                post("/orders")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body)
-            )
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
-
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("number").isNotEmpty())
-                .andReturn()
-        }
-
-        @Test
-        @Rollback
-        fun `When order is paid should returns 202`() {
-            val defaultPendingOrder = orderFactory.create()
-
-            val request = PayOrderRequest(
-                number = defaultPendingOrder.number,
-                status = PaymentStatus.PAID,
-            )
-
-            val body: String = objectMapper.writeValueAsString(request)
-
-            val mvcResult = mvc.perform(
-                put("/orders/${defaultPendingOrder.id}/payment")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(body)
-            )
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
-
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(defaultPendingOrder.id.toString()))
-                .andExpect(jsonPath("number").value(defaultPendingOrder.number))
-                .andExpect(jsonPath("paymentStatus").value("PAID"))
-                .andReturn()
-        }
-
-        @Test
-        @Rollback
-        fun `When get an order by number should returns 200`() {
-            val order = orderFactory.create()
-
-            val mvcResult = mvc.perform(
-                get("/orders/number/${order.number}")
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
-
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(order.id.toString()))
-                .andExpect(jsonPath("number").value(order.number))
-                .andExpect(jsonPath("customerId").isNotEmpty)
-                .andExpect(jsonPath("paymentStatus").value("PENDING"))
-        }
+    @BeforeEach
+    fun setUp() {
     }
+
+    @Test
+    suspend fun testCreateOrder() {
+        val createOrderRequest = CreateOrder(
+                customerId = UUID.randomUUID(),
+                productsId = listOf(UUID.randomUUID(), UUID.randomUUID())
+        )
+
+        val createOrderResponseJson = mockMvc.perform(
+                post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createOrderRequest.toJson())
+        )
+                .andExpect(status().isCreated)
+                .andReturn().response.contentAsString
+
+        val orderId = jacksonObjectMapper().readTree(createOrderResponseJson).get("id").textValue()
+
+        val createdOrder = orderService.findByNumber(orderId.toLong())
+        assertNotNull(createdOrder)
+        assertEquals(createOrderRequest.customerId, createdOrder?.customerId)
+        assertEquals(PaymentStatus.PENDING, createdOrder?.paymentStatus)
+    }
+
+    @Test
+    suspend fun testProcessPayment() {
+        val createOrderRequest = CreateOrder(
+                customerId = UUID.randomUUID(),
+                productsId = listOf(UUID.randomUUID(), UUID.randomUUID())
+        )
+
+        val createOrderResponseJson = mockMvc.perform(
+                post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createOrderRequest.toJson())
+        )
+                .andExpect(status().isCreated)
+                .andReturn().response.contentAsString
+
+        val orderId = jacksonObjectMapper().readTree(createOrderResponseJson).get("id").textValue()
+
+        val orderPaymentRequest = OrderPayment(
+                id = UUID.randomUUID(),
+                number = orderId.toLong(),
+                status = PaymentStatus.PAID
+        )
+
+        mockMvc.perform(
+                put("/orders/$orderId/payment")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(orderPaymentRequest.toJson())
+        )
+                .andExpect(status().isOk)
+
+        val paidOrder = orderService.findByNumber(orderId.toLong())
+        assertNotNull(paidOrder)
+        assertEquals(orderPaymentRequest.status, paidOrder?.paymentStatus)
+    }
+
+    @Test
+    suspend fun testFindByOrderNumber() {
+        val createOrderRequest = CreateOrder(
+                customerId = UUID.randomUUID(),
+                productsId = listOf(UUID.randomUUID(), UUID.randomUUID())
+        )
+
+        val createOrderResponseJson = mockMvc.perform(
+                post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createOrderRequest.toJson())
+        )
+                .andExpect(status().isCreated)
+                .andReturn().response.contentAsString
+
+        val orderId = jacksonObjectMapper().readTree(createOrderResponseJson).get("id").textValue()
+
+        mockMvc.perform(
+                get("/orders/number/{number}", orderId)
+        )
+                .andExpect(status().isOk)
+
+        val foundOrder = orderService.findByNumber(orderId.toLong())
+        assertNotNull(foundOrder)
+    }
+
+    private fun Any.toJson(): String = jacksonObjectMapper().writeValueAsString(this)
 }

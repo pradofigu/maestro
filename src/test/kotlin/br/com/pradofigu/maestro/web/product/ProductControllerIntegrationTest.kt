@@ -1,139 +1,187 @@
-package br.com.pradofigu.maestro.web.product
-
-import br.com.pradofigu.maestro.factory.CategoryFactory
-import br.com.pradofigu.maestro.factory.ProductFactory
-import br.com.pradofigu.maestro.web.controller.CategoryController
-import br.com.pradofigu.maestro.web.controller.ProductController
+import br.com.pradofigu.maestro.usecase.service.ProductService
+import br.com.pradofigu.maestro.web.dto.CategoryRequest
+import br.com.pradofigu.maestro.web.dto.ProductRequest
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.hamcrest.Matchers.*
-import org.junit.jupiter.api.*
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.test.annotation.Rollback
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 import java.util.*
 
-@SpringBootTest(classes = [ProductController::class])
+@SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("/products")
 class ProductControllerIntegrationTest {
 
-    @Autowired private lateinit var productFactory: ProductFactory
-    @Autowired private lateinit var categoryFactory: CategoryFactory
-    @Autowired private lateinit var mvc: MockMvc
-    @Autowired private lateinit var objectMapper: ObjectMapper
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
-    @Nested
-    @Transactional
-    inner class HappyPathIntegrationTest {
+    @Autowired
+    private lateinit var productService: ProductService
 
-        @Test
-        @Rollback
-        fun `When create a products should returns 201`() {
-            val product = productFactory.create()
-            val body: String = objectMapper.writeValueAsString(product)
+    @Test
+    suspend fun testRegisterProduct() {
+        val productRequest = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
 
-            val mvcResult = mvc.perform(
+        val createProductResponseJson = mockMvc.perform(
                 post("/products")
-                    .contentType(APPLICATION_JSON)
-                    .content(body))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ObjectMapper().writeValueAsString(productRequest))
+        )
+                .andExpect(status().isCreated)
+                .andReturn().response.contentAsString
 
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("name").value(product.name))
-                .andExpect(jsonPath("price").value(100.0))
-                .andExpect(jsonPath("category.name").value(product.category.name))
-                .andExpect(jsonPath("preparationTime").value(10.0))
-                .andReturn()
-        }
+        val productId = UUID.fromString(
+                jacksonObjectMapper().readTree(createProductResponseJson).get("id").textValue()
+        )
 
-        @Test
-        @Rollback
-        fun `When get a product by id should returns 200`() {
-            val product = productFactory.create()
+        val createdProduct = productService.findBy(productId)
+        assertNotNull(createdProduct)
+        assertEquals(productRequest.name, createdProduct?.name)
+        assertEquals(productRequest.price, createdProduct?.price)
+        assertEquals(productRequest.category.name, createdProduct?.category?.name)
+        assertEquals(productRequest.description, createdProduct?.description)
+        assertEquals(productRequest.imageUrl, createdProduct?.imageUrl)
+        assertEquals(productRequest.preparationTime, createdProduct?.preparationTime)
+    }
 
-            val mvcResult = mvc.perform(get("/products/${product.id}")
-                    .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+    @Test
+    suspend fun testFindAllProducts() {
+        val product1 = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
 
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(product.id.toString()))
-                .andExpect(jsonPath("name").value(product.name))
-                .andExpect(jsonPath("price").value(100.0))
-                .andExpect(jsonPath("category.name").value(product.category.name))
-                .andExpect(jsonPath("preparationTime").value(10.0))
-        }
+        val product2 = ProductRequest(
+                name = "Batata Frita",
+                price = BigDecimal("5.99"),
+                category = CategoryRequest(name = "Acompanhamento"),
+                description = "Batatas fritas crocantes",
+                imageUrl = "http://example.com/batatafrita.jpg",
+                preparationTime = BigDecimal("15")
+        )
 
-        @Test
-        @Rollback
-        fun `When get a product by category should returns 200`() {
-            val category = categoryFactory.create()
+        productService.register(product1.toModel())
+        productService.register(product2.toModel())
 
-            val product1 = productFactory.create(category)
-            val product2 = productFactory.create(category)
-            productFactory.create()
+        mockMvc.perform(get("/products"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()").value(2))
+    }
 
-            val mvcResult = mvc.perform(get("/products/category/${category.id}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+    @Test
+    suspend fun testFindProductById() {
+        val productRequest = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
 
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize<Any>(2)))
-                .andExpect(jsonPath("$[0].id").value(product1.id.toString()))
-                .andExpect(jsonPath("$[0].name").value(product1.name))
-                .andExpect(jsonPath("$[0].category.name").value(category.name))
-                .andExpect(jsonPath("$[1].id").value(product2.id.toString()))
-                .andExpect(jsonPath("$[1].name").value(product2.name))
-                .andExpect(jsonPath("$[1].category.name").value(category.name))
-        }
+        val createdProduct = productService.register(productRequest.toModel())
 
-        @Test
-        @Rollback
-        fun `When update a product should returns 200`() {
-            val product = productFactory.create()
-            val body: String = objectMapper.writeValueAsString(product.copy(name = "Updated product name"))
+        mockMvc.perform(get("/products/${createdProduct.id}"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(createdProduct.id.toString()))
+                .andExpect(jsonPath("$.name").value(productRequest.name))
+    }
 
-            val mvcResult = mvc.perform(
-                put("/products/${product.id}")
-                    .contentType(APPLICATION_JSON)
-                    .content(body))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+    @Test
+    suspend fun testUpdateProduct() {
+        val productRequest = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
 
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("Updated product name"))
-                .andReturn()
-        }
+        val createdProduct = productService.register(productRequest.toModel())
 
-        @Test
-        @Rollback
-        fun `When delete a product should returns 204`() {
-            val product = productFactory.create()
+        val updatedProductRequest = ProductRequest(
+                name = "Hamburguer Especial",
+                price = BigDecimal("11.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um hamburguer ainda mais delicioso",
+                imageUrl = "http://example.com/hamburguer-especial.jpg",
+                preparationTime = BigDecimal("20")
+        )
 
-            val mvcResult = mvc.perform(delete("/products/${product.id}"))
-                .andExpect(status().isOk())
-                .andExpect(request().asyncStarted())
-                .andReturn()
+        mockMvc.perform(
+                put("/products/${createdProduct.id}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(ObjectMapper().writeValueAsString(updatedProductRequest))
+        )
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.id").value(createdProduct.id.toString()))
+                .andExpect(jsonPath("$.name").value(updatedProductRequest.name))
+    }
 
-            mvc.perform(asyncDispatch(mvcResult))
-                .andExpect(status().isNoContent())
-        }
+    @Test
+    suspend fun testDeleteProduct() {
+        val productRequest = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
+
+        val createdProduct = productService.register(productRequest.toModel())
+
+        mockMvc.perform(delete("/products/${createdProduct.id}"))
+                .andExpect(status().isNoContent)
+
+        val deletedProduct = createdProduct.id?.let { productService.findBy(it) }
+        assertNull(deletedProduct)
+    }
+
+    @Test
+    suspend fun testFindByCategory() {
+        val product1 = ProductRequest(
+                name = "Hamburguer",
+                price = BigDecimal("9.99"),
+                category = CategoryRequest(name = "Lanche"),
+                description = "Um delicioso hamburguer",
+                imageUrl = "http://example.com/hamburguer.jpg",
+                preparationTime = BigDecimal("15")
+        )
+
+        val product2 = ProductRequest(
+                name = "Batata Frita",
+                price = BigDecimal("5.99"),
+                category = CategoryRequest(name = "Acompanhamento"),
+                description = "Batatas fritas crocantes",
+                imageUrl = "http://example.com/batatafrita.jpg",
+                preparationTime = BigDecimal("15")
+        )
+
+        productService.register(product1.toModel())
+        productService.register(product2.toModel())
+
+        mockMvc.perform(get("/products/category/${product1.category.name}"))
+                .andExpect(status().isOk)
+                .andExpect(jsonPath("$.length()").value(1))
     }
 }
