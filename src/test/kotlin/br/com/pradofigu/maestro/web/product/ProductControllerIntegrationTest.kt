@@ -1,3 +1,5 @@
+package br.com.pradofigu.maestro.web.controller
+
 import br.com.pradofigu.maestro.usecase.service.ProductService
 import br.com.pradofigu.maestro.web.dto.CategoryRequest
 import br.com.pradofigu.maestro.web.dto.ProductRequest
@@ -26,7 +28,7 @@ class ProductControllerIntegrationTest {
     private lateinit var productService: ProductService
 
     @Test
-    suspend fun testRegisterProduct() {
+    suspend fun `When registering a product, it should return a 201 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
@@ -59,7 +61,7 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindAllProducts() {
+    suspend fun `When finding all products, it should return a list with length 2`() {
         val product1 = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
@@ -87,7 +89,7 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindProductById() {
+    suspend fun `When finding a product by ID, it should return a 200 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
@@ -106,7 +108,7 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testUpdateProduct() {
+    suspend fun `When updating a product, it should return a 200 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
@@ -138,7 +140,7 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testDeleteProduct() {
+    suspend fun `When deleting a product, it should return a 204 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
@@ -158,7 +160,7 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindByCategory() {
+    suspend fun `When finding products by category, it should return a 200 status`() {
         val product1 = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),

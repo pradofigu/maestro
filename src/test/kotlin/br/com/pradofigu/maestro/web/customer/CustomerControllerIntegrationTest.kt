@@ -31,7 +31,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testRegisterCustomer() {
+    suspend fun `When registering a customer, it should return a 201 status`() {
         val customerRequest = CustomerRequest(
                 name = "Test Customer",
                 cpf = "12345678901",
@@ -64,7 +64,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindAllCustomers() {
+    suspend fun `When finding all customers, it should return a 200 status`() {
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()").value(2))
@@ -81,7 +81,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindCustomerById() {
+    suspend fun `When finding a customer by ID, it should return a 200 status`() {
         val customer = customerService.register(Customer(
                 name = "Test Customer",
                 cpf = CPF("33333333333"),
@@ -100,7 +100,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testUpdateCustomer() {
+    suspend fun `When updating a customer, it should return a 200 status`() {
         val customer = customerService.register(Customer(
                 name = "Original Customer",
                 cpf = CPF("44444444444"),
@@ -131,7 +131,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testDeleteCustomer() {
+    suspend fun `When deleting a customer, it should return a 204 status`() {
         val customer = customerService.register(Customer(
                 name = "Test Customer",
                 cpf = CPF("66666666666"),
@@ -145,7 +145,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindCustomerByCPF() {
+    suspend fun `When finding a customer by CPF, it should return a 200 status`() {
         val customer = customerService.register(Customer(
                 name = "Test Customer",
                 cpf = CPF("77777777777"),

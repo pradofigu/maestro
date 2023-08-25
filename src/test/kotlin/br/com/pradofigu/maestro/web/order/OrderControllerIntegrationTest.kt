@@ -33,7 +33,7 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testCreateOrder() {
+    suspend fun `When creating an order, it should return a 201 status`() {
         val createOrderRequest = CreateOrder(
                 customerId = UUID.randomUUID(),
                 productsId = listOf(UUID.randomUUID(), UUID.randomUUID())
@@ -56,7 +56,7 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testProcessPayment() {
+    suspend fun `When processing a payment, it should return a 200 status`() {
         val createOrderRequest = CreateOrder(
                 customerId = UUID.randomUUID(),
                 productsId = listOf(UUID.randomUUID(), UUID.randomUUID())
@@ -91,7 +91,7 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindByOrderNumber() {
+    suspend fun `When finding an order by number, it should return a 200 status`() {
         val createOrderRequest = CreateOrder(
                 customerId = UUID.randomUUID(),
                 productsId = listOf(UUID.randomUUID(), UUID.randomUUID())

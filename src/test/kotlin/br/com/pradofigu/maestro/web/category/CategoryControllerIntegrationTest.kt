@@ -29,7 +29,7 @@ class CategoryControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testCreateCategory() {
+    suspend fun `When create a category should return 201`() {
         val categoryRequest = CategoryRequest(name = "Test Category")
 
         mockMvc.perform(
@@ -42,14 +42,14 @@ class CategoryControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testFindAllCategories() {
+    suspend fun `When find all categories should return 200`() {
         mockMvc.perform(get("/categories"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()").value(2))
     }
 
     @Test
-    suspend fun testFindCategoryById() {
+    suspend fun `When find category by id should return 200`() {
         val category = categoryService.create(Category(name = "Test Category"))
 
         mockMvc.perform(get("/categories/${category.id}"))
@@ -58,7 +58,7 @@ class CategoryControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testUpdateCategory() {
+    suspend fun `When update a category should return 200`() {
         val category = categoryService.create(Category(name = "Test Category"))
         val updatedCategoryRequest = CategoryRequest(name = "Updated Category")
 
@@ -72,7 +72,7 @@ class CategoryControllerIntegrationTest {
     }
 
     @Test
-    suspend fun testDeleteCategory() {
+    suspend fun `When delete a category should return 204`() {
         val category = categoryService.create(Category(name = "Test Category"))
 
         mockMvc.perform(delete("/categories/${category.id}"))
