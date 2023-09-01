@@ -23,6 +23,7 @@ $ minikube start
 ```bash
 $ kubectl get pods -A
 ```
+![Alt text](image.png)
 
 5 - Verifique se o minikube está como contexto padrão
 
@@ -34,8 +35,6 @@ Obs: Se o minikube não estiver como contexto padrão, execute o comando abaixo 
 ```bash
 $ kubectl config use-context minikube
 ```
-
-![Alt text](image.png)
 
 ## Executando o projeto
 
