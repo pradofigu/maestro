@@ -71,6 +71,9 @@ acesso externo:
 ```bash
 $ minikube service svc-maestro-app -n maestro --url
 ```
+
+![Alt text](image-2.png)
+
 6 - Use a url informada para acesso da aplicação.
 
 - Swagger: http://URL_INFORMADA/swagger-ui/
