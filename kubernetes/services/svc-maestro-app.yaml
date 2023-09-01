@@ -4,10 +4,9 @@ metadata:
   name: svc-maestro-app
   namespace: maestro
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - port: 80      
-      nodePort: 31000
+    - port: 31000     
       targetPort: 8080
   selector:
     app: maestro-app
