@@ -1,6 +1,6 @@
-## Kubernetes - Como rodar localmente
+# Kubernetes - Como rodar localmente
 
-# Requisitos
+## Requisitos
 
 1 - Instalar o kubectl
 
@@ -37,7 +37,7 @@ $ kubectl config use-context minikube
 
 ![Alt text](image.png)
 
-# Executando o projeto
+## Executando o projeto
 
 1 - No terminal, dentro da pasta do projeto, acesse a pasta kubernetes:
 
