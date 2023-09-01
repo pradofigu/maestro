@@ -80,7 +80,11 @@ $ minikube service svc-maestro-app -n maestro --url
 
 7 - Importe a collection no Insomnia que está a pasta "collections"
 
+[Title](collections/maestro-tech-challenge.json)
+
 8 - Configure o baseUrl com a URL informada do environment do Insomnia.
+
+![Alt text](image-3.png)
 
 9 - Para deletar todos os pods, services, etc, basta rodar o comando abaixo:
 
