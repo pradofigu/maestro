@@ -30,6 +30,8 @@ $ kubectl get pods -A
 ```bash
 $ kubectl config get-contexts
 ```
+![Alt text](image-1.png)
+
 Obs: Se o minikube não estiver como contexto padrão, execute o comando abaixo para mudar:
 
 ```bash
