@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Aplicar Secrets e Configmaps
+kubectl apply -f config/maestro-namespace.yaml
 kubectl apply -f config/maestro-secrets.yaml
 kubectl apply -f config/maestro-configmap.yaml
 

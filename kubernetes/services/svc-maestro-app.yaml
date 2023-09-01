@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: svc-maestro-app
+  namespace: maestro
 spec:
   type: NodePort
   ports:
