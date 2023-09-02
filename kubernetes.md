@@ -23,14 +23,14 @@ $ minikube start
 ```bash
 $ kubectl get pods -A
 ```
-![Alt text](image.png)
+![Alt text](images/image.png)
 
 5 - Verifique se o minikube está como contexto padrão
 
 ```bash
 $ kubectl config get-contexts
 ```
-![Alt text](image-1.png)
+![Alt text](images/image-1.png)
 
 Obs: Se o minikube não estiver como contexto padrão, execute o comando abaixo para mudar:
 
@@ -72,7 +72,7 @@ acesso externo:
 $ minikube service svc-maestro-app -n maestro --url
 ```
 
-![Alt text](image-2.png)
+![Alt text](images/image-2.png)
 
 6 - Use a url informada para acesso da aplicação.
 
@@ -84,7 +84,7 @@ $ minikube service svc-maestro-app -n maestro --url
 
 8 - Configure o baseUrl com a URL informada do environment do Insomnia.
 
-![Alt text](image-3.png)
+![Alt text](images/image-3.png)
 
 9 - Para deletar todos os pods, services, etc, basta rodar o comando abaixo:
 
