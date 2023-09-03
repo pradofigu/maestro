@@ -4,8 +4,8 @@ metadata:
   name: svc-postgres
   namespace: maestro
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-    - port: 5432
+    - port: 5432 
   selector:
     app: postgres-db

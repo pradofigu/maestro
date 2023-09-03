@@ -24,6 +24,8 @@ spec:
               key: password
         - name: POSTGRESQL_DATABASE
           value: maestro
+        - name: POSTGRESQL_SCHEMA
+          value: flyway
     - name: postgres-db-redis
       image: redis:latest
       ports:
