@@ -80,7 +80,7 @@ $ minikube service svc-maestro-app -n maestro --url
 
 7 - Importe a collection no Insomnia que está a pasta "collections"
 
-[Title](collections/maestro-tech-challenge.json)
+[Collection Insomnia - MAESTRO](collections/maestro-tech-challenge.json)
 
 8 - Configure o baseUrl com a URL informada do environment do Insomnia.
 
