@@ -21,9 +21,13 @@ class OrderController(private val orderService: OrderService) {
         return ResponseEntity(orderCreated, CREATED)
     }
 
-    @PutMapping("/{orderId}/payment")
+    @PostMapping("/{orderId}/payment")
     //TODO: (Implementar JWT) @PreAuthorize("hasRole('ROLE_USER')")
-    suspend fun payment(@PathVariable orderId: UUID, @RequestBody payOrderRequest: PayOrderRequest): ResponseEntity<OrderResponse> {
+    //FIXME: This is meant to be a webhook, so it should be a POST request
+    suspend fun payment(
+        @PathVariable orderId: UUID,
+        @RequestBody payOrderRequest: PayOrderRequest
+    ): ResponseEntity<OrderResponse> {
         return orderService.processPayment(payOrderRequest.toModel(orderId))
             .let { ResponseEntity.ok(OrderResponse.from(it)) }
     }
