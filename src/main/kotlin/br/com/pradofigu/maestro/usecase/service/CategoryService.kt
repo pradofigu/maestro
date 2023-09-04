@@ -21,7 +21,7 @@ class CategoryService(
     }
 
     suspend fun update(category: Category): Category {
-        return categoryDataAccessPort.update(category)
+        return categoryDataAccessPort.save(category)
     }
 
     suspend fun delete(id: UUID) {

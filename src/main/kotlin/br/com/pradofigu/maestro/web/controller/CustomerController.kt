@@ -1,6 +1,5 @@
 package br.com.pradofigu.maestro.web.controller
 
-import br.com.pradofigu.maestro.usecase.model.CPF
 import br.com.pradofigu.maestro.usecase.service.CustomerService
 import br.com.pradofigu.maestro.web.dto.CustomerRequest
 import br.com.pradofigu.maestro.web.dto.CustomerResponse
@@ -27,30 +26,30 @@ class CustomerController(private val customerService: CustomerService) {
     }
 
     @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: String): ResponseEntity<CustomerResponse> {
-        return customerService.findBy(UUID.fromString(id))?.let {
+    suspend fun findById(@PathVariable id: UUID): ResponseEntity<CustomerResponse> {
+        return customerService.findBy(id)?.let {
             ResponseEntity.ok(CustomerResponse.from(it))
         } ?: ResponseEntity.notFound().build()
     }
 
     @PutMapping("/{id}")
     suspend fun update(
-        @PathVariable id: String,
+        @PathVariable id: UUID,
         @RequestBody request: CustomerRequest
     ): ResponseEntity<CustomerResponse> {
-        val customer = customerService.update(UUID.fromString(id), request.toModel())
+        val customer = customerService.update(id, request.toModel())
         return ResponseEntity.ok(CustomerResponse.from(customer))
     }
 
     @DeleteMapping("/{id}")
-    suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
-        customerService.delete(UUID.fromString(id))
+    suspend fun delete(@PathVariable id: UUID): ResponseEntity<Any> {
+        customerService.delete(id)
         return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/cpf/{cpf}")
     suspend fun findByCPF(@PathVariable cpf: String): ResponseEntity<CustomerResponse> {
-        return customerService.findBy(CPF(cpf))?.let {
+        return customerService.findBy(cpf)?.let {
             ResponseEntity.ok(CustomerResponse.from(it))
         } ?: ResponseEntity.notFound().build()
     }

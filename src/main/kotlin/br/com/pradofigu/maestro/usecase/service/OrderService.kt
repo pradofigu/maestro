@@ -1,21 +1,51 @@
 package br.com.pradofigu.maestro.usecase.service
 
 import br.com.pradofigu.maestro.usecase.model.*
+import br.com.pradofigu.maestro.usecase.persistence.CustomerDataAccessPort
 import br.com.pradofigu.maestro.usecase.persistence.OrderDataAccessPort
+import br.com.pradofigu.maestro.usecase.persistence.OrderTrackingDataAccessPort
+import br.com.pradofigu.maestro.usecase.persistence.ProductDataAccessPort
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.lang.RuntimeException
+import java.util.UUID
 
 @Service
-class OrderService(private val orderDataAccessPort: OrderDataAccessPort) {
+class OrderService(
+    private val orderDataAccessPort: OrderDataAccessPort,
+    private val orderTrackingDataAccessPort: OrderTrackingDataAccessPort,
+    private val customerDataAccessPort: CustomerDataAccessPort,
+    private val productDataAccessPort: ProductDataAccessPort
+) {
 
-    suspend fun create(order: CreateOrder): PendingPaymentOrder = orderDataAccessPort.save(order)
+    @Transactional
+    suspend fun create(order: CreateOrder): Order {
+        val customer = if (order.customerId != null) {
+            customerDataAccessPort.findBy(order.customerId)
+        } else null
+
+        val products = order.productsId.map {
+            productDataAccessPort.findById(it)?: throw RuntimeException("Product not found for given id $it")
+        }
+
+        return orderDataAccessPort.save(Order(customer = customer, products = products)).also {
+            orderTrackingDataAccessPort.save(OrderTracking(order = it))
+        }
+    }
 
     suspend fun findByNumber(number: Long): Order? = orderDataAccessPort.findByNumber(number)
 
-    suspend fun process(orderPayment: OrderPayment): Order = orderDataAccessPort.process(orderPayment)
+    @Transactional
+    suspend fun processPayment(order: Order): Order = orderDataAccessPort.save(order).also {
+        val orderTracking = orderTrackingDataAccessPort.findByOrderId(order.id!!)
+            ?: OrderTracking(order = order)
 
-    suspend fun findTrackingDetails(): List<OrderTracking> =
-        orderDataAccessPort.findTrackingDetails()
+        orderTrackingDataAccessPort.save(orderTracking.copy(status = OrderStatus.RECEIVED, products = order.products))
+    }
 
-    suspend fun updateOrderTracking(id: String, orderStatus: OrderStatus): OrderTracking =
-        orderDataAccessPort.updateOrderTracking(id, orderStatus)
+    suspend fun findTrackingDetails(orderId: UUID): OrderTracking? =
+        orderTrackingDataAccessPort.findByOrderId(orderId)
+
+    suspend fun updateOrderTracking(orderId: UUID, orderStatus: OrderStatus): OrderTracking =
+        orderTrackingDataAccessPort.updateOrderStatus(orderId, orderStatus)
 }

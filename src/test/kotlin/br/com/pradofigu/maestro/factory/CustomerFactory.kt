@@ -18,10 +18,10 @@ class CustomerFactory(private val customerRepository: CustomerRepository) {
             phone = "+5511999998888",
             cpf = CPF(cpf),
             birthDate = LocalDate.of(1980, 1, 1)
-        )
-    )
+        ).toEntity()
+    ).toModel()
 
-    fun findById(id: UUID) = customerRepository.findBy(id)
+    fun findById(id: UUID) = customerRepository.findById(id).get().toModel()
 
     fun generateCpfAsString() = CPFValidator().generateRandomValid()!!
 }

@@ -3,6 +3,7 @@ package br.com.pradofigu.maestro.web.dto
 import br.com.pradofigu.maestro.usecase.model.CPF
 import br.com.pradofigu.maestro.usecase.model.Customer
 import java.time.LocalDate
+import java.util.UUID
 
 data class CustomerRequest(
     val name: String,
@@ -21,18 +22,18 @@ data class CustomerRequest(
 }
 
 data class CustomerResponse(
-    val id: String,
-    val name: String,
-    val cpf: String,
-    val email: String,
-    val phone: String,
-    val birthDate: LocalDate
+    val id: UUID,
+    val name: String?,
+    val cpf: String?,
+    val email: String?,
+    val phone: String?,
+    val birthDate: LocalDate?
 ) {
     companion object {
         fun from(customer: Customer) = CustomerResponse(
-            id = customer.id!!.toString(),
+            id = customer.id!!,
             name = customer.name,
-            cpf = customer.cpf.number,
+            cpf = customer.cpf?.number,
             email = customer.email,
             phone = customer.phone,
             birthDate = customer.birthDate

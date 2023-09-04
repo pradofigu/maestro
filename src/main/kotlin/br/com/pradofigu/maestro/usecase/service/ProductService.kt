@@ -14,7 +14,7 @@ class ProductService(
 
     suspend fun findAll(): List<Product> = productDataAccessPort.findAll()
 
-    suspend fun findBy(id: UUID): Product? = productDataAccessPort.findBy(id)
+    suspend fun findById(id: UUID): Product? = productDataAccessPort.findById(id)
 
     suspend fun findByCategory(categoryId: UUID): List<Product> =
         productDataAccessPort.findByCategory(categoryId)

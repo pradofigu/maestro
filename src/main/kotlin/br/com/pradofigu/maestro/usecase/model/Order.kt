@@ -1,10 +1,13 @@
 package br.com.pradofigu.maestro.usecase.model
 
+import br.com.pradofigu.maestro.persistence.entity.OrderEntity
+import br.com.pradofigu.maestro.persistence.entity.OrderTrackingEntity
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
 enum class OrderStatus {
+    PENDING,
     RECEIVED,
     IN_PREPARATION,
     READY,
@@ -12,38 +15,35 @@ enum class OrderStatus {
 }
 
 data class Order(
-    val id: UUID?,
-    val number: Long,
-    val customerId: UUID?,
-    val paymentStatus: PaymentStatus
-)
+    val id: UUID? = null,
+    val number: Long? = null,
+    val customer: Customer? = null,
+    val products: List<Product> = emptyList(),
+    val paymentStatus: PaymentStatus = PaymentStatus.PENDING
+) {
+    fun toEntity(): OrderEntity = OrderEntity(
+        number = this.number ?: 0,
+        customer = this.customer?.toEntity(),
+        products = this.products.map { it.toEntity() }.toSet(),
+        paymentStatus = this.paymentStatus,
+    ).apply { this.id = this@Order.id }
+}
 
 data class CreateOrder(
     val customerId: UUID?,
     val productsId: List<UUID>
-) {
-    val paymentStatus: PaymentStatus = PaymentStatus.PENDING
-}
-
-data class OrderPayment(
-    val id: UUID,
-    val number: Long,
-    val status: PaymentStatus
 )
 
 data class OrderTracking(
-    val id: UUID,
-    val orderId: UUID,
-    val status: OrderStatus,
-    val createdAt: LocalDateTime
+    val id: UUID? = null,
+    val order: Order,
+    val status: OrderStatus = OrderStatus.PENDING,
+    val products: List<Product> = emptyList(),
+    val createdAt: LocalDateTime? = null,
 ) {
-    var orderNumber: Long? = null
-    var products: List<ProductPreparation>? = null
 
-    fun calculatePreparationTime(): BigDecimal {
-        var amount = BigDecimal.ZERO
-        products!!.forEach { amount += it.preparationTime }
-
-        return amount
-    }
+    fun toEntity(): OrderTrackingEntity = OrderTrackingEntity(
+        order = this.order.toEntity(),
+        status = this.status
+    ).apply { this.id = this@OrderTracking.id }
 }

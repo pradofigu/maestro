@@ -2,6 +2,7 @@ package br.com.pradofigu.maestro.web.dto
 
 import br.com.pradofigu.maestro.usecase.model.Product
 import java.math.BigDecimal
+import java.util.UUID
 
 data class ProductRequest(
     val name: String,
@@ -9,7 +10,7 @@ data class ProductRequest(
     val category: CategoryRequest,
     val description: String,
     val imageUrl: String?,
-    val preparationTime: BigDecimal
+    val preparationTime: Int
 ) {
     fun toModel() = Product(
         name = name,
@@ -22,17 +23,17 @@ data class ProductRequest(
 }
 
 data class ProductResponse(
-    val id: String,
+    val id: UUID,
     val name: String,
     val price: BigDecimal,
     val category: CategoryResponse,
     val description: String,
     val imageUrl: String?,
-    val preparationTime: BigDecimal
+    val preparationTime: Int
 ) {
     companion object {
         fun from(product: Product) = ProductResponse(
-            id = product.id!!.toString(),
+            id = product.id!!,
             name = product.name,
             price = product.price,
             category = product.category.let { CategoryResponse.from(it) },

@@ -1,4 +1,4 @@
-package br.com.pradofigu.maestro.web.customer
+package br.com.pradofigu.maestro.web.controller.customer
 
 import br.com.caelum.stella.validation.InvalidStateException
 import br.com.pradofigu.maestro.usecase.model.CPF
