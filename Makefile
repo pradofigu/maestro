@@ -41,7 +41,13 @@ start-db: ## Starts the database container (postgres and pgadmin)
 start-app: ## Starts the application container
 	@docker-compose -f ${DOCKER_COMPOSE_FILE_PATH} up -d app
 
-start: ## Starts all containers but without running Flyway migrations or compiling the application
+restart: compile ## Restart all containers after recompiling
+	@echo "-------------- Starting Containers --------------"
+	@docker-compose -f ${DOCKER_COMPOSE_FILE_PATH} down
+	@docker-compose -f ${DOCKER_COMPOSE_FILE_PATH} build --no-cache
+	@docker-compose -f ${DOCKER_COMPOSE_FILE_PATH} up -d
+
+start: compile ## Starts all containers but without running Flyway migrations or compiling the application
 	@echo "-------------- Starting Containers --------------"
 	@docker-compose -f ${DOCKER_COMPOSE_FILE_PATH} up -d
 
