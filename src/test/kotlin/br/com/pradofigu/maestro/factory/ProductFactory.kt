@@ -23,15 +23,15 @@ class ProductFactory(
                 imageUrl = "https://my-image.com",
                 price = BigDecimal(100),
                 category = category,
-                preparationTime = BigDecimal(10)
-            )
-        )
+                preparationTime = 10
+            ).toEntity()
+        ).toModel()
     }
 
     fun create(products: List<Product>): List<Product> {
         return products.map { product ->
             val category = categoryFactory.create(product.category.name)
-            productRepository.save(product.copy(category = category))
+            productRepository.save(product.copy(category = category).toEntity()).toModel()
         }
     }
 }

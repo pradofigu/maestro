@@ -9,5 +9,5 @@ import kotlin.random.Random
 class CategoryFactory(private val categoryRepository: CategoryRepository) {
 
         fun create(name: String = "Category ${Random.nextInt(1, 9999)}") =
-                categoryRepository.save(Category(name = name))
+                categoryRepository.save(Category(name = name).toEntity()).toModel()
 }
