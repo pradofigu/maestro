@@ -1,10 +1,12 @@
-package br.com.pradofigu.maestro.web.controller
+package br.com.pradofigu.maestro.web.controller.customer
 
 import br.com.pradofigu.maestro.usecase.model.CPF
 import br.com.pradofigu.maestro.usecase.model.Customer
 import br.com.pradofigu.maestro.usecase.service.CustomerService
+import br.com.pradofigu.maestro.web.controller.CustomerController
 import br.com.pradofigu.maestro.web.dto.CustomerRequest
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,18 +22,15 @@ import java.time.LocalDate
 @AutoConfigureMockMvc
 class CustomerControllerIntegrationTest {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-
-    @Autowired
-    private lateinit var customerService: CustomerService
+    @Autowired private lateinit var mockMvc: MockMvc
+    @Autowired private lateinit var customerService: CustomerService
 
     @BeforeEach
     fun setUp() {
     }
 
     @Test
-    suspend fun `When registering a customer, it should return a 201 status`() {
+    fun `When registering a customer, it should return a 201 status`() {
         val customerRequest = CustomerRequest(
                 name = "Test Customer",
                 cpf = "12345678901",
@@ -48,7 +47,7 @@ class CustomerControllerIntegrationTest {
                 birthDate = customerRequest.birthDate
         )
 
-        val savedCustomer = customerService.register(customer)
+        val savedCustomer = runBlocking { customerService.register(customer) }
 
         mockMvc.perform(
                 post("/customers")
@@ -64,7 +63,7 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When finding all customers, it should return a 200 status`() {
+    fun `When finding all customers, it should return a 200 status`() {
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.length()").value(2))
@@ -81,16 +80,18 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When finding a customer by ID, it should return a 200 status`() {
-        val customer = customerService.register(Customer(
-                name = "Test Customer",
-                cpf = CPF("33333333333"),
-                email = "test@example.com",
-                phone = "333-333-3333",
-                birthDate = LocalDate.of(1995, 4, 4)
-        ))
+    fun `When finding a customer by ID, it should return a 200 status`() {
+        val customer = Customer(
+            name = "Test Customer",
+            cpf = CPF("33333333333"),
+            email = "test@example.com",
+            phone = "333-333-3333",
+            birthDate = LocalDate.of(1995, 4, 4)
+        )
 
-        mockMvc.perform(get("/customers/${customer.id}"))
+        val persistedCustomer = runBlocking { customerService.register(customer) }
+
+        mockMvc.perform(get("/customers/${persistedCustomer.id}"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.name").value("Test Customer"))
                 .andExpect(jsonPath("$.cpf").value("33333333333"))
@@ -100,14 +101,16 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When updating a customer, it should return a 200 status`() {
-        val customer = customerService.register(Customer(
-                name = "Original Customer",
-                cpf = CPF("44444444444"),
-                email = "original@example.com",
-                phone = "444-444-4444",
-                birthDate = LocalDate.of(1985, 5, 5)
-        ))
+    fun `When updating a customer, it should return a 200 status`() {
+        val customer = Customer(
+            name = "Original Customer",
+            cpf = CPF("44444444444"),
+            email = "original@example.com",
+            phone = "444-444-4444",
+            birthDate = LocalDate.of(1985, 5, 5)
+        )
+
+        val persistedCustomer = runBlocking { customerService.register(customer) }
 
         val updatedCustomerRequest = CustomerRequest(
                 name = "Updated Customer",
@@ -118,7 +121,7 @@ class CustomerControllerIntegrationTest {
         )
 
         mockMvc.perform(
-                put("/customers/${customer.id}")
+                put("/customers/${persistedCustomer.id}")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedCustomerRequest.toJson())
         )
@@ -131,30 +134,34 @@ class CustomerControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When deleting a customer, it should return a 204 status`() {
-        val customer = customerService.register(Customer(
-                name = "Test Customer",
-                cpf = CPF("66666666666"),
-                email = "test@example.com",
-                phone = "666-666-6666",
-                birthDate = LocalDate.of(1999, 7, 7)
-        ))
+    fun `When deleting a customer, it should return a 204 status`() {
+        val customer = Customer(
+            name = "Test Customer",
+            cpf = CPF("66666666666"),
+            email = "test@example.com",
+            phone = "666-666-6666",
+            birthDate = LocalDate.of(1999, 7, 7)
+        )
 
-        mockMvc.perform(delete("/customers/${customer.id}"))
+        val persistedCustomer = runBlocking { customerService.register(customer) }
+
+        mockMvc.perform(delete("/customers/${persistedCustomer.id}"))
                 .andExpect(status().isNoContent)
     }
 
     @Test
-    suspend fun `When finding a customer by CPF, it should return a 200 status`() {
-        val customer = customerService.register(Customer(
-                name = "Test Customer",
-                cpf = CPF("77777777777"),
-                email = "test@example.com",
-                phone = "777-777-7777",
-                birthDate = LocalDate.of(2000, 8, 8)
-        ))
+    fun `When finding a customer by CPF, it should return a 200 status`() {
+        val customer = Customer(
+            name = "Test Customer",
+            cpf = CPF("77777777777"),
+            email = "test@example.com",
+            phone = "777-777-7777",
+            birthDate = LocalDate.of(2000, 8, 8)
+        )
 
-        mockMvc.perform(get("/customers/cpf/${customer.cpf}"))
+        val persistedCustomer = runBlocking { customerService.register(customer) }
+
+        mockMvc.perform(get("/customers/cpf/${persistedCustomer.cpf}"))
                 .andExpect(status().isOk)
                 .andExpect(jsonPath("$.name").value("Test Customer"))
                 .andExpect(jsonPath("$.cpf").value("77777777777"))

@@ -1,10 +1,11 @@
-package br.com.pradofigu.maestro.web.controller
+package br.com.pradofigu.maestro.web.controller.product
 
 import br.com.pradofigu.maestro.usecase.service.ProductService
 import br.com.pradofigu.maestro.web.dto.CategoryRequest
 import br.com.pradofigu.maestro.web.dto.ProductRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,21 +22,18 @@ import java.util.*
 @AutoConfigureMockMvc
 class ProductControllerIntegrationTest {
 
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-
-    @Autowired
-    private lateinit var productService: ProductService
+    @Autowired private lateinit var mockMvc: MockMvc
+    @Autowired private lateinit var productService: ProductService
 
     @Test
-    suspend fun `When registering a product, it should return a 201 status`() {
+    fun `When registering a product, it should return a 201 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
         val createProductResponseJson = mockMvc.perform(
@@ -50,7 +48,8 @@ class ProductControllerIntegrationTest {
                 jacksonObjectMapper().readTree(createProductResponseJson).get("id").textValue()
         )
 
-        val createdProduct = productService.findBy(productId)
+        val createdProduct = runBlocking { productService.findById(productId) }
+
         assertNotNull(createdProduct)
         assertEquals(productRequest.name, createdProduct?.name)
         assertEquals(productRequest.price, createdProduct?.price)
@@ -61,14 +60,14 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When finding all products, it should return a list with length 2`() {
+    fun `When finding all products, it should return a list with length 2`() {
         val product1 = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
         val product2 = ProductRequest(
@@ -77,48 +76,50 @@ class ProductControllerIntegrationTest {
                 category = CategoryRequest(name = "Acompanhamento"),
                 description = "Batatas fritas crocantes",
                 imageUrl = "http://example.com/batatafrita.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
-        productService.register(product1.toModel())
-        productService.register(product2.toModel())
+        runBlocking {
+            productService.register(product1.toModel())
+            productService.register(product2.toModel())
+        }
 
         mockMvc.perform(get("/products"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.length()").value(2))
     }
 
     @Test
-    suspend fun `When finding a product by ID, it should return a 200 status`() {
+    fun `When finding a product by ID, it should return a 200 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
-        val createdProduct = productService.register(productRequest.toModel())
+        val createdProduct = runBlocking { productService.register(productRequest.toModel()) }
 
         mockMvc.perform(get("/products/${createdProduct.id}"))
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.id").value(createdProduct.id.toString()))
-                .andExpect(jsonPath("$.name").value(productRequest.name))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(createdProduct.id.toString()))
+            .andExpect(jsonPath("$.name").value(productRequest.name))
     }
 
     @Test
-    suspend fun `When updating a product, it should return a 200 status`() {
+    fun `When updating a product, it should return a 200 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
-        val createdProduct = productService.register(productRequest.toModel())
+        val createdProduct = runBlocking { productService.register(productRequest.toModel()) }
 
         val updatedProductRequest = ProductRequest(
                 name = "Hamburguer Especial",
@@ -126,7 +127,7 @@ class ProductControllerIntegrationTest {
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um hamburguer ainda mais delicioso",
                 imageUrl = "http://example.com/hamburguer-especial.jpg",
-                preparationTime = BigDecimal("20")
+                preparationTime = 20
         )
 
         mockMvc.perform(
@@ -140,34 +141,36 @@ class ProductControllerIntegrationTest {
     }
 
     @Test
-    suspend fun `When deleting a product, it should return a 204 status`() {
+    fun `When deleting a product, it should return a 204 status`() {
         val productRequest = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
-        val createdProduct = productService.register(productRequest.toModel())
+        runBlocking {
+            val createdProduct = productService.register(productRequest.toModel())
 
-        mockMvc.perform(delete("/products/${createdProduct.id}"))
+            mockMvc.perform(delete("/products/${createdProduct.id}"))
                 .andExpect(status().isNoContent)
 
-        val deletedProduct = createdProduct.id?.let { productService.findBy(it) }
-        assertNull(deletedProduct)
+            val deletedProduct = createdProduct.id?.let { productService.findById(it) }
+            assertNull(deletedProduct)
+        }
     }
 
     @Test
-    suspend fun `When finding products by category, it should return a 200 status`() {
+    fun `When finding products by category, it should return a 200 status`() {
         val product1 = ProductRequest(
                 name = "Hamburguer",
                 price = BigDecimal("9.99"),
                 category = CategoryRequest(name = "Lanche"),
                 description = "Um delicioso hamburguer",
                 imageUrl = "http://example.com/hamburguer.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
         val product2 = ProductRequest(
@@ -176,11 +179,13 @@ class ProductControllerIntegrationTest {
                 category = CategoryRequest(name = "Acompanhamento"),
                 description = "Batatas fritas crocantes",
                 imageUrl = "http://example.com/batatafrita.jpg",
-                preparationTime = BigDecimal("15")
+                preparationTime = 15
         )
 
-        productService.register(product1.toModel())
-        productService.register(product2.toModel())
+        runBlocking {
+            productService.register(product1.toModel())
+            productService.register(product2.toModel())
+        }
 
         mockMvc.perform(get("/products/category/${product1.category.name}"))
                 .andExpect(status().isOk)
