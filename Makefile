@@ -25,12 +25,14 @@ test: ## Runs unit tests
 	-@./gradlew test
 	@echo "-------------- Finish Unit Tests--------------"
 
-integration-test: ## Runs integration tests
+integration-test: start-db migrate ## Runs integration tests
 	@echo "-------------- Starting Integration Tests--------------"
 	-@./gradlew integrationTest --stacktrace
 	@echo "-------------- Finish Integration Tests--------------"
 
 all-tests: test integration-test ## Runs all tests
+
+test-rebuild: kill integration-test ## Stops and removes all containers, starts the database container and runs integration tests
 
 # INFRASTRUCTURE
 start-db: ## Starts the database container (postgres and pgadmin)
