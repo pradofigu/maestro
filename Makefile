@@ -6,17 +6,19 @@ run: ## Runs the application through Gradle bootRun task
 # COMPILING
 
 compile: ## Cleans the project and compiles it
-	@echo "-------------- Compiling project and Generating database entity classes with JOOQ -------------- "
+	@echo "-------------- Compiling project -------------- "
 	@./gradlew clean build -x test
 
-migrate: ## Runs Flyway migrations (it also generates the database entity classes with JOOQ)
+migrate: ## Runs Flyway migrations
 	@echo "-------------- Starting migration --------------"
 	@./gradlew flywayMigrate
 	@echo "-------------- Finish migration --------------"
 
-rebuild-migrations: clean start-db migrate ## Stops and removes all containers, starts the database container and runs Flyway migrations
+run: ## Runs the app through Gradle bootRun task
+	@echo "-------------- Running app --------------"
+	@./gradlew bootRun
 
-build: migrate compile ## Runs Flyway migrations and compiles the project
+rebuild-migrations: clean start-db migrate ## Stops and removes all containers, starts the database container and runs Flyway migrations
 
 # TESTING
 
@@ -31,8 +33,6 @@ integration-test: start-db migrate ## Runs integration tests
 	@echo "-------------- Finish Integration Tests--------------"
 
 all-tests: test integration-test ## Runs all tests
-
-test-rebuild: kill integration-test ## Stops and removes all containers, starts the database container and runs integration tests
 
 # INFRASTRUCTURE
 start-db: ## Starts the database container (postgres and pgadmin)
@@ -57,10 +57,6 @@ clean: kill ## Stops and removes all containers (application, database, pgadmin)
 	@echo "-------------- Deleting Named volumes --------------"
 	@docker volume rm maestro_maestro-postgres-data
 	@docker volume rm maestro_maestro-pgadmin4-data
-
-# Necessary order to run migrations from Flyway before compiling the application
-# (JOOQ classes must be generated with the migrations already applied)
-up: start-db migrate compile start-app ## Starts all containers, runs Flyway migrations and compiles the application
 
 help: ## Show this help
 	@echo 'Uso: make [TARGET]'
