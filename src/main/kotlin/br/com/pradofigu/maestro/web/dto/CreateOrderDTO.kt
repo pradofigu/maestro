@@ -10,4 +10,8 @@ data class CreateOrderRequest(
     fun toModel() = CreateOrder(customerId, productsId)
 }
 
-data class CreateOrderResponse(val id: UUID, val number: Long)
+data class CreateOrderResponse(
+    val id: UUID,
+    val number: Long,
+    val products: List<ProductResponse>
+)

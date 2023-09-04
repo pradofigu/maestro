@@ -15,7 +15,7 @@ class OrderController(private val orderService: OrderService) {
     @PostMapping
     suspend fun create(@RequestBody request: CreateOrderRequest): ResponseEntity<CreateOrderResponse> {
         val orderCreated = orderService.create(request.toModel()).let {
-            CreateOrderResponse(it.id!!, it.number!!)
+            CreateOrderResponse(it.id!!, it.number!!, it.products.map { product -> ProductResponse.from(product) })
         }
 
         return ResponseEntity(orderCreated, CREATED)
