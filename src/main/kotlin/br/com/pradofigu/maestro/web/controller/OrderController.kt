@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.UUID
 
 @RestController
 @RequestMapping(value = ["/orders"], produces = [APPLICATION_JSON_VALUE])
@@ -13,14 +14,17 @@ class OrderController(private val orderService: OrderService) {
 
     @PostMapping
     suspend fun create(@RequestBody request: CreateOrderRequest): ResponseEntity<CreateOrderResponse> {
-        val order = orderService.create(request.toModel())
-        return ResponseEntity(CreateOrderResponse.from(order), CREATED)
+        val orderCreated = orderService.create(request.toModel()).let {
+            CreateOrderResponse(it.id!!, it.number!!)
+        }
+
+        return ResponseEntity(orderCreated, CREATED)
     }
 
-    @PutMapping("/{id}/payment")
-    // TODO Implementar JWT
-    suspend fun payment(@PathVariable id: String, @RequestBody paymentToken: PayOrderRequest): ResponseEntity<OrderResponse> {
-        return orderService.process(paymentToken.toModel(id))
+    @PutMapping("/{orderId}/payment")
+    //TODO: (Implementar JWT) @PreAuthorize("hasRole('ROLE_USER')")
+    suspend fun payment(@PathVariable orderId: UUID, @RequestBody payOrderRequest: PayOrderRequest): ResponseEntity<OrderResponse> {
+        return orderService.processPayment(payOrderRequest.toModel(orderId))
             .let { ResponseEntity.ok(OrderResponse.from(it)) }
     }
 
@@ -31,19 +35,19 @@ class OrderController(private val orderService: OrderService) {
         } ?: ResponseEntity.notFound().build()
     }
 
-    @GetMapping("/tracking")
-    suspend fun getTrackingDetails(): ResponseEntity<List<TrackingDetailsResponse>> {
-        return orderService.findTrackingDetails().let {
-            ResponseEntity.ok(it.map { orderTracking ->  TrackingDetailsResponse.from(orderTracking) })
-        }
+    @GetMapping("/{orderId}/tracking")
+    suspend fun getTrackingDetails(@PathVariable orderId: UUID): ResponseEntity<TrackingDetailsResponse> {
+        return orderService.findTrackingDetails(orderId)?.let {
+            ResponseEntity.ok(TrackingDetailsResponse.from(it))
+        } ?: ResponseEntity.notFound().build()
     }
 
-    @PutMapping("/{id}/tracking")
+    @PutMapping("/{orderId}/tracking")
     suspend fun updateOrderTracking(
-        @PathVariable id: String,
+        @PathVariable orderId: UUID,
         @RequestBody request: OrderTrackingRequest
     ): ResponseEntity<Any> {
-        orderService.updateOrderTracking(id, request.status)
+        orderService.updateOrderTracking(orderId, request.status)
         return ResponseEntity.accepted().build()
     }
 }

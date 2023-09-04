@@ -25,25 +25,25 @@ class ProductController(private val productService: ProductService) {
         return ResponseEntity.ok(product)
     }
 
-    @GetMapping("/{id}")
-    suspend fun findById(@PathVariable id: String): ResponseEntity<Any> {
-        return productService.findBy(UUID.fromString(id))?.let {
+    @GetMapping("/{productId}")
+    suspend fun findById(@PathVariable productId: UUID): ResponseEntity<Any> {
+        return productService.findById(productId)?.let {
             ResponseEntity.ok(ProductResponse.from(it))
         } ?: ResponseEntity.notFound().build()
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{productId}")
     suspend fun update(
-        @PathVariable id: String,
+        @PathVariable productId: UUID,
         @RequestBody request: ProductRequest
     ): ResponseEntity<ProductResponse> {
-        val product = productService.update(UUID.fromString(id), request.toModel())
+        val product = productService.update(productId, request.toModel())
         return ResponseEntity.ok(ProductResponse.from(product))
     }
 
-    @DeleteMapping("/{id}")
-    suspend fun delete(@PathVariable id: String): ResponseEntity<Any> {
-        productService.delete(UUID.fromString(id))
+    @DeleteMapping("/{productId}")
+    suspend fun delete(@PathVariable productId: UUID): ResponseEntity<Any> {
+        productService.delete(productId)
         return ResponseEntity.noContent().build()
     }
 

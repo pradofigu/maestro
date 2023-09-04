@@ -17,7 +17,10 @@ class CustomerService(
 
     suspend fun findBy(id: UUID): Customer? = customerDataAccessPort.findBy(id)
 
-    suspend fun findBy(cpf: CPF): Customer? = customerDataAccessPort.findBy(cpf)
+    suspend fun findBy(cpf: String): Customer? {
+        val validCpf = CPF(cpf)
+        return customerDataAccessPort.findBy(validCpf.number)
+    }
 
     suspend fun update(id: UUID, customer: Customer): Customer {
         return customerDataAccessPort.update(id, customer)
