@@ -1,16 +1,17 @@
 package br.com.pradofigu.maestro.web.dto
 
-import br.com.pradofigu.maestro.usecase.model.OrderPayment
+import br.com.pradofigu.maestro.usecase.model.Order
 import br.com.pradofigu.maestro.usecase.model.PaymentStatus
-import java.util.*
+import java.util.UUID
 
 data class PayOrderRequest(
     val number: Long,
     val status: PaymentStatus,
 ) {
-    fun toModel(id: String) = OrderPayment(
-        id = UUID.fromString(id),
+
+    fun toModel(id: UUID) = Order(
+        id = id,
         number = number,
-        status = status
+        paymentStatus = status
     )
 }
