@@ -16,7 +16,7 @@ class DataSourceConfig(private val propertiesConfig: PropertiesConfig) {
     @Bean
     fun dataSource(): DataSource = DriverManagerDataSource().apply {
         this.setDriverClassName("org.postgresql.Driver")
-        this.url = propertiesConfig.getProperty("db.url") + propertiesConfig.getProperty("db.schema")
+        this.url = propertiesConfig.getProperty("db.url")
         this.username = propertiesConfig.getProperty("db.username")
         this.password = propertiesConfig.getProperty("db.password")
     }
