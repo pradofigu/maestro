@@ -46,7 +46,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-val props = Properties().apply {
+val properties = Properties().apply {
     val propertiesFile = when(System.getProperty("spring.profiles.active") ?: "dev") {
         "test" -> "src/test/resources/application-test.properties"
         else -> "src/main/resources/application.properties"
@@ -55,27 +55,21 @@ val props = Properties().apply {
     load(rootProject.file(propertiesFile).reader())
 }
 
-//flyway {
-//    val schema = props.getProperty("db.schema")
-//
-//    schemas = arrayOf(schema)
-//    url = props.getProperty("db.url") + schema
-//    user = props.getProperty("db.username")
-//    password = props.getProperty("db.password")
-//}
+flyway {
+    val dbUrl = System.getenv("SPRING_DATASOURCE_USERNAME") ?: "jdbc:postgresql://localhost:5432/maestro"
+    val dbUsername = System.getenv("SPRING_DATASOURCE_USERNAME") ?: "admin"
+    val dbPassword = System.getenv("SPRING_DATASOURCE_PASSWORD") ?: "admin"
+
+    schemas = arrayOf(properties.getProperty("db.schema"))
+    url = dbUrl
+    user = dbUsername
+    password = dbPassword
+}
 
 tasks {
     bootJar {
         archiveBaseName.set("maestro")
         archiveVersion.set("")
-    }
-
-    named<org.flywaydb.gradle.task.FlywayMigrateTask>("flywayMigrate") {
-        val schema = props.getProperty("db.schema")
-
-        url = props.getProperty("db.url") + schema
-        user = props.getProperty("db.username")
-        password = props.getProperty("db.password")
     }
 
     withType<KotlinCompile> {
