@@ -25,7 +25,7 @@ spec:
         - name: POSTGRESQL_DATABASE
           value: maestro
         - name: POSTGRESQL_SCHEMA
-          value: flyway
+          value: public
     - name: postgres-db-redis
       image: redis:latest
       ports:
