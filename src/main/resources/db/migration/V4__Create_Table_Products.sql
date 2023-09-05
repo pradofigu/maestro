@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS product (
     category_id UUID NOT NULL REFERENCES category(id),
     image_url VARCHAR,
     preparation_time NUMERIC,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 /* Lanches */

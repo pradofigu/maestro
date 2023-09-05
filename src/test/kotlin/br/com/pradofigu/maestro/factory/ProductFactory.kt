@@ -1,37 +1,21 @@
 package br.com.pradofigu.maestro.factory
 
-import br.com.pradofigu.maestro.domain.category.model.Category
-import br.com.pradofigu.maestro.domain.product.model.Product
-import br.com.pradofigu.maestro.output.persistence.product.repository.ProductRepository
-import org.springframework.stereotype.Component
+import br.com.pradofigu.maestro.usecase.model.Category
+import br.com.pradofigu.maestro.usecase.model.Product
 import java.math.BigDecimal
-import kotlin.random.Random
+import java.util.UUID
 
-@Component
-class ProductFactory(
-    private val categoryFactory: CategoryFactory,
-    private val productRepository: ProductRepository
-) {
+object ProductFactory {
 
-    fun create(customCategory: Category? = null): Product {
-        val category = customCategory ?: categoryFactory.create("Category ${Random.nextInt(1, 9999)}")
-
-        return productRepository.save(
-            Product(
-                name = "Product ${Random.nextInt(1, 9999)}",
-                description = "Lorem Ipsum",
-                imageUrl = "https://my-image.com",
-                price = BigDecimal(100),
-                category = category,
-                preparationTime = BigDecimal(10)
-            )
+    fun create(customCategory: Category? = null, batchSize: Int = 1): List<Product> = List(batchSize) {
+        Product(
+            id = UUID.randomUUID(),
+            name = "Product $batchSize",
+            description = "Lorem Ipsum",
+            imageUrl = "https://my-image.com",
+            price = BigDecimal(100),
+            category = customCategory ?: CategoryFactory.create("Category $batchSize"),
+            preparationTime = 10
         )
-    }
-
-    fun create(products: List<Product>): List<Product> {
-        return products.map { product ->
-            val category = categoryFactory.create(product.category.name)
-            productRepository.save(product.copy(category = category))
-        }
     }
 }

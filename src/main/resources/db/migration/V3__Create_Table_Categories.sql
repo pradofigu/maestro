@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS category (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
     name VARCHAR UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 
 INSERT INTO category (id, name) VALUES ('c85b8201-29c4-495a-be86-7dd3a1d16b81', 'Lanche');
