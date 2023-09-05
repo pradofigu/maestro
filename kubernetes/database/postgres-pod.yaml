@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-db
+  namespace: maestro
+  labels:
+    app: postgres-db
+spec:
+  containers:
+    - name: postgres-db
+      image: bitnami/postgresql:latest
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRESQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: maestro-secrets
+              key: username
+        - name: POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: maestro-secrets
+              key: password
+        - name: POSTGRESQL_DATABASE
+          value: maestro
+        - name: POSTGRESQL_SCHEMA
+          value: public
+    - name: postgres-db-redis
+      image: redis:latest
+      ports:
+        - containerPort: 6379

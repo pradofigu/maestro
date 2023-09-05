@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maestro-app
+  namespace: maestro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: maestro-app
+  template:
+    metadata:
+      labels:
+        app: maestro-app
+    spec:
+      containers:
+        - name: maestro-app
+          image: fbadaro/maestro-app-test:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://svc-postgres:5432/maestro

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maestro-configmap
+  namespace: maestro
+data:
+  DATABASE_URL: "jdbc:postgresql://svc-postgres:5432/maestro"
+  

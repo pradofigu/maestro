@@ -1,0 +1,12 @@
+apiVersion: v1  
+kind: Service
+metadata:
+  name: svc-maestro-app
+  namespace: maestro
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 31000     
+      targetPort: 8080
+  selector:
+    app: maestro-app
