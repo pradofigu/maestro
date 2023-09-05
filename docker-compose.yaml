@@ -3,7 +3,7 @@ services:
   app:
     restart: always
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/maestro
+      - SPRING_DATASOURCE_URL=r2dbc:postgresql://database:5432/maestro
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
     build:
