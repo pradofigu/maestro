@@ -20,4 +20,4 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://svc-postgres:5432/maestro
+              value: r2dbc:postgresql://svc-postgres:5432/maestro
