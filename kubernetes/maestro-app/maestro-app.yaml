@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: maestro-app
-          image: fbadaro/maestro-app-test:latest
+          image: diogosilvasantana/maestro_api:latest
           ports:
             - containerPort: 8080
           env:
