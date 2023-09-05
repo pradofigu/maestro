@@ -19,7 +19,7 @@ class OrderTrackingAdapterImpl(
     }.toModel()
 
     override suspend fun findAll(): List<OrderTracking> = runBlocking {
-        orderTrackingRepository.findAll()
+        orderTrackingRepository.findAllByStatusIsNot()
     }.map { it.toModel() }
 
     override suspend fun findByOrderId(orderId: UUID): OrderTracking? = runBlocking {

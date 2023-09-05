@@ -48,4 +48,11 @@ class OrderService(
 
     suspend fun updateOrderTracking(orderId: UUID, orderStatus: OrderStatus): OrderTracking =
         orderTrackingDataAccessPort.updateOrderStatus(orderId, orderStatus)
+
+    suspend fun findAll(): List<OrderTracking> {
+        //TODO: order by status > READY | IN_PREPARATION | RECEIVED
+        val customOrder = listOf(OrderStatus.READY, OrderStatus.IN_PREPARATION, OrderStatus.RECEIVED)
+
+        return orderTrackingDataAccessPort.findAll().sortedWith(compareBy { customOrder.indexOf(it.status) })
+    }
 }

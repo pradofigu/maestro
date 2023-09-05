@@ -5,6 +5,20 @@ import br.com.pradofigu.maestro.usecase.model.OrderTracking
 
 data class OrderTrackingRequest(val status: OrderStatus)
 
+data class OrderTrackingResponse(
+    val id: String,
+    val order: OrderResponse,
+    val status: OrderStatus
+) {
+    companion object {
+        fun from(orderTracking: OrderTracking) = OrderTrackingResponse(
+            id = orderTracking.id.toString(),
+            order = OrderResponse.from(orderTracking.order),
+            status = orderTracking.status
+        )
+    }
+}
+
 data class TrackingDetailsResponse(
     val orderNumber: Long,
     val status: OrderStatus,

@@ -8,13 +8,15 @@ data class OrderResponse(
     val id: UUID,
     val number: Long,
     val customerId: String?,
+    val products: List<ProductResponse> = emptyList(),
     val paymentStatus: PaymentStatus
 ) {
     companion object {
         fun from(order: Order) = OrderResponse(
             id = order.id!!,
-            customerId = order.customer!!.id.toString(),
             number = order.number!!,
+            customerId = order.customer!!.id.toString(),
+            products = order.products.map { ProductResponse.from(it) },
             paymentStatus = order.paymentStatus
         )
     }

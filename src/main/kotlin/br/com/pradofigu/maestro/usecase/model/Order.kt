@@ -2,12 +2,10 @@ package br.com.pradofigu.maestro.usecase.model
 
 import br.com.pradofigu.maestro.persistence.entity.OrderEntity
 import br.com.pradofigu.maestro.persistence.entity.OrderTrackingEntity
-import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
 enum class OrderStatus {
-    PENDING,
     RECEIVED,
     IN_PREPARATION,
     READY,
@@ -37,7 +35,7 @@ data class CreateOrder(
 data class OrderTracking(
     val id: UUID? = null,
     val order: Order,
-    val status: OrderStatus = OrderStatus.PENDING,
+    val status: OrderStatus = OrderStatus.RECEIVED,
     val products: List<Product> = emptyList(),
     val createdAt: LocalDateTime? = null,
 ) {

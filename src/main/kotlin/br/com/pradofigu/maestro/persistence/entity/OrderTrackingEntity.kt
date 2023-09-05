@@ -13,7 +13,7 @@ data class OrderTrackingEntity(
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: OrderStatus = OrderStatus.PENDING
+    val status: OrderStatus = OrderStatus.RECEIVED
 ): AbstractEntity() {
 
     fun toModel(): OrderTracking = OrderTracking(
