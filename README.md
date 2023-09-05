@@ -1,6 +1,6 @@
 <h1 align="center">
     <br>Maestro<br/>
-    Kotlin | Spring Boot | Coroutines | Flyway | Clean Architecture
+    Kotlin | Spring Boot | Coroutines | Flyway
 </h1>
 
 <p align="center">
