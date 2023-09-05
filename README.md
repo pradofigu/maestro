@@ -1,7 +1,18 @@
 # Maestro
 Fast food monolith service
 
-## Software Architecture
+<h1 align="center">
+    <br>Maestro<br/>
+    Kotlin | Spring Boot | Coroutines | Flyway | Clean Architecture
+</h1>
+
+<p align="center">
+  <a href="https://www.postman.com/amorimgc/workspace/pradofigu/collection/1973162-3ee279b0-210f-48b0-be8f-45ab9ab4bf09?action=share&creator=1973162" target="_blank"><img src="https://run.pstmn.io/button.svg" alt="Run in Postman"></a>
+</p>
+
+
+
+## Tech Stack
 
 -  [Kotlin](https://kotlinlang.org/)
 -  [Spring](https://spring.io/)
@@ -39,5 +50,6 @@ Use `make help` to see all available commands.
 
 ## Documentation
 
-- **Event Storming Project Board**: https://miro.com/app/board/uXjVMDHdGWk=/
-- **Maestro Ubiquitous Language**: [Documentation](documentation/event-storming/Glossário%20de%20Linguagem%20Ubiqua.md)
+- **Event Storming Project Board**: [Miro Board](https://miro.com/app/board/uXjVMDHdGWk=/)
+- **Maestro Ubiquitous Language**: [Glossary](documentation/event-storming/Glossario-Linguagem-Ubiqua.md)
+- **Instrunctions to run Kubenetes [pt-BR]**: [Kubernetes](documentation/kubernetes/README.md)
