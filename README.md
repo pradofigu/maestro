@@ -6,10 +6,8 @@ Fast food monolith service
 -  [Kotlin](https://kotlinlang.org/)
 -  [Spring](https://spring.io/)
 -  [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
--  [R2DBC](https://r2dbc.io/)
 -  [Flyway](https://docs.spring.io/spring-boot/docs/3.1.0/reference/htmlsingle/#howto.data-initialization.migration-tool.flyway)
 -  [JUnit](https://junit.org/junit5/)
--  [Mockk](https://mockk.io/)
 -  [Swagger3](https://swagger.io/docs/specification/about/)
 
 ## Usage
@@ -25,7 +23,7 @@ $ make start
 
 - Run the application using `make` commands (or debugging)
 ```bash
-$ make rebuild-migrations # Starts the database container and PgAdmin
+$ make start-db # Starts the database container and PgAdmin
 $ make run # Starts the application with Gradle task
 ```
 
@@ -42,4 +40,4 @@ Use `make help` to see all available commands.
 ## Documentation
 
 - **Event Storming Project Board**: https://miro.com/app/board/uXjVMDHdGWk=/
-- **Maestro Ubiquitous Language**: [Documentation](docs/Glossário%20de%20Linguagem%20Ubiqua.md)
+- **Maestro Ubiquitous Language**: [Documentation](documentation/event-storming/Glossário%20de%20Linguagem%20Ubiqua.md)
