@@ -1,6 +1,3 @@
-# Maestro
-Fast food monolith service
-
 <h1 align="center">
     <br>Maestro<br/>
     Kotlin | Spring Boot | Coroutines | Flyway | Clean Architecture
