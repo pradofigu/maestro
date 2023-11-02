@@ -23,13 +23,10 @@ jobs:
         with:
           distribution: "adopt"
           java-version: "17"
+          cache: gradle
 
       - name: Build API
         run: ./gradlew build
-
-      - name: Get API Version
-        id: get-version
-        run: echo ::set-output name=version::$(cat version.txt)
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -46,7 +43,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: maestro
-          IMAGE_TAG: ${{ steps.get-version.outputs.info }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          API_VERSION=$(grep 'version =' build.gradle.kts | cut -d '"' -f 2)
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${API_VERSION} -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
