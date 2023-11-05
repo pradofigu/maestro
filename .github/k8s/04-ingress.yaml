@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: maestro-app
+  namespace: maestro
+  labels:
+    namespace: maestro
+spec:
+  ingressClassName: "internal-microservices"
+  rules:
+    - host: "maestro.internal.qa"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: "maestro-app"
+                port:
+                  number: 8080

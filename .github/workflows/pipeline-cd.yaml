@@ -1,4 +1,4 @@
-name: CI
+name: CD
 
 on:
   pull_request_target:
@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-publish:
+  deploy:
     runs-on: ubuntu-latest
 
     permissions:
@@ -18,15 +18,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: "adopt"
-          java-version: "17"
-          cache: gradle
-
-      - name: Build API
-        run: ./gradlew build
+      - name: Replace files
+        run: |          
+          sed -i -e 's/<ACCOUNT_ID>/${{secrets.ACCOUNT_ID}}/g' .github/k8s/02-deployment-api.yaml
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -35,15 +29,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_KEY }}
           aws-region: us-east-1
 
-      - name: Login to AWS ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+      - name: Update kube config
+        run: aws eks update-kubeconfig --name ${{secrets.CLUSTER_NAME}} --region us-east-
 
-      - name: Build and Push Docker Image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: maestro
+      - name: Deploy to Amazon EKS
         run: |
-          API_VERSION=$(grep 'version =' build.gradle.kts | cut -d '"' -f 2)
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${API_VERSION} -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
+          kubectl apply -f .github/k8s/01-namespace.yaml
+          kubectl apply -f .github/k8s/02-deployment-api.yaml
+          kubectl apply -f .github/k8s/03-service-api.yaml
+          kubectl apply -f .github/k8s/04-ingress-api.yaml
