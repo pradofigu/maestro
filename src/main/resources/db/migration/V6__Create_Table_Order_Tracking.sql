@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS "order_tracking" (
     id UUID DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-    order_id UUID NOT NULL REFERENCES "order"(id),
+    order_id UUID NOT NULL REFERENCES "order"(id) ON DELETE CASCADE,
     status VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
