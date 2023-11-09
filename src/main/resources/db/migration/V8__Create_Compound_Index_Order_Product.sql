@@ -1,0 +1,1 @@
+CREATE INDEX idx_order_product_order_product ON order_product (order_id, product_id);

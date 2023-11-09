@@ -11,7 +11,8 @@ data class Customer(
     val email: String?,
     val phone: String?,
     val cpf: CPF?,
-    val birthDate: LocalDate?
+    val birthDate: LocalDate?,
+    val address: Address?
 ) {
 
     fun toEntity(): CustomerEntity = CustomerEntity(
@@ -19,7 +20,8 @@ data class Customer(
         email = this.email,
         phone = this.phone,
         cpf = this.cpf?.number,
-        birthDate = this.birthDate
+        birthDate = this.birthDate,
+        address = this.address?.toEntity()
     ).apply { this.id = this@Customer.id }
 }
 
